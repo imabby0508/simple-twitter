@@ -1,6 +1,183 @@
 @import "./reset.scss";
 @import "./color.scss";
 
+/* basic settings*/
+html,
+body {
+  font-family: 'Noto Sans TC', 'Montserrat', sans-serif;
+}
+
+$sizes: (
+  25: 25%,
+  50: 50%,
+  75: 75%,
+  100: 100%
+);
+
+/*  使用 @each產出 CSS size  */
+$sizes: (
+  25: 25%,
+  50: 50%,
+  75: 75%,
+  100: 100%
+);
+
+@each $prop,
+$abbrev in (width: w, height: h) {
+
+  @each $num,
+  $value in $sizes {
+    .#{$abbrev}-#{$num} {
+      #{$prop}: #{$value};
+    }
+  }
+}
+
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: 0.25 * $spacer,
+  2: 0.5 * $spacer,
+  3: 0.75 * $spacer,
+  4: 1 * $spacer,
+  5: 1.25 * $spacer,
+  6: 1.5 * $spacer,
+  7: 1.75 * $spacer,
+  8: 2 * $spacer
+);
+
+@each $prop,
+$abbrev in (margin: m, padding: p) {
+
+  @each $num,
+  $value in $spacers {
+    .#{$abbrev}-#{$num} {
+      #{$prop}: #{$value};
+    }
+
+    .#{$abbrev}t-#{$num} {
+      #{$prop}-top: #{$value};
+    }
+
+    .#{$abbrev}r-#{$num} {
+      #{$prop}-right: #{$value};
+    }
+
+    .#{$abbrev}b-#{$num} {
+      #{$prop}-bottom: #{$value};
+    }
+
+    .#{$abbrev}l-#{$num} {
+      #{$prop}-left: #{$value};
+    }
+
+    .#{$abbrev}x-#{$num} {
+      #{$prop}-right: #{$value};
+      #{$prop}-left: #{$value};
+    }
+
+    .#{$abbrev}-#{$num} {
+      #{$prop}-top: #{$value};
+      #{$prop}-bottom: #{$value};
+    }
+  }
+}
+
+html {
+  font-size: 16px;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  background: var(--main-bg);
+  color: var(--main-color);
+}
+
+.d-none {
+  display: none;
+}
+
+.d-inline {
+  display: inline;
+}
+
+.d-inline-block {
+  display: inline-block;
+}
+
+.d-block {
+  display: block;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify-content-start {
+  justify-content: flex-start;
+}
+
+.justify-content-end {
+  justify-content: flex-end;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.justify-content-around {
+  justify-content: space-around;
+}
+
+.align-content-start {
+  align-content: flex-start;
+}
+
+.align-content-end {
+  align-content: flex-end;
+}
+
+.align-content-center {
+  align-content: center;
+}
+
+.align-items-start {
+  align-items: flex-start;
+}
+
+.align-items-end {
+  align-items: flex-end;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .main-container {
   display: grid;
 }
