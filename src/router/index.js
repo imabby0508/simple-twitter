@@ -1,9 +1,10 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from "vue";
+import VueRouter from "vue-router";
 import NotFound from "../views/NotFound.vue";
 import UserLogin from "../views/UserLogin.vue";
+import Main from "../views/Main.vue";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -17,6 +18,11 @@ const routes = [
     component: UserLogin,
   },
   {
+    path: "/main",
+    name: "main",
+    component: Main,
+  },
+  {
     path: "*",
     name: "not-found",
     component: NotFound,
@@ -24,7 +30,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
