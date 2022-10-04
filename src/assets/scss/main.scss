@@ -172,6 +172,7 @@ body {
   cursor: pointer;
 }
 
+//Main
 .main-container {
   display: grid;
 }
@@ -198,9 +199,9 @@ body {
         padding-left: 8px;
         line-height: 50px;
       }
-    }
+    }   
     button {
-      position: absolute;
+      position: absolute; 
       right: 40px;
       bottom: 16px;
       width: 64px;
@@ -209,7 +210,7 @@ body {
       border: none;
     }
   }
-  .tweet__card {
+  .tweet__card {    
     .tweet__card__content {
       display: flex;
       padding: 16px 24px;
@@ -221,7 +222,7 @@ body {
       .tweet__card__title {
         display: flex;
         p {
-          margin: 0;
+          margin: 0
         }
         .tweet__card__name {
           margin: 0 8px 0 0;
@@ -233,137 +234,140 @@ body {
           margin: 0;
           padding: 10px 0;
         }
-
-        // Reply
-        .reply-comtaimer {
-          display: grid;
-        }
-        .reply {
-          border: 1px solid #e6ecf0;
-          .reply__header {
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #e6ecf0;
-            padding: 24px 28px;
-            img {
-              width: 17px;
-              height: 14px;
-              margin-right: 20px;
-            }
-          }
-          .tweet__content {
-            padding: 16px;
-            .tweet__title {
-              display: flex;
-              .tweet__avatar {
-                width: 50px;
-                height: 50px;
-                margin-right: 8px;
-              }
-              .tweet__name {
-                color: $scale-gray10;
-                font-weight: 700;
-                font-size: 16px;
-              }
-              .tweet__account {
-                color: $secondary-gray;
-                font-weight: 400;
-                font-size: 14px;
-              }
-            }
-            .tweet__description {
-              color: $scale-gray10;
-              font-weight: 400;
-              font-size: 24px;
-              margin: 8px 0;
-            }
-            .tweet__time {
-              color: $secondary-gray;
-              font-weight: 500;
-              font-size: 14px;
-            }
-            .tweet__count {
-              display: flex;
-              color: $secondary-gray;
-              font-weight: 500;
-              font-size: 19px;
-              .tweet__num {
-                color: $scale-gray10;
-                margin-right: 2px;
-              }
-              .tweet__reply {
-                margin-right: 8px;
-              }
-            }
-            .tweet__card__footer {
-              display: flex;
-              align-items: center;
-              img {
-                width: 13px;
-                height: 13px;
-              }
-              p {
-                margin: 0 40px 0 10px;
-              }
-            }
-          }
-        }
-        img {
-          width: 25px;
-          height: 25px;
-          margin-right: 134px;
-        }
-      }
-      hr {
-        color: #e6ecf0;
-        width: 99%;
       }
     }
-  }
-  .reply__card__wrapper {
-    .reply__card {
+    .tweet__card__footer {
       display: flex;
-      border-top: 1px solid #e6ecf0;
-      padding: 16px 24px;
-      .reply__card__avatar {
+      align-items: center;
+      img {
+        width: 13px;
+        height: 13px;        
+      }
+      p {
+        margin: 0 40px 0 10px;
+      }
+    }    
+  }
+}
+
+// Reply
+.reply-comtaimer {
+  display: grid;
+}
+.reply {
+  border: 1px solid #e6ecf0;
+  .reply__header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e6ecf0;
+    padding: 24px 28px;
+    img {
+      width: 17px;
+      height: 14px;
+      margin-right: 20px;
+    }
+  }
+  .tweet__content {
+    padding: 16px;
+    .tweet__title {
+      display: flex;
+      .tweet__avatar {
         width: 50px;
         height: 50px;
         margin-right: 8px;
       }
-      .reply__card__title {
-        display: flex;
-        align-items: center;
-        .reply__card__name {
-          color: $scale-gray10;
-          font-weight: 700;
-          font-size: 16px;
-          margin-right: 8px;
-        }
-        .reply__card__account,
-        .reply__card__time {
-          color: $secondary-gray;
-          font-weight: 400;
-          font-size: 14px;
-        }
+      .tweet__name {
+        color: $scale-gray10;
+        font-weight: 700;
+        font-size: 16px;
       }
-      .reply__card__target {
-        display: flex;
+      .tweet__account {
         color: $secondary-gray;
         font-weight: 400;
         font-size: 14px;
-        margin: 8px 0;
-        P {
-          margin-right: 2px;
-        }
-        .reply__card__target__account {
-          color: $brand-orange;
-        }
       }
-      .reply__card__content {
+    }
+    .tweet__description {
+      color: $scale-gray10;
+      font-weight: 400;
+      font-size: 24px;
+      margin: 8px 0;
+    }
+    .tweet__time {
+      color: $secondary-gray;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .tweet__count {
+      display: flex;
+      color: $secondary-gray;
+      font-weight: 500;
+      font-size: 19px;
+      .tweet__num {
         color: $scale-gray10;
-        font-weight: 400;
-        font-size: 16px;
+        margin-right: 2px;
       }
+      .tweet__reply {
+        margin-right: 8px;
+      }
+    }
+    .tweet__card__footer {
+      display: flex;
+      img {
+        width: 25px;
+        height: 25px;
+        margin-right: 134px;
+      }
+    }
+    hr {
+      color: #e6ecf0;
+      width: 99%;
+    }
+  }
+}
+.reply__card__wrapper {
+  .reply__card {
+    display: flex;
+    border-top: 1px solid #e6ecf0;
+    padding: 16px 24px;
+    .reply__card__avatar {
+      width: 50px;
+      height: 50px;
+      margin-right: 8px;
+    }
+    .reply__card__title {
+      display: flex;
+      align-items: center;
+      .reply__card__name {
+        color: $scale-gray10;
+        font-weight: 700;
+        font-size: 16px;
+        margin-right: 8px;
+      }
+      .reply__card__account,
+      .reply__card__time {
+        color: $secondary-gray;
+        font-weight: 400;
+        font-size: 14px;
+      }
+    }
+    .reply__card__target {
+      display: flex;
+      color: $secondary-gray;
+      font-weight: 400;
+      font-size: 14px;
+      margin: 8px 0;
+      P {
+        margin-right: 2px;
+      }
+      .reply__card__target__account {
+        color: $brand-orange;
+      }
+    }
+    .reply__card__content {
+      color: $scale-gray10;
+      font-weight: 400;
+      font-size: 16px;
     }
   }
 }

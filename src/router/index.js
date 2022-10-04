@@ -22,6 +22,8 @@ const routes = [
     path: "/main",
     name: "main",
     component: Main,
+  },
+  {
     path: "/reply",
     name: "reply",
     component: Reply,
