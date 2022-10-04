@@ -4,14 +4,14 @@
 /* basic settings*/
 html,
 body {
-  font-family: 'Noto Sans TC', 'Montserrat', sans-serif;
+  font-family: "Noto Sans TC", "Montserrat", sans-serif;
 }
 
 $sizes: (
   25: 25%,
   50: 50%,
   75: 75%,
-  100: 100%
+  100: 100%,
 );
 
 /*  使用 @each產出 CSS size  */
@@ -19,14 +19,11 @@ $sizes: (
   25: 25%,
   50: 50%,
   75: 75%,
-  100: 100%
+  100: 100%,
 );
 
-@each $prop,
-$abbrev in (width: w, height: h) {
-
-  @each $num,
-  $value in $sizes {
+@each $prop, $abbrev in (width: w, height: h) {
+  @each $num, $value in $sizes {
     .#{$abbrev}-#{$num} {
       #{$prop}: #{$value};
     }
@@ -43,14 +40,11 @@ $spacers: (
   5: 1.25 * $spacer,
   6: 1.5 * $spacer,
   7: 1.75 * $spacer,
-  8: 2 * $spacer
+  8: 2 * $spacer,
 );
 
-@each $prop,
-$abbrev in (margin: m, padding: p) {
-
-  @each $num,
-  $value in $spacers {
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $num, $value in $spacers {
     .#{$abbrev}-#{$num} {
       #{$prop}: #{$value};
     }
@@ -176,4 +170,126 @@ body {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+// Reply
+.reply-comtaimer {
+  display: grid;
+}
+.reply {
+  border: 1px solid #e6ecf0;
+  .reply__header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e6ecf0;
+    padding: 24px 28px;
+    img {
+      width: 17px;
+      height: 14px;
+      margin-right: 20px;
+    }
+  }
+  .tweet__content {
+    padding: 16px;
+    .tweet__title {
+      display: flex;
+      .tweet__avatar {
+        width: 50px;
+        height: 50px;
+        margin-right: 8px;
+      }
+      .tweet__name {
+        color: $scale-gray10;
+        font-weight: 700;
+        font-size: 16px;
+      }
+      .tweet__account {
+        color: $secondary-gray;
+        font-weight: 400;
+        font-size: 14px;
+      }
+    }
+    .tweet__description {
+      color: $scale-gray10;
+      font-weight: 400;
+      font-size: 24px;
+      margin: 8px 0;
+    }
+    .tweet__time {
+      color: $secondary-gray;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .tweet__count {
+      display: flex;
+      color: $secondary-gray;
+      font-weight: 500;
+      font-size: 19px;
+      .tweet__num {
+        color: $scale-gray10;
+        margin-right: 2px;
+      }
+      .tweet__reply {
+        margin-right: 8px;
+      }
+    }
+    .tweet__card__footer {
+      display: flex;
+      img {
+        width: 25px;
+        height: 25px;
+        margin-right: 134px;
+      }
+    }
+    hr {
+      color: #e6ecf0;
+      width: 99%;
+    }
+  }
+}
+.reply__card__wrapper {
+  .reply__card {
+    display: flex;
+    border-top: 1px solid #e6ecf0;
+    padding: 16px 24px;
+    .reply__card__avatar {
+      width: 50px;
+      height: 50px;
+      margin-right: 8px;
+    }
+    .reply__card__title {
+      display: flex;
+      align-items: center;
+      .reply__card__name {
+        color: $scale-gray10;
+        font-weight: 700;
+        font-size: 16px;
+        margin-right: 8px;
+      }
+      .reply__card__account,
+      .reply__card__time {
+        color: $secondary-gray;
+        font-weight: 400;
+        font-size: 14px;
+      }
+    }
+    .reply__card__target {
+      display: flex;
+      color: $secondary-gray;
+      font-weight: 400;
+      font-size: 14px;
+      margin: 8px 0;
+      P {
+        margin-right: 2px;
+      }
+      .reply__card__target__account {
+        color: $brand-orange;
+      }
+    }
+    .reply__card__content {
+      color: $scale-gray10;
+      font-weight: 400;
+      font-size: 16px;
+    }
+  }
 }

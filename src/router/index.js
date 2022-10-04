@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import NotFound from "../views/NotFound.vue";
 import UserLogin from "../views/UserLogin.vue";
+import Reply from "../views/Reply.vue";
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes = [
     path: "/signin",
     name: "sign-in",
     component: UserLogin,
+  },
+  {
+    path: "/reply",
+    name: "reply",
+    component: Reply,
   },
   {
     path: "*",
