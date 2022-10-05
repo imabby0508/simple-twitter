@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import NotFound from "../views/NotFound.vue";
 import UserLogin from "../views/UserLogin.vue";
 import Main from "../views/Main.vue";
+import Reply from "../views/Reply.vue";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
     path: "/main",
     name: "main",
     component: Main,
+  },
+  {
+    path: "/reply",
+    name: "reply",
+    component: Reply,
   },
   {
     path: "*",
