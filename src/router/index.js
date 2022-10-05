@@ -3,7 +3,6 @@ import VueRouter from "vue-router";
 import NotFound from "../views/NotFound.vue";
 import UserLogin from "../views/UserLogin.vue";
 import Main from "../views/Main.vue";
-import Reply from "../views/Reply.vue";
 
 Vue.use(VueRouter);
 
@@ -41,7 +40,22 @@ const routes = [
   {
     path: "/reply",
     name: "reply",
-    component: Reply,
+    component: () => import("../views/Reply.vue"),
+  },
+  {
+    path: "/user/tweets",
+    name: "user-tweets",
+    component: () => import("../views/UserTweets.vue"),
+  },
+  {
+    path: "/user/replies",
+    name: "user-replies",
+    component: () => import("../views/UserReplies.vue"),
+  },
+  {
+    path: "/user/likes",
+    name: "user-likes",
+    component: () => import("../views/UserLikes.vue"),
   },
   {
     path: "*",
