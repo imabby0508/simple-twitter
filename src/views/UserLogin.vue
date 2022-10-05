@@ -1,3 +1,57 @@
 <template>
-  
+  <div class="login__wrapper">
+    <div>
+      <img src="../assets/logo@2x.png" alt="log">
+    </div>
+    <div>
+      <h1>登入 Alphitter</h1>
+    </div>
+    <LoginForm />
+
+    <div class="router_wrapper text-right mr-3">
+      <router-link 
+      to='/signup'
+      >
+      註冊</router-link>
+      <span class="d-inline-block mx-2">・</span>
+      <router-link to='/signin/admin'>後台登入</router-link>
+    </div>
+  </div>
+
 </template>
+
+<script>
+import LoginForm from '../components/LoginForm.vue'
+export default {
+  components: {
+    LoginForm,
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.login__wrapper {
+  padding: 6vh 38vw 60vh 38vw;
+  img {
+    margin: 0 auto;
+    width: 50px;
+    height: 50px;
+    margin-bottom: 24px
+  };
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 40px
+  }
+  .router_wrapper {
+    a {
+      color: $primary-blue;
+      text-decoration: underline;
+      font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+    }
+  }
+}
+</style>
