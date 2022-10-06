@@ -1,7 +1,7 @@
 <template>
   <div class="login__wrapper">
     <div>
-      <img src="../assets/logo@2x.png" alt="log">
+      <img src="../assets/image/logo-icon.png" alt="log">
     </div>
     <div>
       <h1>登入 Alphitter</h1>
