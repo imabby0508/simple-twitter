@@ -1,67 +1,225 @@
 <template>
   <div class="user__edit__modal">
     <div class="modal-card">
-      <div class="edit__header">
-        <img src="@/assets/image/orange-cross.png" alt="cancel">
-        <h5>編輯個人資料</h5>
-        <button>儲存</button>
-      </div>
-
-      <div class="user__edit__image">
-        <div class="user__cover">
-          <img class="user__cover__img" src="@/assets/image/user-cover.png" alt="user-cover-img">
-          <div class="user__cover__mask"></div>
-          <div class="user__cover__icons">
-            <img class="upload" src="@/assets/image/upload.png" alt="upload">
-            <img class="cancel" src="@/assets/image/white-cross.png" alt="cancel">
-          </div>
-        </div>
-        
-        <div class="user__avatar">
-          <img class="user__avatar__img" src="@/assets/image/avatar-1.png" alt="user-avatar">
-          <div class="user__avatar__mask"></div>
-          <img class="upload" src="@/assets/image/upload.png" alt="upload"> 
-        </div>      
-      </div>
-
-      <div class="user__edit__content">
-        <div class="form__wrapper">
-          <label for="name" class="d-block">名稱</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="請輸入名稱"
-            required
-            autofocus
-            class="d-block"          
-          >
-          <div class="compute">
-            <div class="words__compute--warn">字數超出上限</div>
-            <div class="words__compute">8/50</div>
-          </div>
+      <form @submit.stop.prevent="handleSubmit">
+        <div class="edit__header">
+          <button>
+            <img
+              @click.stop.prevent="closeUserEditModal()"
+              src="@/assets/image/orange-cross.png"
+              alt="cancel"
+            />
+          </button>
+          <h5>編輯個人資料</h5>
+          <button type="submit" class="save">儲存</button>
         </div>
 
-        <div class="form__wrapper">
-          <label for="bio" class="d-block">自我介紹</label>
-          <textarea
-            type="text"
-            id="bio"
-            name="bio"
-            placeholder="請輸入自我介紹"
-            required            
-            class="d-block bio"
-          ></textarea>
-          <div class="compute">
-            <div class="words__compute--warn">字數超出上限</div>
-            <div class="words__compute">0/160</div>
+        <div class="user__edit__image">
+          <div class="user__cover">
+            <img
+              class="user__cover__img"
+              :src="this.user.backgroundImage"
+              alt="user-cover-img"
+            />
+            <div class="user__cover__mask"></div>
+            <div class="user__cover__icons">
+              <input
+                id="coverImage"
+                type="file"
+                name="coverImage"
+                accept="image/*"
+                class="upload__coverImage__file d-none"
+                ref="coverInput"
+                @change="handleCoverFileChange"
+              />
+              <button @click.stop.prevent="onPickFile('cover')">
+                <img
+                  class="upload"
+                  src="@/assets/image/upload.png"
+                  alt="upload"
+                />
+              </button>
+
+              <button @click.stop.prevent="deleteCover()">
+                <img
+                  class="cancel"
+                  src="@/assets/image/white-cross.png"
+                  alt="cancel"
+                />
+              </button>
+            </div>
+          </div>
+
+          <div class="user__avatar">
+            <img
+              class="user__avatar__img"
+              :src="this.user.image"
+              alt="user-avatar"
+            />
+            <div class="user__avatar__mask"></div>
+
+            <input
+              id="avatarImage"
+              type="file"
+              name="avatarImage"
+              accept="image/*"
+              class="upload__avatarImage__file d-none"
+              ref="avatarInput"
+              @change="handleFileChange"
+            />
+            <button @click.stop.prevent="onPickFile('avatar')">
+              <img class="upload" src="@/assets/image/upload.png" alt="upload" />
+            </button>
+            
           </div>
         </div>
-      </div>
-    </div>       
+
+        <div class="user__edit__content">
+          <div class="form__wrapper">
+            <label for="name" class="d-block">名稱</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              :placeholder="user.name ? user.name : '請輸入名稱'"
+              required
+              autofocus
+              class="d-block"
+              v-model="user.name"
+            />
+            <div class="compute">
+              <div class="words__compute--warn">
+                {{ nameThreshold > 50 ? "字數超出上限!" : "" }}
+              </div>
+              <div class="words__compute">{{ nameThreshold }}/50</div>
+            </div>
+          </div>
+
+          <div class="form__wrapper">
+            <label for="bio" class="d-block">自我介紹</label>
+            <textarea
+              type="text"
+              id="bio"
+              name="bio"
+              :placeholder="user.bio ? user.bio : '請輸入自我介紹'"
+              required
+              class="d-block bio"
+              v-model="user.bio"
+            ></textarea>
+            <div class="compute">
+              <div class="words__compute--warn">
+                {{ bioThreshold > 160 ? "字數超出上限!" : "" }}
+              </div>
+              <div class="words__compute">{{ bioThreshold }}/160</div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-
 </template>
+
+<script>
+import { Toast } from '../utils/helpers'
+const dummyUser = {
+  user: {
+    id: 1,
+    backgroundImage: '@/assets/image/user-cover.png',
+    image: '@/assets/image/avatar-1.png',
+    name: 'John Doe',
+    bio: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
+  }
+}
+export default {
+  data() {
+    return {
+      user: {
+        id: -1,
+        backgroundImage: "",
+        image: "",
+        name: "",
+        bio: "",
+      },
+    };
+  },
+  created() {
+    this.fetchUser()
+  },
+  computed: {
+    nameThreshold() {
+      const nameLength = this.user.name.length;
+      return nameLength;
+    },
+    bioThreshold() {
+      const bioLength = this.user.bio.length;
+      return bioLength;
+    },
+  },
+  updated() {
+    if (this.nameThreshold > 50) {
+      document.getElementById("name").style.borderBottomColor = "#FC5A5A";
+    } else {
+      document.getElementById("name").style.borderBottomColor = null;
+    }
+    if (this.bioThreshold > 160) {
+      document.getElementById("bio").style.borderBottomColor = "#FC5A5A";
+    } else {
+      document.getElementById("bio").style.borderBottomColor = null;
+    }
+  },
+  methods: {
+    fetchUser() {
+      this.user = {
+        ...this.user,
+        ...dummyUser.user
+      }
+    },
+    closeUserEditModal() {
+      this.$emit("after-click-button");
+    },
+    handleFileChange(e) {
+      const { files } = e.target;
+      if (files.length === 0) {
+        this.user.image = "";
+      } else {
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.user.image = imageURL;
+      }
+    },
+    handleCoverFileChange(e) {
+      const { files } = e.target;
+      if (files.length === 0) {
+        this.user.backgroundImage = "";
+      } else {
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.user.backgroundImage = imageURL;
+      }
+    },
+    onPickFile(imageFile) {
+      if (imageFile === 'avatar') {
+        this.$refs.avatarInput.click()
+      } else {
+        this.$refs.coverInput.click()
+      }
+    },
+    deleteCover() {
+      this.user.backgroundImage = ''
+    },
+    handleSubmit(e) {
+      const form = e.target;
+      const formData = new FormData(form)
+      for (let [name, value] of formData.entries()) {
+        console.log(name + ': ' + value)
+      }
+
+      Toast.fire({
+        icon: 'success',
+        title: '成功儲存'
+      })
+    }
+  }, 
+};
+</script>
 
 <style lang="scss" scoped>
 .user__edit__modal {
@@ -90,14 +248,13 @@
       img {
         width: 15px;
         height: 15px;
-        margin: 20px;          
+        margin: 20px;
       }
       h5 {
         font-size: 18px;
         font-weight: 700;
-        padding-left: 16px;
       }
-      button {
+      .save {
         position: absolute;
         top: 8px;
         right: 16px;
@@ -107,8 +264,8 @@
         background-color: $brand-orange;
         border-radius: 50px;
         font-size: 16px;
-        font-weight: 400;       
-        color: $scale-gray1; 
+        font-weight: 400;
+        color: $scale-gray1;
       }
     }
     .user__edit__image {
@@ -118,7 +275,7 @@
           height: 200px;
           object-fit: cover;
           object-position: bottom;
-          opacity: 70%;       
+          opacity: 70%;
         }
         .user__cover__mask {
           background: rgba(23, 23, 37, 0.5);
@@ -130,7 +287,7 @@
         .user__cover__icons {
           position: absolute;
           top: 50%;
-          left: 50%;          
+          left: 50%;
           transform: translate(-50%, -50%);
           z-index: 999;
           display: flex;
@@ -140,7 +297,7 @@
         }
         .upload {
           width: 20px;
-          height: 20px;          
+          height: 20px;
         }
         .cancel {
           width: 15px;
@@ -178,7 +335,7 @@
       }
     }
     .user__edit__content {
-      padding: 80px 16px 40px 16px;
+      padding: 60px 16px 40px 16px;
       label {
         padding: 2px 18px;
         color: $scale-gray8;
@@ -189,7 +346,8 @@
         margin: 0;
         border-radius: 2px 0;
       }
-      input, textarea {
+      input,
+      textarea {
         padding: 0 18px 2px 18px;
         width: 100%;
         border: 0px;
@@ -200,13 +358,17 @@
         border-bottom: 2px solid $form-border;
         text-align: start;
         &.bio {
-          height: 147px;    
+          height: 147px;
           resize: none;
         }
-        &:hover, :focus {
+        &:hover,
+        :focus {
           border-bottom: 2px solid $sider-blue;
         }
-      }    
+        &:-webkit-autofill {
+          -webkit-box-shadow: 0 0 0px 100px $form-bg inset;
+        }
+      }
       .compute {
         display: flex;
         justify-content: space-between;
@@ -214,14 +376,13 @@
         font-weight: 500;
         margin: 4px 0 8px 0;
         .words__compute--warn {
-          color: $error-red;          
+          color: $error-red;
         }
         .words__compute {
-          color: $scale-gray8;          
+          color: $scale-gray8;
         }
       }
-    }    
+    }
   }
 }
-
 </style>

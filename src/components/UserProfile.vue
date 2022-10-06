@@ -3,33 +3,81 @@
   <div class="user__profile">
 
     <div class="user__profile__header">
-      <img src="@/assets/image/arrow.png" alt="arrow" />
+      <router-link :to="{name: 'main'}">
+        <img src="@/assets/image/arrow.png" alt="arrow" />
+      </router-link>
       <div>
-        <h4 class="header__name">John Doe</h4>
-        <p class="header__tweet__count">25推文</p>
+        <h4 class="header__name">{{this.user.name}}</h4>
+        <p class="header__tweet__count">{{this.user.tweetCount}}推文</p>
       </div>      
     </div>
 
     <div class="user__profile__content">
       <img class="user__cover" src="@/assets/image/user-cover.png" alt="user-cover-img">
       <img class="user__avatar" src="@/assets/image/avatar-1.png" alt="user-avatar">   
-      <button>編輯個人資料</button>
+      <button @click.stop.prevent="showUserEditModal()">編輯個人資料</button>
       <div class="user__info">
-        <div class="user__name">John Doe</div>
-        <div class="user__account">@heyjohn</div>
+        <div class="user__name">{{this.user.name}}</div>
+        <div class="user__account">{{this.user.account}}</div>
         <div class="user__bio">
-          Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
+          {{this.user.bio}}
         </div>
         <div class="user__follow"> 
-          <p class="user__follow__num">34個</p><p class="following">跟隨中</p>
-          <p class="user__follow__num">59位</p><p class="follower">跟隨者</p>
+          <router-link :to="{name: 'user-followers', params: { id: '1'}}" class="user__follow__num">{{this.user.followingCount}}個</router-link><p class="following">跟隨中</p>
+          <router-link :to="{name: 'user-followings', params: { id: '1'}}" class="user__follow__num">{{this.user.followerCount}}位</router-link><p class="follower">跟隨者</p>
         </div>
       </div>      
-    </div>  
-
+    </div> 
   </div>
-
 </template>
+
+<script>
+const dummyUser = {
+  user: {
+    id: 1,
+    tweetCount: 25,
+    backgroundImage: '@/assets/image/user-cover.png',
+    image: '@/assets/image/avatar-1.png',
+    name: 'John Doe',
+    account: '@heyjohn',
+    bio: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
+    followingCount: 34,
+    followerCount: 59,
+  }
+}
+
+export default {
+  data() {
+    return {
+      user: {
+        id: -1,
+        tweetCount: "",
+        backgroundImage: '',
+        image: '',
+        name: '',
+        account: '',
+        bio: "",
+        followingCount: "",
+        followerCount: "",
+      },
+    }
+  },
+  created() {
+    this.fetchUser()
+  },
+  methods: {
+    fetchUser() {
+      this.user = {
+        ...this.user,
+        ...dummyUser.user
+      }
+    },
+    showUserEditModal() {
+      this.$emit("after-click-button")      
+    },
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .user__profile__header {
@@ -74,7 +122,6 @@
     color: $brand-orange;
     border: 1px solid $brand-orange;
     border-radius: 50px;
-    padding: 7px 15px;
     width: 128px;
     height: 40px;
     font-size: 16px;

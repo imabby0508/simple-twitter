@@ -18,19 +18,19 @@ const routes = [
     component: UserLogin,
   },
   {
-    path: '/signup',
-    name: 'sign-up',
-    component: () => import('../views/Regist.vue')
+    path: "/signup",
+    name: "sign-up",
+    component: () => import("../views/Regist.vue"),
   },
   {
-    path: '/signin/admin',
+    path: "/signin/admin",
     name: "admin-sign-in",
-    component: () => import('../views/AdminLogin.vue')
+    component: () => import("../views/AdminLogin.vue"),
   },
   {
-    path: '/setting',
-    name: 'setting',
-    component: () => import('../views/Setting.vue')
+    path: "/setting",
+    name: "setting",
+    component: () => import("../views/Setting.vue"),
   },
   {
     path: "/main",
@@ -43,19 +43,29 @@ const routes = [
     component: () => import("../views/Reply.vue"),
   },
   {
-    path: "/user/tweets",
+    path: "/user/:id/tweets",
     name: "user-tweets",
     component: () => import("../views/UserTweets.vue"),
   },
   {
-    path: "/user/replies",
+    path: "/user/:id/replies",
     name: "user-replies",
     component: () => import("../views/UserReplies.vue"),
   },
   {
-    path: "/user/likes",
+    path: "/user/:id/likes",
     name: "user-likes",
     component: () => import("../views/UserLikes.vue"),
+  },
+  {
+    path: "/user/:id/followers",
+    name: "user-followers",
+    component: () => import("../views/UserFollowers.vue"),
+  },
+  {
+    path: "/user/:id/followings",
+    name: "user-followings",
+    component: () => import("../views/UserFollowings.vue"),
   },
   {
     path: "*",

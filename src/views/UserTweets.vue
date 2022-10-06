@@ -5,16 +5,16 @@
     <MainNav />
 
     <div class="user__info__wrapper">
-      <UserProfile />
+      <UserProfile @after-click-button="editUserProfile"/>
       
-      <ProfilePills />
+      <ProfilePills :initial-selected="selected"/>
 
-      <TweetCard />
+      <TweetCard :initial-selected="selected"/>
     </div>
 
     <PopularList />
 
-    <UserEdit />
+    <UserEdit v-if="isModalVisible" @after-click-button="closeUserEditModal"/>
 
   </div>
 
@@ -37,6 +37,20 @@ export default {
     PopularList,
     UserEdit
   },
+  data() {
+    return {
+      isModalVisible: false,
+      selected: 'tweets'
+    }    
+  },
+  methods: {
+    editUserProfile() {
+      this.isModalVisible = true
+    },
+    closeUserEditModal() {
+      this.isModalVisible = false
+    }
+  } 
 }
 
 </script>
