@@ -1,9 +1,9 @@
 <template>
 
-  <div class="container main-container">
+  <div class="container main__container">
 
     <MainNav />
-    <!-- Tweet -->
+
     <div class="tweet">
       <div class="tweet__post">
         <h4 class="tweet__title">首頁</h4>
@@ -39,5 +39,49 @@ export default {
 }
 
 </script>
+
+<style lang="scss" scoped>
+.main__container {
+  display: grid;
+}
+.tweet {
+  border: 1px solid $border;
+  .tweet__title {
+    padding: 24px;
+    margin-bottom: 0;
+  }
+  .tweet__content {
+    position: relative;
+    height: 136px;
+    padding: 16px 24px;
+    border-top: 1px solid $border;
+    border-bottom: 10px solid $border;
+    .tweet__description {
+      display: flex;
+      .tweet__avatar {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+      }
+      h5 {
+        color: $secondary-gray;
+        padding-left: 8px;
+        line-height: 50px;
+      }
+    }   
+    button {
+      position: absolute; 
+      right: 40px;
+      bottom: 16px;
+      width: 64px;
+      height: 40px;
+      border-radius: 50px;
+      border: none;
+      background: $brand-orange;
+      color: $scale-gray1
+    }
+  }
+}
+</style>
 
 
