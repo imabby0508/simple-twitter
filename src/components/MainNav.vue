@@ -1,84 +1,145 @@
 <template>
   <nav class="sidebar">
-    <div class="sidebar--logo">
-      <img
-        src="../assets/image/logo-icon.png"
-        alt="logo"
-      >
+
+    <div>
+
+      <div class="sidebar--logo">
+        <img
+          src="../assets/image/logo-icon.png"
+          alt="logo"
+          class="icon-logo"
+        >
+      </div>
+
+      <div class="sidebar--menu">
+
+        <router-link
+          to="/main"
+          class="d-flex align-items-center"          
+        >
+          <img
+            src='../assets/image/home-icon_active.png'
+            alt="home-page"
+            class="icon"
+            v-if="$route.name === 'main'"
+          >
+          <img
+            src='../assets/image/home-icon.png'
+            alt="home-page"
+            class="icon"
+            v-else
+          >
+          <span
+          >首頁</span>
+        </router-link>
+      
+        <a
+          href="#"
+          class="d-flex align-items-center"
+        >
+          <img
+            src="../assets/image/profile-icon_active.png"
+            alt="profile-page"
+            class="icon"
+            v-if="$route.name === 'profile'"
+          >
+          <img
+            src="../assets/image/profile-icon.png"
+            alt="profile-page"
+            class="icon"
+            v-else
+          >
+          <span>個人資料</span>
+        </a>
+      
+        <router-link
+          to="/setting"
+          class="d-flex align-items-center"
+        >
+          <img
+            src="../assets/image/setting-icon_active.png"
+            alt="setting-page"
+            class="icon"
+            v-if="$route.name === 'setting'"
+          >
+          <img
+            src="../assets/image/setting-icon.png"
+            alt="setting-page"
+            class="icon"
+            v-else
+          >
+          <span>設定</span>
+        </router-link>
+      
+      </div>
+ 
+      <div>
+        <button
+        type="button"
+        >
+        推文</button>
+      </div>
+      
     </div>
 
     <div class="sidebar--menu">
-      <div class="sidebar--menu--link d-flex align-items-center">
+      <router-link
+        to="/signin"
+        class="d-flex align-items-center"
+      >
         <img
-          src="../assets/image/home-icon.png"
-          alt="home-page"
-          class="mx-4"
-        >
-        <span>首頁</span>
-      </div>
-      <div class="sidebar--menu--link d-flex align-items-center">
-        <img
-          src="../assets/image/profile-icon.png"
-          alt="profile-page"
-          class="mx-4"
-        >
-        <span>個人資料</span>
-      </div>
-      <div class="sidebar--menu--link d-flex align-items-center">
-        <img
-          src="../assets/image/setting-icon.png"
+          src="../assets/image/logout-icon.png"
           alt="setting-page"
-          class="mx-4"
+          class="icon"
         >
-        <span>設定</span>
-      </div>
+        <span>登出</span>
+      </router-link>
     </div>
-    
-    <div>
-      <button>推文</button>
-    </div>
+
   </nav>
 </template>
 
 <style lang="scss" scoped>
 .sidebar {
-  background: #ccc;
-  width: 100%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 999;
+  width: 12.7vw;
   height: 100%;
-  .sidebar--logo {
-    padding: 13px 0 0 13px;
-    img {
-        width: 50px;
-        height: 50px;
-    }
-  }
-  .sidebar--menu{
-    padding-top: 29px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  background: $scale-gray1;
 
-    .sidebar--menu--link:not(:last-child) {
+  .sidebar--logo {
+    padding: 8px 0 0 8px;
+    margin-bottom: 30px;
+  }
+
+  .sidebar--menu {
+    padding-left: 16px;
+    a:not(:last-child) {
       margin-bottom: 40px;
     }
-    
-    .sidebar--menu--link {
-      img {
-        width: 24px;
-        height: 24px;
-              &:hover {
-                  color: $brand-orange
-                }
-      }
-      span {
-        color: $scale-gray9;
-        font-weight: 700;
-        font-size: 18px;
-        line-height: 26px;
-              &:hover {
-                  color: $brand-orange
-                }
-      }
-
+    img {
+      margin-right: 16px;
     }
-
+    span {
+      color: $scale-gray9;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 26px;
+    }
+  }
+  .icon-logo {
+    width: 50px;
+    height: 50px;
+  }
+  .icon {
+    width: 24px;
+    height: 24px;
   }
   button {
     width: 100%;
@@ -89,6 +150,12 @@
     color: $scale-gray1;
     padding: 8px 0;
     margin-top: 24px;
+  }
+
+  .router-link-exact-active {
+    span {
+      color: $brand-orange;
+    }
   }
 
 }
