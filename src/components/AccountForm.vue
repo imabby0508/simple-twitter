@@ -74,17 +74,17 @@
 
     <div class="form-wrapper">
       <label
-        for="passwordCheck"
+        for="checkPassword"
         class="d-block"
       >密碼確認</label>
       <input
         type="password"
-        id="passwordCheck"
-        name="passwordCheck"
+        id="checkPassword"
+        name="checkPassword"
         placeholder="請再次輸入密碼"
         required
         class="d-block"
-        v-model="passwordCheck"
+        v-model="checkPassword"
       >
     </div>
 
@@ -126,7 +126,7 @@ export default {
       name: '',
       email: '',
       password: '',
-      passwordCheck: ''
+      checkPassword: ''
     }
   },
   computed: {
@@ -159,7 +159,7 @@ export default {
         name: this.name,
         email: this.email,
         password: this.password,
-        passwordCheck: this.passwordCheck
+        checkPassword: this.checkPassword
       })
       console.log(data)
     },
@@ -169,7 +169,7 @@ export default {
         name: this.name,
         email: this.email,
         password: this.password,
-        passwordCheck: this.passwordCheck
+        checkPassword: this.checkPassword
       })
       console.log(data)
     }

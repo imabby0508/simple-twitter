@@ -2,7 +2,7 @@
   <div class="login__wrapper">
     <div>
       <img
-        src="../assets/logo@2x.png"
+        src="../assets/image/logo-icon.png"
         alt="log"
       >
     </div>
