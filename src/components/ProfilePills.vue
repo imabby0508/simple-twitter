@@ -1,16 +1,36 @@
 <template>
   <ul class="nav">
     <li class="nav-item">
-      <a class="nav-link active" href="#">推文</a>
+      <router-link :class="{active: selected === 'tweets'}" class="nav-link" :to="{ name: 'user-tweets'}">推文</router-link>
+       
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">回覆</a>
+      <router-link :class="{active: selected === 'replies'}" class="nav-link" :to="{ name: 'user-replies'}">回覆</router-link>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">喜歡的內容</a>
+      <router-link :class="{active: selected === 'likes'}" class="nav-link" :to="{ name: 'user-likes'}">喜歡的內容</router-link>
     </li>
   </ul>
+  
 </template>
+
+<script>
+export default {
+  props: {
+    initialSelected: {
+      type: String,
+      required: true
+    }
+  },
+  data() {
+    return {
+      selected: this.initialSelected
+    }
+  }
+
+}
+
+</script>
 
 <style lang="scss" scoped>
 .nav-link {
