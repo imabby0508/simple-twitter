@@ -1,15 +1,17 @@
 <template>
   <div class="tweet__card__wrapper">
-    <div v-for="tweet in tweetsArray" :key="tweet.id" class="tweet__card">
+    <div v-for="tweet in tweetsArray" :key="tweet.id" class="tweet__card" :to="{name: 'reply', params: {id: tweet.id}}">
       <div class="tweet__card__content">
-        <img
-          class="tweet__card__avatar"
-          src="@/assets/image/user-avatar.png"
-          alt="avatar"
-        />
+        <router-link :to="{name: 'user-tweets', params: {id: tweet.user.id}}">
+          <img
+            class="tweet__card__avatar"
+            src="@/assets/image/user-avatar.png"
+            alt="avatar"
+          />
+        </router-link>
         <div class="tweet__card__right">
           <div class="tweet__card__title">
-            <p class="tweet__card__name">{{ tweet.user.name }}</p>
+            <router-link :to="{name: 'user-tweets', params: {id: tweet.user.id}}" class="tweet__card__name">{{ tweet.user.name }}</router-link>
             <p class="tweet__card__account">{{ tweet.user.account }}</p>
             <p class="tweet__card__time">・{{ tweet.createdAt }}</p>
           </div>
@@ -20,7 +22,7 @@
             <img src="@/assets/image/reply-icon.png" alt="reply" />
             <p>{{ tweet.replyCounts }}</p>
             <img v-if="tweet.isLiked" src="@/assets/image/red-like-icon.png" alt="like" />
-            <img v-else src="@/assets/image/like-icon.png" alt="like" />
+            <img v-else src="@/assets/image/like-icon.png" alt="like"/>
             <p>{{ tweet.likeCounts }}</p>
           </div>
         </div>
@@ -31,6 +33,7 @@
 </template>
 
 <script>
+
 const dummyData = {
   tweets: [
     {
@@ -64,7 +67,7 @@ const dummyData = {
       },
     },
     {
-      id: 2,
+      id: 3,
       description:
         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
       createdAt: "3小時",
@@ -79,7 +82,7 @@ const dummyData = {
       },
     },
     {
-      id: 2,
+      id: 4,
       description:
         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
       createdAt: "3小時",
@@ -94,7 +97,7 @@ const dummyData = {
       },
     },
     {
-      id: 2,
+      id: 5,
       description:
         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
       createdAt: "3小時",
@@ -109,7 +112,7 @@ const dummyData = {
       },
     },
     {
-      id: 2,
+      id: 6,
       description:
         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
       createdAt: "3小時",
@@ -124,7 +127,7 @@ const dummyData = {
       },
     },
     {
-      id: 2,
+      id: 7,
       description:
         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
       createdAt: "3小時",
@@ -139,7 +142,7 @@ const dummyData = {
       },
     },
     {
-      id: 2,
+      id: 8,
       description:
         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
       createdAt: "3小時",
@@ -157,6 +160,16 @@ const dummyData = {
 };
 
 export default {
+  // props: {
+  //   tweetContent: {
+  //     type: String,
+  //     required: true
+  //   },
+  //   isSubmit: {
+  //     type: Boolean,
+  //     default: false
+  //   }
+  // },
   data() {
     return {
       tweet: {
@@ -211,16 +224,33 @@ export default {
         };        
         
         this.tweetsArray.push(this.tweet)
-      });
-      
+      });      
     },
+
+
+    // afterCreateTweet() {
+    //   if(this.isSubmit) {
+    //     this.tweetsArray.push(this.tweetContent)
+    //   }
+      
+    //   console.log(this.tweetsArray)
+    // }
   },
 };
 </script>
 
 <style lang="scss" scoped>
+
 .tweet__card {
   border-top: 1px solid $border;
+  .router-link-active {
+    text-decoration: none; 
+    color: $scale-gray10
+  }
+  a {
+    text-decoration: none;
+    color: $scale-gray10
+  }
   .tweet__card__content {
     display: flex;
     padding: 16px 24px;

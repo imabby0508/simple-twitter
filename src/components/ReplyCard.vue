@@ -2,11 +2,13 @@
   <div class="reply__card__wrapper">
      <!-- <p class="reply__card__name">{{ this.user.name }}</p> -->
     <div v-for="reply in repliesArray" :key="reply.id" class="reply__card">
-      <img
-        class="reply__card__avatar"
-        src="@/assets/image/user-avatar.png"
-        alt="avatar"
-      />
+      <router-link :to="{ name: 'user-tweets', params: {id: reply.replyUser.id}}">
+        <img
+          class="reply__card__avatar"
+          src="@/assets/image/user-avatar.png"
+          alt="avatar"
+        />
+      </router-link>
       <div class="reply__card__right">
         <div class="reply__card__title">
           <p class="reply__card__name">{{ reply.replyUser.name }}</p>

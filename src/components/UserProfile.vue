@@ -14,15 +14,24 @@
 
     <div class="user__profile__content">
       <img class="user__cover" src="@/assets/image/user-cover.png" alt="user-cover-img">
-      <img class="user__avatar" src="@/assets/image/avatar-1.png" alt="user-avatar">   
-      <button @click.stop.prevent="showUserEditModal()">編輯個人資料</button>
+      <img class="user__avatar" src="@/assets/image/avatar-1.png" alt="user-avatar">
+      <template v-if="user.id === currentUser.id" >
+        <button @click.stop.prevent="showUserEditModal()" class="modify__profile__btn">編輯個人資料</button>
+      </template>   
+      <div v-else class="profile__btn">
+        <button class="message__btn"><img src="@/assets/image/btn_msg.png" alt="message"></button>
+        <button class="notfi__btn"><img src="@/assets/image/btn_notfi.png" alt="notfi"></button>
+        <button v-if="user.isFollow" class="following__btn" @click.stop.prevent="deleteFollow(user.id)">正在跟隨</button>
+        <button v-else class="unfollowing__btn" @click.stop.prevent="addFollow(user.id)">跟隨</button>
+      </div>     
+      
       <div class="user__info">
         <div class="user__name">{{this.user.name}}</div>
         <div class="user__account">{{this.user.account}}</div>
-        <div class="user__bio">
-          {{this.user.bio}}
+        <div class="user__introduction">
+          {{this.user.introduction}}
         </div>
-        <div class="user__follow"> 
+        <div class="user__follow">
           <router-link :to="{name: 'user-followers', params: { id: '1'}}" class="user__follow__num">{{this.user.followingCount}}個</router-link><p class="following">跟隨中</p>
           <router-link :to="{name: 'user-followings', params: { id: '1'}}" class="user__follow__num">{{this.user.followerCount}}位</router-link><p class="follower">跟隨者</p>
         </div>
@@ -34,15 +43,19 @@
 <script>
 const dummyUser = {
   user: {
-    id: 1,
+    id: 2,
     tweetCount: 25,
     backgroundImage: '@/assets/image/user-cover.png',
     image: '@/assets/image/avatar-1.png',
     name: 'John Doe',
     account: '@heyjohn',
-    bio: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
+    introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
     followingCount: 34,
     followerCount: 59,
+    isFollow: false 
+  },
+  currentUser: {
+    id: 1,    
   }
 }
 
@@ -56,14 +69,18 @@ export default {
         image: '',
         name: '',
         account: '',
-        bio: "",
+        introduction: "",
         followingCount: "",
         followerCount: "",
       },
+      currentUser: {
+        id: -1,
+      }
     }
   },
   created() {
     this.fetchUser()
+    this.fetchCurrentUser()
   },
   methods: {
     fetchUser() {
@@ -72,9 +89,37 @@ export default {
         ...dummyUser.user
       }
     },
+    fetchCurrentUser() {
+      this.currentUser = {
+        ...this.currentUser,
+        ...dummyUser.currentUser
+      }
+    },
     showUserEditModal() {
       this.$emit("after-click-button")      
     },
+    addFollow(userId) {
+      if(userId === this.user.id) {
+        this.user = {
+          ...this.user,
+          isFollow: true,
+          followerCount: this.user.followerCount + 1
+        }
+      } else {
+        return user
+      }
+    },
+    deleteFollow(userId) {
+      if(userId === this.user.id) {
+        this.user = {
+          ...this.user,
+          isFollow: false,
+          followerCount: this.user.followerCount - 1
+        }
+      } else {
+        return user
+      }
+    }
   }
 }
 </script>
@@ -115,7 +160,39 @@ export default {
     border: 4px solid $scale-gray1;
     border-radius: 50%;
   }
-  button {
+  .profile__btn {
+    position: absolute;
+    top: 216px;
+    right: 16px;
+    display: flex;
+    .message__btn, .notfi__btn {    
+      width: 50px;
+      height: 40px;
+    }
+    .following__btn{ 
+      width: 96px;
+      height: 40px; 
+      margin-left: 5px;
+      border-radius: 50px;
+      background: $brand-orange;
+      font-weight: 400;
+      font-size: 16px;
+      color: $scale-gray1
+    }
+    .unfollowing__btn {
+      width: 64px;
+      height: 40px; 
+      margin-left: 5px;
+      border-radius: 50px;
+      border: 1px solid $brand-orange;
+      background: $scale-gray1;
+      font-weight: 400;
+      font-size: 16px;
+      color: $brand-orange
+    }
+  }
+
+  .modify__profile__btn {
     position: absolute;
     top: 216px;
     right: 16px;
@@ -139,7 +216,7 @@ export default {
       font-size: 14px;
       font-weight: 400;
     }
-    .user__bio {
+    .user__introduction {
       color: $scale-gray10;
       font-size: 14px;
       font-weight: 400;

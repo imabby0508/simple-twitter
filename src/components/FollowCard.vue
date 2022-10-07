@@ -29,7 +29,7 @@
               </button>
             </div>
             <p class="follow__card__description">
-              {{ follower.bio }}
+              {{ follower.introduction }}
             </p>
           </div>
         </div>
@@ -65,7 +65,7 @@
               </button>
             </div>
             <p class="follow__card__description">
-              {{ following.bio }}
+              {{ following.introduction }}
             </p>
           </div>
         </div>
@@ -82,7 +82,7 @@ const dummyData = {
       name: "Apple",
       account: "@apple",
       image: "",
-      bio: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
       isFollowing: true,
       isFollowed: true,
     },
@@ -91,27 +91,135 @@ const dummyData = {
       name: "Bob",
       account: "@bob",
       image: "",
-      bio: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: false,
+      isFollowed: true,
+    },
+        {
+      id: 3,
+      name: "Bob",
+      account: "@bob",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: false,
+      isFollowed: true,
+    },
+    {
+      id: 4,
+      name: "Bob",
+      account: "@bob",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: false,
+      isFollowed: true,
+    },
+    {
+      id: 5,
+      name: "Bob",
+      account: "@bob",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: false,
+      isFollowed: true,
+    },
+    {
+      id: 6,
+      name: "Bob",
+      account: "@bob",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: false,
+      isFollowed: true,
+    },
+    {
+      id: 7,
+      name: "Bob",
+      account: "@bob",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: false,
+      isFollowed: true,
+    },
+    {
+      id: 8,
+      name: "Bob",
+      account: "@bob",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
       isFollowing: false,
       isFollowed: true,
     },
   ],
   followings: [
     {
-      id: 3,
+      id: 13,
       name: "Apple",
       account: "@apple",
       image: "",
-      bio: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
       isFollowing: true,
       isFollowed: true,
     },
     {
-      id: 4,
+      id: 14,
       name: "Cindy",
       account: "@cindy",
       image: "",
-      bio: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: true,
+      isFollowed: false,
+    },
+    {
+      id: 15,
+      name: "Cindy",
+      account: "@cindy",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: true,
+      isFollowed: false,
+    },
+    {
+      id: 16,
+      name: "Cindy",
+      account: "@cindy",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: true,
+      isFollowed: false,
+    },
+    {
+      id: 17,
+      name: "Cindy",
+      account: "@cindy",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: true,
+      isFollowed: false,
+    },
+    {
+      id: 18,
+      name: "Cindy",
+      account: "@cindy",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: true,
+      isFollowed: false,
+    },
+    {
+      id: 19,
+      name: "Cindy",
+      account: "@cindy",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: true,
+      isFollowed: false,
+    },
+    {
+      id: 20,
+      name: "Cindy",
+      account: "@cindy",
+      image: "",
+      introduction: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
       isFollowing: true,
       isFollowed: false,
     },
