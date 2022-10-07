@@ -1,6 +1,6 @@
 <template>
 
-  <div class="container follow__container">
+  <div class="follow__container">
 
     <MainNav />
 
@@ -44,25 +44,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.user__follow__wrapper {
-  border: 1px solid $border;
-  .user__follow__header {
-    display: flex;
-    padding: 16px 0;
-    img {
-      width: 17px;
-      height: 14px;
-      margin: 14px 20px 14px 28px;
-    }
-    .header__name {
-      color: $scale-gray10;    
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .header__tweet__count {
-      color: $secondary-gray;    
-      font-size: 13px;
-      font-weight: 500;
+.follow__container {
+  position: relative;
+  margin: auto 9.3vw auto 9.3vw;
+  .user__follow__wrapper {
+    position: absolute;
+    left: 14.4vw;
+    right: 21.2vw;
+    border: 1px solid $border;
+    .user__follow__header {
+      display: flex;
+      padding: 16px 0;
+      img {
+        width: 17px;
+        height: 14px;
+        margin: 14px 20px 14px 28px;
+      }
+      .header__name {
+        color: $scale-gray10;    
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .header__tweet__count {
+        color: $secondary-gray;    
+        font-size: 13px;
+        font-weight: 500;
+      }
     }
   }
 }

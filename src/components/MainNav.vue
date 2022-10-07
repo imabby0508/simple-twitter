@@ -104,9 +104,11 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  // right: ;
+  left: 9.3vw;
   z-index: 999;
   width: 12.7vw;
+  max-width: 178px;
+  min-width: 160px;
   height: 100%;
   display: flex;
   flex-direction: column;

@@ -1,6 +1,6 @@
 <template>
 
-  <div class="container main__container">
+  <div class="main__container">
 
     <MainNav />
 
@@ -42,9 +42,13 @@ export default {
 
 <style lang="scss" scoped>
 .main__container {
-  display: grid;
+  position: relative;
+  margin: auto 9.3vw auto 9.3vw;
 }
 .tweet {
+  position: absolute; //讓 tweet置於 nav, popularlist 中間
+  left: 14.4vw;
+  right: 21.2vw;
   border: 1px solid $border;
   .tweet__title {
     padding: 24px;

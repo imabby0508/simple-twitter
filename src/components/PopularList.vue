@@ -200,6 +200,8 @@ export default {
   top: 16px;
   right: 9.3vw;
   width: 19.5vw;
+  max-width: 350px;
+  min-width: 265px;
   background: $scale-gray2;
   border-radius: 16px;
 
@@ -240,7 +242,7 @@ export default {
         }
       }
       &--button {
-        width: 96px;
+        min-width: 96px;
         height: 40px;
         .btn {
             border-radius: 50px;
