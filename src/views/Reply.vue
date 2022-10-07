@@ -1,5 +1,5 @@
 <template>
-  <div class="container reply__container">
+  <div class="reply__container">
     <MainNav />
 
     <div class="reply">
@@ -60,9 +60,13 @@ export default {
 
 <style lang="scss" scoped>
 .reply__container {
-  display: grid;
+  position: relative;
+  margin: auto 9.3vw auto 9.3vw;
 }
 .reply {
+  position: absolute;
+  left: 14.4vw;
+  right: 21.2vw;
   border: 1px solid #e6ecf0;
   .reply__header {
     display: flex;

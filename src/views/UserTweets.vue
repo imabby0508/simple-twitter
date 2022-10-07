@@ -1,6 +1,6 @@
 <template>
 
-  <div class="container user__container">
+  <div class="user__container">
 
     <MainNav />
 
@@ -55,7 +55,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.user__info__wrapper {
-  border: 1px solid $border
+.user__container {
+  position: relative;
+  margin: auto 9.3vw auto 9.3vw;
+  .user__info__wrapper {
+    position: absolute; 
+    left: 14.4vw;
+    right: 21.2vw;
+    border: 1px solid $border
+  }
 }
+
 </style>

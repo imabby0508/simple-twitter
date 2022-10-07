@@ -63,6 +63,96 @@ const dummyData = {
         avatar: "",
       },
     },
+    {
+      id: 2,
+      description:
+        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      createdAt: "3小時",
+      replyCounts: 13,
+      likeCounts: 76,
+      isLiked: true,
+      user: {
+        id: 2,
+        account: "@apple",
+        name: "Apple",
+        avatar: "",
+      },
+    },
+    {
+      id: 2,
+      description:
+        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      createdAt: "3小時",
+      replyCounts: 13,
+      likeCounts: 76,
+      isLiked: true,
+      user: {
+        id: 2,
+        account: "@apple",
+        name: "Apple",
+        avatar: "",
+      },
+    },
+    {
+      id: 2,
+      description:
+        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      createdAt: "3小時",
+      replyCounts: 13,
+      likeCounts: 76,
+      isLiked: true,
+      user: {
+        id: 2,
+        account: "@apple",
+        name: "Apple",
+        avatar: "",
+      },
+    },
+    {
+      id: 2,
+      description:
+        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      createdAt: "3小時",
+      replyCounts: 13,
+      likeCounts: 76,
+      isLiked: true,
+      user: {
+        id: 2,
+        account: "@apple",
+        name: "Apple",
+        avatar: "",
+      },
+    },
+    {
+      id: 2,
+      description:
+        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      createdAt: "3小時",
+      replyCounts: 13,
+      likeCounts: 76,
+      isLiked: true,
+      user: {
+        id: 2,
+        account: "@apple",
+        name: "Apple",
+        avatar: "",
+      },
+    },
+    {
+      id: 2,
+      description:
+        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      createdAt: "3小時",
+      replyCounts: 13,
+      likeCounts: 76,
+      isLiked: true,
+      user: {
+        id: 2,
+        account: "@apple",
+        name: "Apple",
+        avatar: "",
+      },
+    },
   ],
 };
 
