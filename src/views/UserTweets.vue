@@ -7,9 +7,9 @@
     <div class="user__info__wrapper">
       <UserProfile @after-click-button="editUserProfile"/>
       
-      <ProfilePills :initial-selected="selected"/>
+      <ProfilePills />
 
-      <TweetCard :initial-selected="selected"/>
+      <TweetCard />
     </div>
 
     <PopularList />
@@ -40,7 +40,6 @@ export default {
   data() {
     return {
       isModalVisible: false,
-      selected: 'tweets'
     }    
   },
   methods: {

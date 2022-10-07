@@ -7,7 +7,7 @@
     <div class="user__info__wrapper">
       <UserProfile @after-click-button="editUserProfile" />
       
-      <ProfilePills :initial-selected="selected"/>
+      <ProfilePills />
 
       <ReplyCard />
     </div>
@@ -40,7 +40,6 @@ export default {
   data() {
     return {
       isModalVisible: false,
-      selected: 'replies'
     }    
   },
   methods: {

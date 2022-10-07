@@ -1,69 +1,143 @@
 <template>
   <div class="follow__card__wrapper">
-    <div v-for="follower in followers" :key="follower.id" class="follow__card">
-      <div class="follow__card__content">
-        <img
-          class="follow__card__avatar"
-          src="@/assets/image/user-avatar.png"
-          alt="avatar"
-        />
-        <div class="follow__card__right">
-          <div class="follow__card__title">
-            <div>
-              <p class="follow__card__name">{{follower.name}}</p>
-              <p class="follow__card__account">{{follower.account}}</p>
+    <template v-if="$route.name === 'user-followers'">
+      <div
+        v-for="follower in followers"
+        :key="follower.id"
+        class="follow__card"
+      >
+        <div class="follow__card__content">
+          <img
+            class="follow__card__avatar"
+            src="@/assets/image/user-avatar.png"
+            alt="avatar"
+          />
+          <div class="follow__card__right">
+            <div class="follow__card__title">
+              <div>
+                <p class="follow__card__name">{{ follower.name }}</p>
+                <p class="follow__card__account">{{ follower.account }}</p>
+              </div>
+              <button
+                v-if="follower.isFollowing"
+                class="follow__card__btn--following"
+              >
+                正在跟隨
+              </button>
+              <button v-else class="follow__card__btn--unfollowing">
+                跟隨
+              </button>
             </div>
-            <button v-if="follower.isFollowing" class="follow__card__btn--following">正在跟隨</button>
-            <button v-else class="follow__card__btn--unfollowing">跟隨</button>
+            <p class="follow__card__description">
+              {{ follower.bio }}
+            </p>
           </div>
-          <p class="follow__card__description">
-            {{follower.bio}}
-          </p>
         </div>
       </div>
-    </div>
+    </template>
+
+    <template v-if="$route.name === 'user-followings'">
+      <div
+        v-for="following in followings"
+        :key="following.id"
+        class="follow__card"
+      >
+        <div class="follow__card__content">
+          <img
+            class="follow__card__avatar"
+            src="@/assets/image/user-avatar.png"
+            alt="avatar"
+          />
+          <div class="follow__card__right">
+            <div class="follow__card__title">
+              <div>
+                <p class="follow__card__name">{{ following.name }}</p>
+                <p class="follow__card__account">{{ following.account }}</p>
+              </div>
+              <button
+                v-if="following.isFollowing"
+                class="follow__card__btn--following"
+              >
+                正在跟隨
+              </button>
+              <button v-else class="follow__card__btn--unfollowing">
+                跟隨
+              </button>
+            </div>
+            <p class="follow__card__description">
+              {{ following.bio }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 const dummyData = {
   followers: [
-  {
-    id: 1,
-    name: 'Apple',
-    account: '@apple',
-    image: '',
-    bio: 'Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ',
-    isFollowing: true,
-    isFollowed: true,
-  },
-  {
-    id: 2,
-    name: 'Bob',
-    account: '@bob',
-    image: '',
-    bio: 'Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ',
-    isFollowing: false,
-    isFollowed: true,
-  }]
-}
-
+    {
+      id: 1,
+      name: "Apple",
+      account: "@apple",
+      image: "",
+      bio: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: true,
+      isFollowed: true,
+    },
+    {
+      id: 2,
+      name: "Bob",
+      account: "@bob",
+      image: "",
+      bio: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: false,
+      isFollowed: true,
+    },
+  ],
+  followings: [
+    {
+      id: 3,
+      name: "Apple",
+      account: "@apple",
+      image: "",
+      bio: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: true,
+      isFollowed: true,
+    },
+    {
+      id: 4,
+      name: "Cindy",
+      account: "@cindy",
+      image: "",
+      bio: "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+      isFollowing: true,
+      isFollowed: false,
+    },
+  ],
+};
 
 export default {
   data() {
     return {
-      followers: [],      
-    }
+      followers: [],
+      followings: [],
+    };
   },
   created() {
-    this.fetchFollower()
+    this.fetchFollower();
+    this.fetchFollowings();
   },
   methods: {
     fetchFollower() {
-      this.followers = dummyData.followers
-    }
-  }
-}
+      this.followers = dummyData.followers;
+    },
+    fetchFollowings() {
+      this.followings = dummyData.followings;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

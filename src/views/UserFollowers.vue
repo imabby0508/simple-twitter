@@ -2,7 +2,7 @@
 
   <div class="container follow__container">
 
-    <!-- <MainNav /> -->
+    <MainNav />
 
     <div class="user__follow__wrapper">
       <div class="user__follow__header">
