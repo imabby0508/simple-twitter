@@ -74,10 +74,23 @@
       </div>
  
       <div>
+
+        <!-- <button
+          id="show-modal"
+          @click="showTweetModal = true"
+        >Show Modal</button> -->
+
+        <!-- use the modal component, pass in the prop -->
+        <TweetModal
+          v-if="showTweetModal"
+          @close="showTweetModal = false"
+        />
+
         <button
         type="button"
-        >
-        推文</button>
+        id="show-modal"
+        @click="showTweetModal = true"
+        >推文</button>
       </div>
       
     </div>
@@ -98,6 +111,21 @@
 
   </nav>
 </template>
+
+<script>
+import TweetModal from '../components/TweetModal.vue'
+
+export default {
+  components: {
+    TweetModal,
+  },
+  data () {
+    return {
+      showTweetModal: false
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .sidebar {
