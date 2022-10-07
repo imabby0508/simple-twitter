@@ -1,10 +1,10 @@
 <template>
   <ul class="nav">
     <li class="nav-item">
-      <router-link class="nav-link active" to="/user/followers">追蹤者</router-link>
+      <router-link class="nav-link" :class="{active: $route.name === 'user-followers'}" :to="{name: 'user-followers'}">追蹤者</router-link>
     </li>
     <li class="nav-item">
-      <router-link class="nav-link" to="/user/followings">正在追隨</router-link>
+      <router-link class="nav-link" :class="{active: $route.name === 'user-followings'}" :to="{name: 'user-followings'}">正在追隨</router-link>
     </li>
   </ul>
 </template>

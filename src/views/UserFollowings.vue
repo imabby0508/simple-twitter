@@ -6,7 +6,9 @@
 
     <div class="user__follow__wrapper">
       <div class="user__follow__header">
-        <img src="@/assets/image/arrow.png" alt="arrow" />
+        <router-link :to="{name: 'user-tweets'}">
+          <img src="@/assets/image/arrow.png" alt="arrow" />
+        </router-link>
         <div>
           <h4 class="header__name">John Doe</h4>
           <p class="header__tweet__count">25推文</p>

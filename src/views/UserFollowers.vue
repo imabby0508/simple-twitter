@@ -6,10 +6,12 @@
 
     <div class="user__follow__wrapper">
       <div class="user__follow__header">
-        <img src="@/assets/image/arrow.png" alt="arrow" />
+        <router-link :to="{name: 'user-tweets'}">
+          <img src="@/assets/image/arrow.png" alt="arrow" />
+        </router-link>
         <div>
-          <h4 class="header__name">John Doe</h4>
-          <p class="header__tweet__count">25推文</p>
+          <h4 class="header__name">{{this.user.name}}</h4>
+          <p class="header__tweet__count">{{this.user.tweetCount}}推文</p>
         </div>      
       </div>
 
@@ -24,11 +26,20 @@
 
 </template>
 
+
 <script>
 import MainNav from "./../components/MainNav";
 import FollowPills from "./../components/FollowPills";
 import FollowCard from "./../components/FollowCard";
 import PopularList from "./../components/PopularList";
+
+const dummyUser = {
+  user: {
+    id: 1,
+    tweetCount: 25,
+    name: 'John Doe',    
+  }
+}
 
 export default {
   components: {
@@ -36,7 +47,27 @@ export default {
     FollowPills,
     FollowCard,
     PopularList
+  },  
+  data() {
+    return {
+      user: {
+        id: -1,
+        tweetCount: "",        
+        name: ''
+      },
+    }
   },
+  created() {
+    this.fetchUser()
+  },
+  methods: {
+    fetchUser() {
+      this.user = {
+        ...this.user,
+        ...dummyUser.user
+      }
+    }
+  }
 }
 
 </script>
