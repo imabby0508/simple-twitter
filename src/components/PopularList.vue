@@ -23,18 +23,18 @@
           </div>
         </div>
         <div class="user--wrapper--button d-flex justify-content-end">
-          <button 
-          class="btn btn-follow" 
-          type="button"
-          v-if="user.isFollowed"
-          @click.stop.prevent="deleteFollow(user.id)"
+          <button
+            class="btn btn-follow"
+            type="button"
+            v-if="user.isFollowed"
+            @click.stop.prevent="deleteFollow(user.id)"
           >正在跟隨</button>
 
-          <button 
-          class="btn btn-unfollow" 
-          type="button"
-          v-else
-          @click.stop.prevent="addFollow(user.id)"
+          <button
+            class="btn btn-unfollow"
+            type="button"
+            v-else
+            @click.stop.prevent="addFollow(user.id)"
           >跟隨</button>
 
         </div>
@@ -164,7 +164,7 @@ export default {
     fetchPopularList() {
       this.users = dummyData.users
     },
-    deleteFollow (userId) {
+    deleteFollow(userId) {
 
       this.users = this.users.map(user => {
         if (user.id === userId) {
@@ -211,17 +211,22 @@ export default {
     font-size: 24px;
     line-height: 26px;
   }
+
   &--users {
     border-top: 1px solid $border;
+
     .user--wrapper {
       padding: 16px;
+
       &--image img {
         width: 50px;
         height: 50px;
       }
+
       &--info {
         max-width: 6.4vw;
         margin-left: 8px;
+
         h3 {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -231,6 +236,7 @@ export default {
           line-height: 26px;
           // background: green;
         }
+
         p {
           overflow: hidden;
           text-overflow: ellipsis;
@@ -241,30 +247,32 @@ export default {
           // background: blue;
         }
       }
+
       &--button {
         min-width: 96px;
         height: 40px;
+
         .btn {
-            border-radius: 50px;
-            // padding: 8px 1vw;
-            margin-left: 5px;
-            font-weight: 400;
-            font-size: 16px;
-        
-            // line-height: 24px;
-            &-follow {
-              width: 100%;
-              background: $brand-orange;
-              color: $scale-gray1;
-            }
-        
-            &-unfollow {
-              width: 67%;
-              background: $scale-gray1;
-              border: 1px solid $brand-orange;
-              color: $brand-orange;
-            }
+          border-radius: 50px;
+          // padding: 8px 1vw;
+          margin-left: 5px;
+          font-weight: 400;
+          font-size: 16px;
+
+          // line-height: 24px;
+          &-follow {
+            width: 100%;
+            background: $brand-orange;
+            color: $scale-gray1;
           }
+
+          &-unfollow {
+            width: 67%;
+            background: $scale-gray1;
+            border: 1px solid $brand-orange;
+            color: $brand-orange;
+          }
+        }
       }
     }
   }

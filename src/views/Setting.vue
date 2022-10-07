@@ -76,7 +76,7 @@ export default {
     top: 0;
     left: 23.7vw;
     right: 30.5vw;
-    z-index: 999;
+    z-index: 99;
     padding: 24px;
     margin-bottom: 0;
     background: $scale-gray1;
