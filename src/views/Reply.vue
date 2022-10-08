@@ -18,7 +18,7 @@
 
             <div>
               <p class="tweet__name">{{this.tweet.user.name}}</p>
-              <p class="tweet__account">{{this.tweet.user.account}}</p>
+              <p class="tweet__account">@{{this.tweet.user.account}}</p>
             </div>            
           </div>
           <div class="tweet__description">
@@ -67,7 +67,7 @@ const dummyData = {
       id: 1,
       image: '',
       name: 'Apple',
-      account: '@apple'
+      account: 'apple'
     }
   }
 }

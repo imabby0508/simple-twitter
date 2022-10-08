@@ -17,7 +17,7 @@
 
       <FollowPills />
 
-      <FollowCard />
+      <FollowCard :user="user"/>
     </div>
 
     <PopularList />

@@ -27,7 +27,7 @@
       
       <div class="user__info">
         <div class="user__name">{{this.user.name}}</div>
-        <div class="user__account">{{this.user.account}}</div>
+        <div class="user__account">@{{this.user.account}}</div>
         <div class="user__introduction">
           {{this.user.introduction}}
         </div>
@@ -43,12 +43,12 @@
 <script>
 const dummyUser = {
   user: {
-    id: 2,
+    id: 1,
     tweetCount: 25,
     backgroundImage: '@/assets/image/user-cover.png',
     image: '@/assets/image/avatar-1.png',
     name: 'John Doe',
-    account: '@heyjohn',
+    account: 'heyjohn',
     introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
     followingCount: 34,
     followerCount: 59,
