@@ -1,38 +1,86 @@
 <template>
   <div class="tweet__card__wrapper">    
-    <router-link v-for="tweet in tweetsArray" :key="tweet.id" class="tweet__card" :to="{name: 'reply', params: {id: tweet.id}}">
-      <div class="tweet__card__content">  
+
+    <div
+    v-for="tweet in tweetsArray"
+    :key="tweet.id"
+    class="tweet__card"
+    >
+    <!-- <router-link 
+    v-for="tweet in tweetsArray" 
+    :key="tweet.id" 
+    class="tweet__card" 
+    :to="{name: 'reply', params: {id: tweet.id}}"
+    > -->
+
+      <router-link
+        class="tweet__card__content"
+        :to="{name: 'reply', params: {id: tweet.id}}"
+      >
+      <!-- <div class="tweet__card__content">   -->
         <div class="tweet__card__title">
-          <router-link :to="{name: 'user-tweets', params: {id: tweet.user.id}}">
+
+          <router-link :to="{name: 'user-tweets', params: {id: tweet.user.id}}" class="avatar">
             <img
               class="tweet__card__avatar"
               src="@/assets/image/user-avatar.png"
               alt="avatar"
             />
           </router-link>
-          <router-link :to="{name: 'user-tweets', params: {id: tweet.user.id}}" class="tweet__card__name">{{ tweet.user.name }}</router-link>
+
+          <router-link 
+          :to="{name: 'user-tweets', params: {id: tweet.user.id}}" 
+          class="tweet__card__name"
+          >{{ tweet.user.name }}
+          </router-link>
+
           <p class="tweet__card__account">@{{ tweet.user.account }}</p>
           <p class="tweet__card__time">・{{ tweet.createdAt }}</p>
         </div>
         <div class="tweet__card__description">
           {{ tweet.description }}
         </div>
-        <div class="tweet__card__footer">
-          <img @click="tweet.showReplyModal=true" src="@/assets/image/reply-icon.png" alt="reply" />
 
-          <ReplyModal 
+      <!-- </div> -->
+      </router-link>
+
+    <!-- </router-link> -->
+      <div class="tweet__card__footer">
+      
+        <div class="reply-icon">
+          <img
+            @click="tweet.showReplyModal=true"
+            src="@/assets/image/reply-icon.png"
+            alt="reply"
+          />
+        </div>
+        <p>{{ tweet.replyCounts }}</p>
+      
+        <ReplyModal
           v-if="tweet.showReplyModal"
           @close="tweet.showReplyModal=false"
           :tweet="tweet"
-          />
-
-          <p>{{ tweet.replyCounts }}</p>
-          <img v-if="tweet.isLiked" src="@/assets/image/red-like-icon.png" alt="like" @click.stop.prevent="deleteLike(tweet.id)"/>
-          <img v-else src="@/assets/image/like-icon.png" alt="like" @click.stop.prevent="addLike(tweet.id)"/>
-          <p>{{ tweet.likeCounts }}</p>
-        </div>
+        />
+      
+        <img
+          v-if="tweet.isLiked"
+          src="@/assets/image/red-like-icon.png"
+          alt="like"
+          @click.stop.prevent="deleteLike(tweet.id)"
+        />
+        <img
+          v-else
+          src="@/assets/image/like-icon.png"
+          alt="like"
+          @click.stop.prevent="addLike(tweet.id)"
+        />
+        <p>{{ tweet.likeCounts }}</p>
+      
       </div>
-    </router-link>
+    </div>
+
+
+
   </div>
 </template>
 
@@ -80,7 +128,7 @@ const dummyData = {
       likeCounts: 76,
       isLiked: true,
       user: {
-        id: 2,
+        id: 3,
         account: "apple",
         name: "Apple",
         avatar: "",
@@ -95,7 +143,7 @@ const dummyData = {
       likeCounts: 76,
       isLiked: true,
       user: {
-        id: 2,
+        id: 4,
         account: "apple",
         name: "Apple",
         avatar: "",
@@ -110,7 +158,7 @@ const dummyData = {
       likeCounts: 76,
       isLiked: true,
       user: {
-        id: 2,
+        id: 5,
         account: "apple",
         name: "Apple",
         avatar: "",
@@ -125,7 +173,7 @@ const dummyData = {
       likeCounts: 76,
       isLiked: true,
       user: {
-        id: 2,
+        id: 6,
         account: "apple",
         name: "Apple",
         avatar: "",
@@ -140,7 +188,7 @@ const dummyData = {
       likeCounts: 76,
       isLiked: true,
       user: {
-        id: 2,
+        id: 7,
         account: "apple",
         name: "Apple",
         avatar: "",
@@ -155,7 +203,7 @@ const dummyData = {
       likeCounts: 76,
       isLiked: true,
       user: {
-        id: 2,
+        id: 8,
         account: "apple",
         name: "Apple",
         avatar: "",
@@ -243,18 +291,26 @@ export default {
           return {
             ...tweetContent,
             isLiked: true,
-            // likeCounts: tweetContent.likeCounts + 1   
+            likeCounts: tweetContent.likeCounts + 1   
           }
+        } else {
+          return tweetContent
         }
       })  
     },
-    // deleteLike(tweetId) {
-    //   this.tweet = {
-    //     ...this.tweet,
-    //     isLiked: false,
-    //     likeCounts: this.tweet.likeCounts - 1      
-    //   }
-    // }
+    deleteLike(tweetId) {
+      this.tweetsArray = this.tweetsArray.map(tweetContent => {
+        if (tweetId === tweetContent.id) {
+          return {
+            ...tweetContent,
+            isLiked: false,
+            likeCounts: tweetContent.likeCounts - 1
+          }
+        } else {
+          return tweetContent
+        }
+      })  
+    }
 
 
     // afterCreateTweet() {
@@ -269,19 +325,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.tweet__card {  
+.tweet__card {
+  position: relative;
+  display: block;
+  &:hover {
+      background-color: $scale-gray3;
+    }
   .router-link-active {
     text-decoration: none; 
-    color: $scale-gray10
+    color: $scale-gray10;
   }
   a {
     text-decoration: none;
-    color: $scale-gray10
+    color: $scale-gray10;
   }
   .tweet__card__content {
+    display: block;
     border-top: 1px solid $border;
-    padding: 16px 24px;
+    padding: 16px 24px 40px 24px;
     .tweet__card__title {
       display: flex;
       align-items: top;
@@ -290,11 +351,17 @@ export default {
         border-radius: 50%;
         width: 50px;
         height: 50px;
+        &:hover {
+          opacity: 0.7
+        }
       }
       .tweet__card__name {
         margin: 2px 8px 0 10px;
         font-size: 16px;
         font-weight: 700;
+        &:hover {
+          text-decoration: solid underline $modal-black 1.5px;
+        }
       }
       .tweet__card__account,
       .tweet__card__time {
@@ -313,19 +380,33 @@ export default {
     } 
   }
   .tweet__card__footer {
+    position: absolute;
+    bottom: 16px;
+    left: 82px;
+    width: 120px;
+    height: 16px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     color: $secondary-gray;
     font-size: 14px;
     font-weight: 600;
     font-family: Montserrat;
-    padding-left: 60px;
     img {
+      position: relative;
+      display: block;
       width: 13px;
       height: 13px;
+      cursor: pointer;
+      // &:hover {
+      //   border: 10px solid rgba(255, 102, 0, 0.2);
+      // }
     }
     p {
       margin: 0 40px 0 10px;
+      &:hover {
+        color: $brand-orange;
+      }
     }
   }
 }
