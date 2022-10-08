@@ -18,7 +18,14 @@
           {{ tweet.description }}
         </div>
         <div class="tweet__card__footer">
-          <img src="@/assets/image/reply-icon.png" alt="reply" />
+          <img @click="tweet.showReplyModal=true" src="@/assets/image/reply-icon.png" alt="reply" />
+
+          <ReplyModal 
+          v-if="tweet.showReplyModal"
+          @close="tweet.showReplyModal=false"
+          :tweet="tweet"
+          />
+
           <p>{{ tweet.replyCounts }}</p>
           <img v-if="tweet.isLiked" src="@/assets/image/red-like-icon.png" alt="like" @click.stop.prevent="deleteLike(tweet.id)"/>
           <img v-else src="@/assets/image/like-icon.png" alt="like" @click.stop.prevent="addLike(tweet.id)"/>
@@ -30,6 +37,7 @@
 </template>
 
 <script>
+import ReplyModal from './ReplyModal.vue';
 
 const dummyData = {
   tweets: [
@@ -167,6 +175,9 @@ export default {
   //     default: false
   //   }
   // },
+  components: {
+    ReplyModal,
+},
   data() {
     return {
       tweet: {
@@ -218,6 +229,7 @@ export default {
             name,
             avatar,
           },
+          showReplyModal: false
         };        
         
         this.tweetsArray.push(this.tweet)

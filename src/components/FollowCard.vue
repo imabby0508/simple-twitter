@@ -21,16 +21,21 @@
                 <p class="follow__card__account">@{{ follower.account }}</p>
               </div>
             </div>
-            <button              
+
+            <button
+              @click.stop.prevent="deleteFollower(follower.id)"
               v-if="follower.isFollowing"
-              class="follow__card__btn--following"
-            >
+              class="follow__card__btn--following">
               正在跟隨
             </button>
 
             <!-- PROMBLEM HERE!! -->
             <!-- <button v-else class="follow__card__btn--unfollowing" @click.stop.prevent="addFollow(follower.id)"> -->
-            <button v-else class="follow__card__btn--unfollowing" >
+
+            <button 
+              @click.stop.prevent="addFollower(follower.id)"
+              v-else 
+              class="follow__card__btn--unfollowing" >
               跟隨
             </button>
 
@@ -71,13 +76,17 @@
               @click.stop.prevent="deleteFollow(following.id)"
             > -->
             <button
+              @click.stop.prevent="deleteFollowing(following.id)"
               v-if="following.isFollowing"
-              class="follow__card__btn--following"          
+              class="follow__card__btn--following"       
             >
               正在跟隨
             </button>
 
-            <button v-else class="follow__card__btn--unfollowing">
+            <button
+            @click.stop.prevent="addFollowing(following.id)"
+            v-else 
+            class="follow__card__btn--unfollowing">
               跟隨
             </button>
           </div>
@@ -266,6 +275,58 @@ export default {
     fetchFollowings() {
       this.followings = dummyData.followings;
     },
+    deleteFollower (followId) {
+      this.followers = this.followers.map(follow => {
+
+        if (follow.id === followId) {
+          return {
+            ...follow,
+            isFollowing: false,
+          }
+        } else {
+          return follow
+        }
+      })
+    },
+    addFollower (followId) {
+      this.followers = this.followers.map(follow => {
+
+        if (follow.id === followId) {
+          return {
+            ...follow,
+            isFollowing: true,
+          }
+        } else {
+          return follow
+        }
+      })
+    }, 
+    deleteFollowing(followId) {
+      this.followings = this.followings.map(follow => {
+
+        if (follow.id === followId) {
+          return {
+            ...follow,
+            isFollowing: false,
+          }
+        } else {
+          return follow
+        }
+      })
+    },
+    addFollowing(followId) {
+      this.followings = this.followings.map(follow => {
+
+        if (follow.id === followId) {
+          return {
+            ...follow,
+            isFollowing: true,
+          }
+        } else {
+          return follow
+        }
+      })
+    }, 
 
     // <!-- PROMBLEM HERE!! -->
     // addFollow(followerId) {

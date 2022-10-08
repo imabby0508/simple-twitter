@@ -23,8 +23,8 @@ import AccountForm from "@/components/AccountForm.vue";
 const dummyUser = {
   user: {
     id: 1,
-    name: "John",
-    account: "john",
+    name: "John Doe",
+    account: "heyjohn",
     avatar: "",
     email: "john@gmail.com"
   },
