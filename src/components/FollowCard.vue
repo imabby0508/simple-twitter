@@ -21,7 +21,7 @@
                 <p class="follow__card__account">@{{ follower.account }}</p>
               </div>
             </div>
-            <button
+            <button              
               v-if="follower.isFollowing"
               class="follow__card__btn--following"
             >

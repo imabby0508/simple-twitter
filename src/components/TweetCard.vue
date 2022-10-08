@@ -1,6 +1,6 @@
 <template>
-  <div class="tweet__card__wrapper">
-    <div v-for="tweet in tweetsArray" :key="tweet.id" class="tweet__card" :to="{name: 'reply', params: {id: tweet.id}}">
+  <div class="tweet__card__wrapper">    
+    <router-link v-for="tweet in tweetsArray" :key="tweet.id" class="tweet__card" :to="{name: 'reply', params: {id: tweet.id}}">
       <div class="tweet__card__content">  
         <div class="tweet__card__title">
           <router-link :to="{name: 'user-tweets', params: {id: tweet.user.id}}">
@@ -20,12 +20,12 @@
         <div class="tweet__card__footer">
           <img src="@/assets/image/reply-icon.png" alt="reply" />
           <p>{{ tweet.replyCounts }}</p>
-          <img v-if="tweet.isLiked" src="@/assets/image/red-like-icon.png" alt="like" />
-          <img v-else src="@/assets/image/like-icon.png" alt="like"/>
+          <img v-if="tweet.isLiked" src="@/assets/image/red-like-icon.png" alt="like" @click.stop.prevent="deleteLike(tweet.id)"/>
+          <img v-else src="@/assets/image/like-icon.png" alt="like" @click.stop.prevent="addLike(tweet.id)"/>
           <p>{{ tweet.likeCounts }}</p>
         </div>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -43,8 +43,8 @@ const dummyData = {
       isLiked: false,
       user: {
         id: 1,
-        account: "apple",
-        name: "Apple",
+        account: "daniel",
+        name: "Daniel",
         avatar: "",
       },
     },
@@ -221,8 +221,28 @@ export default {
         };        
         
         this.tweetsArray.push(this.tweet)
-      });      
+      });   
     },
+
+    // PROBLEM
+    addLike(tweetId) {      
+      this.tweetsArray = this.tweetsArray.map(tweetContent => {
+        if(tweetId === tweetContent.id) {          
+          return {
+            ...tweetContent,
+            isLiked: true,
+            // likeCounts: tweetContent.likeCounts + 1   
+          }
+        }
+      })  
+    },
+    // deleteLike(tweetId) {
+    //   this.tweet = {
+    //     ...this.tweet,
+    //     isLiked: false,
+    //     likeCounts: this.tweet.likeCounts - 1      
+    //   }
+    // }
 
 
     // afterCreateTweet() {
@@ -238,8 +258,7 @@ export default {
 
 <style lang="scss" scoped>
 
-.tweet__card {
-  border-top: 1px solid $border;
+.tweet__card {  
   .router-link-active {
     text-decoration: none; 
     color: $scale-gray10
@@ -249,6 +268,7 @@ export default {
     color: $scale-gray10
   }
   .tweet__card__content {
+    border-top: 1px solid $border;
     padding: 16px 24px;
     .tweet__card__title {
       display: flex;

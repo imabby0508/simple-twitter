@@ -1,15 +1,8 @@
 <template>
   <div class="reply__card__wrapper">
      <!-- <p class="reply__card__name">{{ this.user.name }}</p> -->
-    <div v-for="reply in repliesArray" :key="reply.id" class="reply__card">
-      <!-- <router-link :to="{ name: 'user-tweets', params: {id: reply.replyUser.id}}">
-        <img
-          class="reply__card__avatar"
-          src="@/assets/image/user-avatar.png"
-          alt="avatar"
-        />
-      </router-link> -->
-      <!-- <div class="reply__card__right"> -->
+    <router-link v-for="reply in repliesArray" :key="reply.id" class="reply__card" :to="{ name: 'reply', params: {id: reply.tweetId}}">
+      <div class="reply__card__content">
         <div class="reply__card__title">
           <router-link :to="{ name: 'user-tweets', params: {id: reply.replyUser.id}}">
             <img
@@ -32,12 +25,13 @@
             </div>
           </div>
         </div>
-       
-        <div class="reply__card__content">
+      
+      
+        <div class="reply__card__description">
           {{ reply.replyContent }}
         </div>
-      <!-- </div> -->
-    </div>
+      </div>
+    </router-link>
   </div>
 </template>
 
@@ -228,54 +222,56 @@ export default {
 
 <style lang="scss" scoped>
 .reply__card__wrapper {
-  .reply__card {    
-    border-top: 1px solid #e6ecf0;
-    padding: 16px 24px;
-    .reply__card__title {
-      display: flex;
-      align-items: top;
-      .reply__card__avatar {
-        width: 50px;
-        height: 50px;
-        margin-top: 0;
-      }
-      .reply__card__info {
+  .reply__card {  
+    .reply__card__content {
+      border-top: 1px solid #e6ecf0;
+      padding: 16px 24px;
+      .reply__card__title {
         display: flex;
-        align-items: top; 
-        margin: 2px 0 0 10px;
-        .reply__card__name {
-          color: $scale-gray10;
-          font-weight: 700;
-          font-size: 16px;
-          margin-right: 8px;
+        align-items: top;
+        .reply__card__avatar {
+          width: 50px;
+          height: 50px;
+          margin-top: 0;
         }
-        .reply__card__account,
-        .reply__card__time {
+        .reply__card__info {
+          display: flex;
+          align-items: top; 
+          margin: 2px 0 0 10px;
+          .reply__card__name {
+            color: $scale-gray10;
+            font-weight: 700;
+            font-size: 16px;
+            margin-right: 8px;
+          }
+          .reply__card__account,
+          .reply__card__time {
+            color: $secondary-gray;
+            font-weight: 400;
+            font-size: 14px;
+            margin: 2px 0 0 0;
+          }
+        }
+        .reply__card__target {
+          display: flex;
           color: $secondary-gray;
           font-weight: 400;
           font-size: 14px;
-          margin: 2px 0 0 0;
-        }
-      }      
-    }
-    .reply__card__target {
-      display: flex;
-      color: $secondary-gray;
-      font-weight: 400;
-      font-size: 14px;
-      margin: 8px 0 8px 10px;
-      P {
-        margin-right: 2px;
+          margin: 8px 0 8px 10px;
+          P {
+            margin-right: 2px;
+          }
+          .reply__card__target__account {
+            color: $brand-orange;
+          }
+        } 
       }
-      .reply__card__target__account {
-        color: $brand-orange;
+      .reply__card__description {
+        color: $scale-gray10;
+        font-weight: 400;
+        font-size: 16px;
+        margin: 0 0 8px 60px;
       }
-    }
-    .reply__card__content {
-      color: $scale-gray10;
-      font-weight: 400;
-      font-size: 16px;
-      margin: 0 0 8px 60px;
     }
   }
 }
