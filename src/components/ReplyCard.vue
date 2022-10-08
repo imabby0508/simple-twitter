@@ -2,27 +2,41 @@
   <div class="reply__card__wrapper">
      <!-- <p class="reply__card__name">{{ this.user.name }}</p> -->
     <div v-for="reply in repliesArray" :key="reply.id" class="reply__card">
-      <img
-        class="reply__card__avatar"
-        src="@/assets/image/user-avatar.png"
-        alt="avatar"
-      />
-      <div class="reply__card__right">
+      <!-- <router-link :to="{ name: 'user-tweets', params: {id: reply.replyUser.id}}">
+        <img
+          class="reply__card__avatar"
+          src="@/assets/image/user-avatar.png"
+          alt="avatar"
+        />
+      </router-link> -->
+      <!-- <div class="reply__card__right"> -->
         <div class="reply__card__title">
-          <p class="reply__card__name">{{ reply.replyUser.name }}</p>
-          <p class="reply__card__account"> {{ reply.replyUser.account }}</p>
-          <p class="reply__card__time">・{{ reply.createdAt }}</p>
+          <router-link :to="{ name: 'user-tweets', params: {id: reply.replyUser.id}}">
+            <img
+              class="reply__card__avatar"
+              src="@/assets/image/user-avatar.png"
+              alt="avatar"
+            />
+          </router-link>
+          <div>
+            <div class="reply__card__info">
+              <p class="reply__card__name">{{ reply.replyUser.name }}</p>
+              <p class="reply__card__account"> @{{ reply.replyUser.account }}</p>
+              <p class="reply__card__time">・{{ reply.createdAt }}</p>
+            </div>
+            <div class="reply__card__target">
+              <p>回覆</p>
+              <p class="reply__card__target__account">
+                @{{ reply.tweetAuthorAccount }}
+              </p>
+            </div>
+          </div>
         </div>
-        <div class="reply__card__target">
-          <p>回覆</p>
-          <p class="reply__card__target__account">
-            {{ reply.tweetAuthorAccount }}
-          </p>
-        </div>
-        <p class="reply__card__content">
+       
+        <div class="reply__card__content">
           {{ reply.replyContent }}
-        </p>
-      </div>
+        </div>
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -32,7 +46,7 @@
 //   user: {
 //     id: 1,
 //     name: "John",
-//     account: "@john",
+//     account: "john",
 //     avatar: "",
 //   },
 // };
@@ -45,10 +59,10 @@ const dummyData = {
         "former apple engineer shares a simple DIY fix to seal your surgical mask",
       createdAt: "3小時",
       tweetId: 1,
-      tweetAuthorAccount: '@Daniel',
+      tweetAuthorAccount: 'Daniel',
       replyUser: {
         id: 1,
-        account: "@apple",
+        account: "apple",
         avatar: "",
         name: "Apple",
       },
@@ -58,10 +72,10 @@ const dummyData = {
       replyContent: "Michelin Challenges Creatives to Upcycle",
       createdAt: "12小時",
       tweetId: 2,
-      tweetAuthorAccount: '@Daniel',
+      tweetAuthorAccount: 'Daniel',
       replyUser: {
         id: 2,
-        account: "@apple",
+        account: "apple",
         avatar: "",
         name: "Apple",
       },
@@ -71,10 +85,10 @@ const dummyData = {
       replyContent: "Michelin Challenges Creatives to Upcycle",
       createdAt: "12小時",
       tweetId: 2,
-      tweetAuthorAccount: '@Daniel',
+      tweetAuthorAccount: 'Daniel',
       replyUser: {
         id: 2,
-        account: "@apple",
+        account: "apple",
         avatar: "",
         name: "Apple",
       },
@@ -84,10 +98,10 @@ const dummyData = {
       replyContent: "Michelin Challenges Creatives to Upcycle",
       createdAt: "12小時",
       tweetId: 2,
-      tweetAuthorAccount: '@Daniel',
+      tweetAuthorAccount: 'Daniel',
       replyUser: {
         id: 2,
-        account: "@apple",
+        account: "apple",
         avatar: "",
         name: "Apple",
       },
@@ -97,10 +111,10 @@ const dummyData = {
       replyContent: "Michelin Challenges Creatives to Upcycle",
       createdAt: "12小時",
       tweetId: 2,
-      tweetAuthorAccount: '@Daniel',
+      tweetAuthorAccount: 'Daniel',
       replyUser: {
         id: 2,
-        account: "@apple",
+        account: "apple",
         avatar: "",
         name: "Apple",
       },
@@ -110,10 +124,10 @@ const dummyData = {
       replyContent: "Michelin Challenges Creatives to Upcycle",
       createdAt: "12小時",
       tweetId: 2,
-      tweetAuthorAccount: '@Daniel',
+      tweetAuthorAccount: 'Daniel',
       replyUser: {
         id: 2,
-        account: "@apple",
+        account: "apple",
         avatar: "",
         name: "Apple",
       },
@@ -123,10 +137,10 @@ const dummyData = {
       replyContent: "Michelin Challenges Creatives to Upcycle",
       createdAt: "12小時",
       tweetId: 2,
-      tweetAuthorAccount: '@Daniel',
+      tweetAuthorAccount: 'Daniel',
       replyUser: {
         id: 2,
-        account: "@apple",
+        account: "apple",
         avatar: "",
         name: "Apple",
       },
@@ -214,37 +228,42 @@ export default {
 
 <style lang="scss" scoped>
 .reply__card__wrapper {
-  .reply__card {
-    display: flex;
+  .reply__card {    
     border-top: 1px solid #e6ecf0;
     padding: 16px 24px;
-    .reply__card__avatar {
-      width: 50px;
-      height: 50px;
-      margin-right: 8px;
-    }
     .reply__card__title {
       display: flex;
-      align-items: center;
-      .reply__card__name {
-        color: $scale-gray10;
-        font-weight: 700;
-        font-size: 16px;
-        margin-right: 8px;
+      align-items: top;
+      .reply__card__avatar {
+        width: 50px;
+        height: 50px;
+        margin-top: 0;
       }
-      .reply__card__account,
-      .reply__card__time {
-        color: $secondary-gray;
-        font-weight: 400;
-        font-size: 14px;
-      }
+      .reply__card__info {
+        display: flex;
+        align-items: top; 
+        margin: 2px 0 0 10px;
+        .reply__card__name {
+          color: $scale-gray10;
+          font-weight: 700;
+          font-size: 16px;
+          margin-right: 8px;
+        }
+        .reply__card__account,
+        .reply__card__time {
+          color: $secondary-gray;
+          font-weight: 400;
+          font-size: 14px;
+          margin: 2px 0 0 0;
+        }
+      }      
     }
     .reply__card__target {
       display: flex;
       color: $secondary-gray;
       font-weight: 400;
       font-size: 14px;
-      margin: 8px 0;
+      margin: 8px 0 8px 10px;
       P {
         margin-right: 2px;
       }
@@ -256,6 +275,7 @@ export default {
       color: $scale-gray10;
       font-weight: 400;
       font-size: 16px;
+      margin: 0 0 8px 60px;
     }
   }
 }

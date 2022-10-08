@@ -96,21 +96,21 @@
           </div>
 
           <div class="form__wrapper">
-            <label for="bio" class="d-block">自我介紹</label>
+            <label for="introduction" class="d-block">自我介紹</label>
             <textarea
               type="text"
-              id="bio"
-              name="bio"
-              :placeholder="user.bio ? user.bio : '請輸入自我介紹'"
+              id="introduction"
+              name="introduction"
+              :placeholder="user.introduction ? user.introduction : '請輸入自我介紹'"
               required
-              class="d-block bio"
-              v-model="user.bio"
+              class="d-block introduction"
+              v-model="user.introduction"
             ></textarea>
             <div class="compute">
               <div class="words__compute--warn">
-                {{ bioThreshold > 160 ? "字數超出上限!" : "" }}
+                {{ introductionThreshold > 160 ? "字數超出上限!" : "" }}
               </div>
-              <div class="words__compute">{{ bioThreshold }}/160</div>
+              <div class="words__compute">{{ introductionThreshold }}/160</div>
             </div>
           </div>
         </div>
@@ -127,7 +127,7 @@ const dummyUser = {
     backgroundImage: '@/assets/image/user-cover.png',
     image: '@/assets/image/avatar-1.png',
     name: 'John Doe',
-    bio: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
+    introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
   }
 }
 export default {
@@ -138,7 +138,7 @@ export default {
         backgroundImage: "",
         image: "",
         name: "",
-        bio: "",
+        introduction: "",
       },
     };
   },
@@ -150,9 +150,9 @@ export default {
       const nameLength = this.user.name.length;
       return nameLength;
     },
-    bioThreshold() {
-      const bioLength = this.user.bio.length;
-      return bioLength;
+    introductionThreshold() {
+      const introductionLength = this.user.introduction.length;
+      return introductionLength;
     },
   },
   updated() {
@@ -161,10 +161,10 @@ export default {
     } else {
       document.getElementById("name").style.borderBottomColor = null;
     }
-    if (this.bioThreshold > 160) {
-      document.getElementById("bio").style.borderBottomColor = "#FC5A5A";
+    if (this.introductionThreshold > 160) {
+      document.getElementById("introduction").style.borderBottomColor = "#FC5A5A";
     } else {
-      document.getElementById("bio").style.borderBottomColor = null;
+      document.getElementById("introduction").style.borderBottomColor = null;
     }
   },
   methods: {
@@ -357,7 +357,7 @@ export default {
         color: $scale-gray10;
         border-bottom: 2px solid $form-border;
         text-align: start;
-        &.bio {
+        &.introduction {
           height: 147px;
           resize: none;
         }

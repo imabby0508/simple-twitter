@@ -38,7 +38,7 @@ const routes = [
     component: Main,
   },
   {
-    path: "/reply",
+    path: "/tweets/:id/reply",
     name: "reply",
     component: () => import("../views/Reply.vue"),
   },

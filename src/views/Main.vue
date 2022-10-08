@@ -10,14 +10,23 @@
         
         <div class="tweet__content">
           <div class="tweet__description">
-            <img class="tweet__avatar" src="@/assets/image/avatar-1.png" alt="avatar">
-            <h5>有什麼新鮮事?</h5>
+            <!-- <router-link :to="{name: 'user-tweets', params: {id: user.id}}"> -->
+              <img class="tweet__avatar" src="@/assets/image/avatar-1.png" alt="avatar">
+            <!-- </router-link> -->
+            <h5>有什麼新鮮事?</h5>            
+            <!-- <textarea
+              v-model="tweetContent"
+              placeholder="有什麼新鮮事？"
+              maxlength="140"
+            />       -->
           </div>
-          <button>推文</button>
-        </div>
+          <button @click.stop.prevent="showTweetModal === true">推文</button>
+         </div>
       </div>    
     
       <TweetCard />
+
+      <TweetModal v-if="showTweetModal" @close="showTweetModal === false"/>
     </div>
 
     <PopularList />
@@ -29,13 +38,55 @@
 import MainNav from "./../components/MainNav";
 import TweetCard from "./../components/TweetCard";
 import PopularList from "./../components/PopularList";
+import TweetModal from "./../components/TweetModal";
+import { Toast } from "./../utils/helpers"
+
+
+const dummyUser = {
+  currentUser: {
+    id: 1,
+    image: '',
+  }
+}
 
 export default {
+  name: "Main",
   components: {
     MainNav,
     TweetCard,
-    PopularList
+    PopularList,
+    TweetModal
   },
+  data() {
+    return {
+      user: {},
+      showTweetModal: false,
+      // tweetContent: '',
+      // isSubmit: false
+    } 
+  },
+  created() {
+    this.fetchUser()
+  },
+  methods: {
+    fetchUser() {
+      this.user = {
+        ...this.user,
+        ...dummyUser.currentUser
+      }
+    },
+    // handleSubmit() {
+    //   if (!this.tweetContent) {
+    //     Toast.fire({
+    //       icon: "warning",
+    //       title: "內容不可空白",
+    //     })
+    //     return 
+    //   } 
+    //   console.log('submit')
+    //   this.isSubmit = true
+    // }
+  }
 }
 
 </script>
@@ -71,7 +122,21 @@ export default {
         color: $secondary-gray;
         padding-left: 8px;
         line-height: 50px;
-      }
+      // textarea {
+      //   border: none;
+      //   resize: none;
+      //   overflow: hidden;
+      //   color: $scale-gray10;
+      //   width: 80%;
+      //   height: 100px;
+      //   padding: 15px 8px;
+      //   line-height: 26px;
+      //   font-size: 18px;
+      //   font-weight: 700;
+      //   &::placeholder {
+      //     color: $secondary-gray;
+        // }
+      }      
     }   
     button {
       position: absolute; 
