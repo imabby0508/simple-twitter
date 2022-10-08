@@ -75,12 +75,6 @@
  
       <div>
 
-        <!-- <button
-          id="show-modal"
-          @click="showTweetModal = true"
-        >Show Modal</button> -->
-
-        <!-- use the modal component, pass in the prop -->
         <TweetModal
           v-if="showTweetModal"
           @close="showTweetModal = false"
@@ -88,7 +82,6 @@
 
         <button
         type="button"
-        id="show-modal"
         @click="showTweetModal = true"
         >推文</button>
       </div>

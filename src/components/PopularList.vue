@@ -197,6 +197,7 @@ export default {
 <style lang="scss" scoped>
 .popularList {
   position: fixed;
+  z-index: 990;
   top: 16px;
   right: 9.3vw;
   width: 19.5vw;

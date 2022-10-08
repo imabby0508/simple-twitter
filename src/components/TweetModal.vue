@@ -13,7 +13,7 @@
           </div>
   
           <div class="modal-body d-flex">
-            <img src="../assets/image/avatar-1.png" alt="">
+            <img src="../assets/image/avatar-1.png" alt="avatar">
             <textarea 
             name="tweetContent" 
             required
@@ -24,7 +24,8 @@
           </div>
   
           <div class="modal-footer">
-            <span>{{tweetContentCount > 140 ? '字數超出上限' : ''}}</span>
+            <span>{{tweetContentCount > 140 ? '字數不可超過 140 字' : ''}}</span>
+            <span>{{!tweetContentCount ? '內容不可空白' : ''}}</span>
             <button
               @click.stop.prevent="submitTweet"
             >
@@ -106,15 +107,12 @@ export default {
   padding: 56px 30.5vw 300px 23.7vw;
 }
 
-
 .modal-wrapper {
   padding: 56px 30.5vw auto 23.7vw;
 }
 
 .modal-container {
   width: 45.7vw;
-  // padding: 20.5px 16px 16px 19.5px;
-  // height: 40vh;
   background-color: $scale-gray1;
   border-radius: 14px;
   transition: all .2s ease;
@@ -169,14 +167,12 @@ export default {
     span {
       color: $error-red;
       font-weight: 500;
-      font-size: 12px;
-      line-height: 20px;
       margin: 0 16px 16px 0;
+      font-size: 15px;
+      line-height: 15px;
     }
   }
 }
-
-
 
 .modal-enter {
   opacity: 0;
