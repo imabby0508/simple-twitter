@@ -1,77 +1,81 @@
 <template>
 
-
-  <div class="main__container">
-
+  <div class="setting__container">
     <MainNav />
-
-    <div class="tweet">
-
-      <div class="tweet__title">
-        <h4>首頁</h4>
+    <div class="setting">
+      <div class="setting__title">
+        <h4>帳戶設定</h4>
       </div>
-
-      <div class="tweet__post">
-        <div class="tweet__content">
-          <div class="tweet__description">
-            <img
-              class="tweet__avatar"
-              src="@/assets/image/avatar-1.png"
-              alt="avatar"
-            >
-            <h5>有什麼新鮮事?</h5>
-          </div>
-          <button>推文</button>
-        </div>
-        <TweetCard />
-        <TweetCard />
-        <TweetCard />
-        <TweetCard />
-        <TweetCard />
-        <TweetCard />
-        <TweetCard />
-        <TweetCard />
-        <TweetCard />
-        <TweetCard />
-        <TweetCard />
+      <div class="setting__post">
+        <AccountForm
+        :isSignUp="false"
+        :initialUser = "user"
+        />
       </div>
-
-
     </div>
-
-    <PopularList />
-
-
   </div>
 </template>
 
 <script>
 import MainNav from "./../components/MainNav";
-import TweetCard from "./../components/TweetCard";
-import PopularList from "./../components/PopularList";
+import AccountForm from "@/components/AccountForm.vue";
+
+const dummyUser = {
+  user: {
+    id: 1,
+    name: "John",
+    account: "john",
+    avatar: "",
+    email: "john@gmail.com"
+  },
+};
 
 export default {
   components: {
     MainNav,
-    TweetCard,
-    PopularList
+    AccountForm,
   },
+  data () {
+    return {
+      user: {
+        id: -1,
+        name: '',
+        account: '',
+        email: ''
+      }
+    }
+  },
+  created () {
+    this.fetchCurrentUser()
+  },
+  methods: {
+    fetchCurrentUser () {
+      const {id, name, account, email} = dummyUser.user
+      this.user = {
+        ...this.user,
+        id,
+        name,
+        account,
+        email
+      }
+    }
+  }
 }
 
 </script>
 
 <style lang="scss" scoped>
-.main__container {
+.setting__container {
   position: relative;
   margin: auto 9.3vw auto 9.3vw;
 }
 
-.tweet {
-  position: absolute; //讓 tweet置於 nav, popularlist 中間
+.setting {
+  position: absolute; //讓 setting置於 nav, popularlist 中間
   left: 14.4vw;
   right: 21.2vw;
 
-  .tweet__title {
+  .setting__title {
     position: fixed; //讓 title固定在上面
     top: 0;
     left: 23.7vw;
@@ -83,47 +87,14 @@ export default {
     border: 1px solid $border;
   }
 
-  .tweet__post {
-    position: absolute; //讓 post排在 title下面
+  .setting__post {
+    position: absolute; //讓 setting排在 title下面
+    width: 100%;
+    height: 90vh;
     top: 80px;
-    border: 1px solid $border;
-    border-top: 0px solid $border;
-  }
-
-  .tweet__content {
-    position: relative;
-
-    height: 136px;
-    padding: 16px 24px;
-    border-bottom: 10px solid $border;
-
-    .tweet__description {
-      display: flex;
-
-      .tweet__avatar {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-      }
-
-      h5 {
-        color: $secondary-gray;
-        padding-left: 8px;
-        line-height: 50px;
-      }
-    }
-
-    button {
-      position: absolute;
-      right: 40px;
-      bottom: 16px;
-      width: 64px;
-      height: 40px;
-      border-radius: 50px;
-      border: none;
-      background: $brand-orange;
-      color: $scale-gray1
-    }
+    padding: 24px 23px 0 23px;
+    border-left: 1px solid $border;
+    border-right: 1px solid $border;
   }
 }
 </style>

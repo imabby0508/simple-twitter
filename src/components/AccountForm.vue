@@ -88,7 +88,7 @@
       >
     </div>
 
-    <template v-if="isSignUp">
+    <template v-if="isSignUp"> 
       <div>
         <button
           type="button"
@@ -101,9 +101,10 @@
     </template>
 
     <template v-else>
-      <div>
+      <div class="d-flex justify-content-end">
         <button
           type="button"
+          style="width: 88px"
           @click.stop.prevent="submitSetting"
         >儲存</button>
       </div>
@@ -118,6 +119,10 @@ export default {
     isSignUp: {
       type: Boolean,
       required: true
+    },
+    initialUser: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -127,6 +132,43 @@ export default {
       email: '',
       password: '',
       checkPassword: ''
+    }
+  },
+  // for Setting views only
+  mounted () {
+    this.renderUser()
+  },
+  methods: {
+    // for Setting views only
+    renderUser () {
+      this.account = this.initialUser.account
+      this.name = this.initialUser.name
+      this.email = this.initialUser.email
+    },
+    submitSignUp() {
+      const data = JSON.stringify({
+        account: this.account,
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        checkPassword: this.checkPassword
+      })
+      console.log(data)
+      // 註冊成功新增到 server後，router轉到 signin
+      this.$router.push('/signin')
+    },
+    submitSetting() {
+      const data = JSON.stringify({
+        account: this.account,
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        checkPassword: this.checkPassword
+      })
+      console.log(data)
+
+      // setting成功更新到 server後，router轉到 main
+      this.$router.push('/main')
     }
   },
   computed: {
@@ -152,29 +194,9 @@ export default {
       document.getElementById("name").style.borderBottomColor = null;
     }
   },
-  methods: {
-    submitSignUp () {
-      const data = JSON.stringify({
-        account: this.account,
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        checkPassword: this.checkPassword
-      })
-      console.log(data)
-    },
-    submitSetting() {
-      const data = JSON.stringify({
-        account: this.account,
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        checkPassword: this.checkPassword
-      })
-      console.log(data)
-    }
-  }
 }
+
+
 </script>
 
 <style lang="scss" scoped>

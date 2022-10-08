@@ -3,14 +3,14 @@
     <div>
       <img
         src="../assets/image/logo-icon.png"
-        alt="log"
+        alt="logo"
       >
     </div>
     <div>
       <h1>建立你的帳號</h1>
     </div>
     <AccountForm
-    :isSignUp="isSignUp"
+    :isSignUp="true"
     />
   </div>
 </template>
@@ -23,9 +23,6 @@ export default {
     AccountForm,
   },
   data () {
-    return {
-      isSignUp: true,
-    }
   }
 }
 </script>
