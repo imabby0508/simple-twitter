@@ -102,7 +102,10 @@ export default {
         })
         return
       }
+
+      // 當回覆發送成功時，Toast補上
       this.$emit('close')
+      
     }
   },
   computed: {

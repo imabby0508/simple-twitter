@@ -33,15 +33,15 @@
           >首頁</span>
         </router-link>
       
-        <a
-          href="#"
+        <router-link
+          :to="{name: 'user-tweets', params: {id: id}}"
           class="d-flex align-items-center"
         >
           <img
             src="../assets/image/profile-icon_active.png"
             alt="profile-page"
             class="icon"
-            v-if="$route.name === 'profile'"
+            v-if="$route.name === 'user-tweets'"
           >
           <img
             src="../assets/image/profile-icon.png"
@@ -50,7 +50,7 @@
             v-else
           >
           <span>個人資料</span>
-        </a>
+        </router-link>
       
         <router-link
           to="/setting"

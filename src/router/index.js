@@ -23,11 +23,6 @@ const routes = [
     component: () => import("../views/Regist.vue"),
   },
   {
-    path: "/signin/admin",
-    name: "admin-sign-in",
-    component: () => import("../views/AdminLogin.vue"),
-  },
-  {
     path: "/setting",
     name: "setting",
     component: () => import("../views/Setting.vue"),
@@ -66,6 +61,21 @@ const routes = [
     path: "/user/:id/followings",
     name: "user-followings",
     component: () => import("../views/UserFollowings.vue"),
+  },
+  {
+    path: "/admin/signin",
+    name: "admin-sign-in",
+    component: () => import("../views/AdminLogin.vue"),
+  },
+  {
+    path: "/admin/main",
+    name: "admin-main",
+    component: () => import("../views/AdminMain.vue"),
+  },
+  {
+    path: "/admin/users",
+    name: "admin-users",
+    component: () => import("../views/AdminTweetersCard.vue"),
   },
   {
     path: "*",
