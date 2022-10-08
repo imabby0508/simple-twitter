@@ -20,13 +20,13 @@
               maxlength="140"
             />       -->
           </div>
-          <button @click.stop.prevent="showTweetModal === true">推文</button>
+          <button @click.stop.prevent="showTweetModal = true">推文</button>
          </div>
       </div>    
     
       <TweetCard />
 
-      <TweetModal v-if="showTweetModal" @close="showTweetModal === false"/>
+      <TweetModal v-if="showTweetModal" @close="showTweetModal = false"/>
     </div>
 
     <PopularList />
