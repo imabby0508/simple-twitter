@@ -101,8 +101,7 @@
               type="text"
               id="introduction"
               name="introduction"
-              :placeholder="user.introduction ? user.introduction : '請輸入自我介紹'"
-              required
+              :placeholder="user.introduction ? user.introduction : '請輸入自我介紹'"              
               class="d-block introduction"
               v-model="user.introduction"
             ></textarea>
@@ -216,6 +215,28 @@ export default {
         icon: 'success',
         title: '成功儲存'
       })
+      
+      if (!this.user.name) {
+        Toast.fire({
+          icon: 'warning',
+          title: '名稱不可空白'
+        })
+        return
+      } else if (this.user.name.length > 50) {
+        Toast.fire({
+          icon: 'warning',
+          title: '名稱不可超過50字'
+        })
+        return
+      }
+      
+      if (!this.user.introduction.length > 160) {
+        Toast.fire({
+          icon: 'warning',
+          title: '自我介紹不可超過160字'
+        })
+        return
+      }
     }
   }, 
 };

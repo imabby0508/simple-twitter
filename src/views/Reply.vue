@@ -66,8 +66,8 @@ const dummyData = {
     user: {
       id: 1,
       image: '',
-      name: 'Apple',
-      account: 'apple'
+      name: 'Daniel',
+      account: 'daniel'
     }
   }
 }
