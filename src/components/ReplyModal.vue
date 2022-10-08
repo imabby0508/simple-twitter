@@ -21,10 +21,10 @@
               <div class="tweet--card--content">
                 <div class="tweet--card--title d-flex align-items-center">
                   <p class="name">{{tweet.user.name}}</p>
-                  <p class="accounttime">{{tweet.user.account}}・{{tweet.createdAt}}</p>
+                  <p class="accounttime">@{{tweet.user.account}}・{{tweet.createdAt}}</p>
                 </div>
                 <p class="tweet--card--description">{{tweet.description}}</p>
-                <p class="tweet--card--target">回覆給 <span>{{tweet.user.account}}</span></p>
+                <p class="tweet--card--target">回覆給 <span>@{{tweet.user.account}}</span></p>
                 </div>
               </div>
 
@@ -101,10 +101,12 @@ export default {
           title: '回覆內容不可超過 140字'
         })
         return
+      } else if (this.replyContent.length < 140) {
+        // 當回覆發送成功時，Toast補上
+        this.$emit('close')
       }
 
-      // 當回覆發送成功時，Toast補上
-      this.$emit('close')
+
       
     }
   },
