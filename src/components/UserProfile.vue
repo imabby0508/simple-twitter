@@ -7,14 +7,14 @@
         <img src="@/assets/image/arrow.png" alt="arrow" />
       </router-link>
       <div>
-        <h4 class="header__name">{{this.user.name}}</h4>
-        <p class="header__tweet__count">{{this.user.tweetCount}}推文</p>
+        <h4 class="header__name">{{user.name}}</h4>
+        <p class="header__tweet__count">{{user.tweetCount}}推文</p>
       </div>      
     </div>
 
     <div class="user__profile__content">
-      <img class="user__cover" src="@/assets/image/user-cover.png" alt="user-cover-img">
-      <img class="user__avatar" src="@/assets/image/avatar-1.png" alt="user-avatar">
+      <img class="user__cover" :src="user.backgroundImage" alt="user-cover-img">
+      <img class="user__avatar" :src="user.avatar" alt="user-avatar">
       <template v-if="user.id === currentUser.id" >
         <button @click.stop.prevent="showUserEditModal()" class="modify__profile__btn">編輯個人資料</button>
       </template>   
@@ -26,14 +26,14 @@
       </div>     
       
       <div class="user__info">
-        <div class="user__name">{{this.user.name}}</div>
-        <div class="user__account">@{{this.user.account}}</div>
+        <div class="user__name">{{user.name}}</div>
+        <div class="user__account">@{{user.account}}</div>
         <div class="user__introduction">
-          {{this.user.introduction}}
+          {{user.introduction}}
         </div>
         <div class="user__follow">
-          <router-link :to="{name: 'user-followers', params: { id: '1'}}" class="user__follow__num">{{this.user.followingCount}}個</router-link><p class="following">跟隨中</p>
-          <router-link :to="{name: 'user-followings', params: { id: '1'}}" class="user__follow__num">{{this.user.followerCount}}位</router-link><p class="follower">跟隨者</p>
+          <router-link :to="{name: 'user-followings', params: { id: '14'}}" class="user__follow__num">{{user.followingCount}}個</router-link><p class="following">跟隨中</p>
+          <router-link :to="{name: 'user-followers', params: { id: '14'}}" class="user__follow__num">{{user.followerCount}}位</router-link><p class="follower">跟隨者</p>
         </div>
       </div>      
     </div> 
@@ -41,6 +41,9 @@
 </template>
 
 <script>
+import userAPI from "@/apis/user";
+import { Toast } from '@/utils/helpers'
+
 const dummyUser = {
   user: {
     id: 1,
@@ -64,31 +67,63 @@ export default {
     return {
       user: {
         id: -1,
-        tweetCount: "",
-        backgroundImage: '',
-        image: '',
-        name: '',
         account: '',
+        name: '',
+        avatar: '',
         introduction: "",
+        backgroundImage: '',
+        tweetCount: "",
+        followerCount: "",  
         followingCount: "",
-        followerCount: "",
+        isFollow: false,
       },
       currentUser: {
         id: -1,
-      }
+      },
+      isLoading: true
     }
   },
   created() {
-    this.fetchUser()
+    const { id: userId } = this.$route.params;
+    this.fetchUser(userId)
     this.fetchCurrentUser()
   },
+  // beforeRouteUpdate(to, from, next) {
+  //   console.log('to', to)
+  //   console.log('from', from)
+  //   next()
+  // },
   methods: {
-    fetchUser() {
-      this.user = {
+    async fetchUser(userId) {
+      try {
+        const { data } = await userAPI.getUser({ userId });
+        const {id, account, name, avatar, introduction, backgroundImage, tweetCount, followerCount, followingCount, isFollow} = data
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        this.user = {
         ...this.user,
-        ...dummyUser.user
-      }
+          id,
+          account,
+          name,
+          avatar,
+          introduction,
+          backgroundImage,
+          tweetCount,
+          followerCount,
+          followingCount,
+          isFollow
+        }
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者資料，請稍後再試",
+        });
+      }   
     },
+
     fetchCurrentUser() {
       this.currentUser = {
         ...this.currentUser,
