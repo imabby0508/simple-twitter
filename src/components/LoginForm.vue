@@ -28,7 +28,9 @@
       >
     </div>
     <div>
-      <button 
+      <button
+      :class="{disabled: isProcessing}"
+      :disabled="isProcessing"
       type="button"
       @click.stop.prevent="submitSignIn"
       >登入</button>
@@ -37,20 +39,58 @@
 </template>
 
 <script>
+import authorizationAPI from '@/apis/authorization'
+import { Toast } from '@/utils/helpers'
+
 export default {
   data () {
     return {
       account: '',
-      password: ''
+      password: '',
+      isProcessing: false
     }
   },
   methods: {
-    submitSignIn () {
-      const data = JSON.stringify({
-        account: this.account,
-        password: this.password
-      })
-      console.log(data)
+    async submitSignIn () {
+
+      try {
+
+        if (!this.account || !this.password) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請填入帳號和密碼'
+          })
+          return
+        }
+
+        this.isProcessing = true
+
+        const response = await authorizationAPI.signIn({
+          account: this.account,
+          password: this.password
+        })
+
+        const { data } = response
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
+        localStorage.setItem('token', data.data.token)
+        this.$router.push('main')
+
+      } catch (error) {
+        this.password = ''
+
+        Toast.fire({
+          icon: 'warning',
+          title: '請確認您輸入了正確的帳號密碼'
+        })
+
+        this.isProcessing = false
+        console.log('error', error)
+
+      }
     }
   }
 }
@@ -95,6 +135,9 @@ export default {
     color: $scale-gray1;
     padding: 8px 24px;
     margin: 8px 0 22px 0;
+    &.disabled {
+      opacity: 0.5;
+    }
   }
   ::placeholder {
     color: $scale-gray6;
