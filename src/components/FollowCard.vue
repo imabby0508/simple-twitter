@@ -31,9 +31,6 @@
               正在跟隨
             </button>
 
-            <!-- PROMBLEM HERE!! -->
-            <!-- <button v-else class="follow__card__btn--unfollowing" @click.stop.prevent="addFollow(follower.id)"> -->
-
             <button
               @click.stop.prevent="addFollower(follower.id)"
               v-else
@@ -73,12 +70,6 @@
               </div>
             </div>
 
-            <!-- PROMBLEM HERE!! -->
-            <!-- <button
-              v-if="following.isFollowing"
-              class="follow__card__btn--following"
-              @click.stop.prevent="deleteFollow(following.id)"
-            > -->
             <button
               @click.stop.prevent="deleteFollowing(following.id)"
               v-if="following.isFollowing"
@@ -105,6 +96,9 @@
 </template>
 
 <script>
+import userAPI from "@/apis/user";
+import { Toast } from '@/utils/helpers'
+
 const dummyData = {
   followers: [
     {
@@ -286,16 +280,68 @@ export default {
     };
   },
   created() {
-    this.fetchFollower();
-    this.fetchFollowings();
+    const { id: userId } = this.$route.params;
+    this.fetchFollower(userId);
+    this.fetchFollowings(userId);
   },
   methods: {
     fetchFollower() {
       this.followers = dummyData.followers;
     },
-    fetchFollowings() {
-      this.followings = dummyData.followings;
+    async fetchFollowings(userId) {
+      try {
+        const response = await userAPI.getFollowings({ userId });
+        console.log(response)
+        // const { data } = await userAPI.getFollowings({ userId });
+        // const {id, name, account, avatar, introduction, followingId, isFollowed} = data
+
+        // if (data.status === 'error') {
+        //   throw new Error(data.message)
+        // }
+        // this.followings = {
+        // ...this.followings,
+        //   id,          
+        //   name,
+        //   account,
+        //   avatar,
+        //   introduction,
+        //   followingId,
+        //   isFollowed
+        // }
+      } catch(error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者資料，請稍後再試",
+        })
+      }
     },
+    // async fetchFollowings() {
+    //   try {
+    //     const { data } = await userAPI.getFollowings({ userId });
+    //     const {id, name, account, avatar, introduction, followingId, isFollowed} = data
+
+    //     if (data.status === 'error') {
+    //       throw new Error(data.message)
+    //     }
+    //     this.followings = {
+    //     ...this.followings,
+    //       id,          
+    //       name,
+    //       account,
+    //       avatar,
+    //       introduction,
+    //       followingId,
+    //       isFollowed
+    //     }
+    //   } catch(error) {
+    //     console.log("error", error);
+    //     Toast.fire({
+    //       icon: "error",
+    //       title: "無法取得使用者資料，請稍後再試",
+    //     })
+    //   }
+    // },
     deleteFollower(followId) {
       this.followers = this.followers.map((follow) => {
         if (follow.id === followId) {
@@ -345,37 +391,6 @@ export default {
       });
     },
 
-    // <!-- PROMBLEM HERE!! -->
-    // addFollow(followerId) {
-    //   this.followers = this.followers.map(follower => {
-    //     console.log(follower.id)
-    //     console.log(followerId)
-    //     if(followerId === follower.id) {
-    //       console.log('true')
-    //       return {
-    //         ...this.follower,
-    //         isFollowing: true
-    //       }
-
-    //     }
-    //     console.log(this.followers)
-    //   })
-    // },
-    // deleteFollow(followingId) {
-    //   this.followings = this.followings.map(following => {
-    //     console.log(following.id)
-    //     if(followingId === following.id) {
-    //       console.log(this.following)
-    //       return {
-    //         ...this.following,
-    //         isFollowing: false,
-    //       }
-    //     } else {
-    //       return following
-    //     }
-    //     console.log(this.following)
-    //   })
-    // }
   },
 };
 </script>
