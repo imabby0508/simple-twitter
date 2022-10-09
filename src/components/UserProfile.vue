@@ -32,8 +32,8 @@
           {{user.introduction}}
         </div>
         <div class="user__follow">
-          <router-link :to="{name: 'user-followers', params: { id: '1'}}" class="user__follow__num">{{user.followingCount}}個</router-link><p class="following">跟隨中</p>
-          <router-link :to="{name: 'user-followings', params: { id: '1'}}" class="user__follow__num">{{user.followerCount}}位</router-link><p class="follower">跟隨者</p>
+          <router-link :to="{name: 'user-followings', params: { id: '14'}}" class="user__follow__num">{{user.followingCount}}個</router-link><p class="following">跟隨中</p>
+          <router-link :to="{name: 'user-followers', params: { id: '14'}}" class="user__follow__num">{{user.followerCount}}位</router-link><p class="follower">跟隨者</p>
         </div>
       </div>      
     </div> 

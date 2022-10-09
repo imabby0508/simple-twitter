@@ -2,11 +2,14 @@
   "name": "simple-twitter",
   "version": "0.1.0",
   "private": true,
+  "description": "## Project setup ``` npm install ```",
+  "author": "",
   "scripts": {
     "serve": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
     "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
     "lint": "vue-cli-service lint"
   },
+  "main": "babel.config.js",
   "dependencies": {
     "axios": "^1.1.2",
     "bootstrap": "^4.6.2",
@@ -16,7 +19,8 @@
     "popper.js": "^1.16.1",
     "sweetalert2": "^9.8.2",
     "vue": "^2.6.14",
-    "vue-router": "^3.5.1"
+    "vue-router": "^3.5.1",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -24,6 +28,7 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-router": "^5.0.8",
+    "@vue/cli-plugin-vuex": "^5.0.8",
     "@vue/cli-service": "~5.0.0",
     "css-loader": "^3.5.3",
     "eslint": "^7.32.0",
@@ -53,17 +58,14 @@
     "last 2 versions",
     "not dead"
   ],
-  "description": "## Project setup ``` npm install ```",
-  "main": "babel.config.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/imabby0508/simple-twitter.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/imabby0508/simple-twitter/issues"
   },
-  "homepage": "https://github.com/imabby0508/simple-twitter#readme"
+  "homepage": "https://github.com/imabby0508/simple-twitter#readme",
+  "keywords": [],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imabby0508/simple-twitter.git"
+  }
 }

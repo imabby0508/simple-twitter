@@ -25,7 +25,7 @@
             </div>
             <button
               @click.stop.prevent="deleteFollower(follower.id)"
-              v-if="follower.isFollowing"
+              v-if="follower.isFollowed"
               class="follow__card__btn--following"
             >
               正在跟隨
@@ -72,7 +72,7 @@
 
             <button
               @click.stop.prevent="deleteFollowing(following.id)"
-              v-if="following.isFollowing"
+              v-if="following.isFollowed"
               class="follow__card__btn--following"
             >
               正在跟隨
@@ -99,172 +99,172 @@
 import userAPI from "@/apis/user";
 import { Toast } from '@/utils/helpers'
 
-const dummyData = {
-  followers: [
-    {
-      id: 1,
-      name: "Apple",
-      account: "apple",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: true,
-      isFollowed: true,
-    },
-    {
-      id: 2,
-      name: "Bob",
-      account: "bob",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: false,
-      isFollowed: true,
-    },
-    {
-      id: 3,
-      name: "Bob",
-      account: "bob",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: false,
-      isFollowed: true,
-    },
-    {
-      id: 4,
-      name: "Bob",
-      account: "bob",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: false,
-      isFollowed: true,
-    },
-    {
-      id: 5,
-      name: "Bob",
-      account: "bob",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: false,
-      isFollowed: true,
-    },
-    {
-      id: 6,
-      name: "Bob",
-      account: "bob",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: false,
-      isFollowed: true,
-    },
-    {
-      id: 7,
-      name: "Bob",
-      account: "bob",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: false,
-      isFollowed: true,
-    },
-    {
-      id: 8,
-      name: "Bob",
-      account: "bob",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: false,
-      isFollowed: true,
-    },
-  ],
-  followings: [
-    {
-      id: 13,
-      name: "Apple",
-      account: "apple",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: true,
-      isFollowed: true,
-    },
-    {
-      id: 14,
-      name: "Cindy",
-      account: "cindy",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: true,
-      isFollowed: false,
-    },
-    {
-      id: 15,
-      name: "Cindy",
-      account: "cindy",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: true,
-      isFollowed: false,
-    },
-    {
-      id: 16,
-      name: "Cindy",
-      account: "cindy",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: true,
-      isFollowed: false,
-    },
-    {
-      id: 17,
-      name: "Cindy",
-      account: "cindy",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: true,
-      isFollowed: false,
-    },
-    {
-      id: 18,
-      name: "Cindy",
-      account: "cindy",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: true,
-      isFollowed: false,
-    },
-    {
-      id: 19,
-      name: "Cindy",
-      account: "cindy",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: true,
-      isFollowed: false,
-    },
-    {
-      id: 20,
-      name: "Cindy",
-      account: "cindy",
-      image: "",
-      introduction:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      isFollowing: true,
-      isFollowed: false,
-    },
-  ],
-};
+// const dummyData = {
+//   followers: [
+//     {
+//       id: 1,
+//       name: "Apple",
+//       account: "apple",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: true,
+//       isFollowed: true,
+//     },
+//     {
+//       id: 2,
+//       name: "Bob",
+//       account: "bob",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: false,
+//       isFollowed: true,
+//     },
+//     {
+//       id: 3,
+//       name: "Bob",
+//       account: "bob",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: false,
+//       isFollowed: true,
+//     },
+//     {
+//       id: 4,
+//       name: "Bob",
+//       account: "bob",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: false,
+//       isFollowed: true,
+//     },
+//     {
+//       id: 5,
+//       name: "Bob",
+//       account: "bob",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: false,
+//       isFollowed: true,
+//     },
+//     {
+//       id: 6,
+//       name: "Bob",
+//       account: "bob",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: false,
+//       isFollowed: true,
+//     },
+//     {
+//       id: 7,
+//       name: "Bob",
+//       account: "bob",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: false,
+//       isFollowed: true,
+//     },
+//     {
+//       id: 8,
+//       name: "Bob",
+//       account: "bob",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: false,
+//       isFollowed: true,
+//     },
+//   ],
+//   followings: [
+//     {
+//       id: 13,
+//       name: "Apple",
+//       account: "apple",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: true,
+//       isFollowed: true,
+//     },
+//     {
+//       id: 14,
+//       name: "Cindy",
+//       account: "cindy",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: true,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 15,
+//       name: "Cindy",
+//       account: "cindy",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: true,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 16,
+//       name: "Cindy",
+//       account: "cindy",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: true,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 17,
+//       name: "Cindy",
+//       account: "cindy",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: true,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 18,
+//       name: "Cindy",
+//       account: "cindy",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: true,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 19,
+//       name: "Cindy",
+//       account: "cindy",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: true,
+//       isFollowed: false,
+//     },
+//     {
+//       id: 20,
+//       name: "Cindy",
+//       account: "cindy",
+//       image: "",
+//       introduction:
+//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
+//       isFollowing: true,
+//       isFollowed: false,
+//     },
+//   ],
+// };
 
 export default {
   // props: {
@@ -280,34 +280,39 @@ export default {
     };
   },
   created() {
-    const { id: userId } = this.$route.params;
+    const { id: userId } = this.$route.params;    
     this.fetchFollower(userId);
     this.fetchFollowings(userId);
   },
   methods: {
-    fetchFollower() {
-      this.followers = dummyData.followers;
+    async fetchFollower(userId) {
+      try {
+        const { data } = await userAPI.getFollowers({ userId });
+               
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
+        this.followers = data
+
+      } catch(error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者資料，請稍後再試",
+        })
+      }      
     },
     async fetchFollowings(userId) {
-      try {
-        const response = await userAPI.getFollowings({ userId });
-        console.log(response)
-        // const { data } = await userAPI.getFollowings({ userId });
-        // const {id, name, account, avatar, introduction, followingId, isFollowed} = data
+      try {               
+        const { data } = await userAPI.getFollowings({ userId });
+               
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
 
-        // if (data.status === 'error') {
-        //   throw new Error(data.message)
-        // }
-        // this.followings = {
-        // ...this.followings,
-        //   id,          
-        //   name,
-        //   account,
-        //   avatar,
-        //   introduction,
-        //   followingId,
-        //   isFollowed
-        // }
+        this.followings = data
+       
       } catch(error) {
         console.log("error", error);
         Toast.fire({
