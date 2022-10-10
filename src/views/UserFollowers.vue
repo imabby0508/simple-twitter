@@ -1,6 +1,6 @@
 <template>
-
-  <div class="follow__container">
+  <Spinner v-if="isLoading" />
+  <div v-else class="follow__container">
 
     <MainNav />
 
@@ -10,8 +10,8 @@
           <img src="@/assets/image/arrow.png" alt="arrow" />
         </router-link>
         <div>
-          <h4 class="header__name">{{this.user.name}}</h4>
-          <p class="header__tweet__count">{{this.user.tweetCount}}推文</p>
+          <h4 class="header__name">{{user.name}}</h4>
+          <p class="header__tweet__count">{{user.tweetCount}}推文</p>
         </div>      
       </div>
 
@@ -32,44 +32,67 @@ import MainNav from "./../components/MainNav";
 import FollowPills from "./../components/FollowPills";
 import FollowCard from "./../components/FollowCard";
 import PopularList from "./../components/PopularList";
+import userAPI from "@/apis/user";
+import { Toast } from '@/utils/helpers';
+import Spinner from './../components/Spinner'
 
-const dummyUser = {
-  user: {
-    id: 1,
-    tweetCount: 25,
-    name: 'John Doe',    
-  }
-}
+// const dummyUser = {
+//   user: {
+//     id: 1,
+//     tweetCount: 25,
+//     name: 'John Doe',    
+//   }
+// }
 
 export default {
   components: {
     MainNav,
     FollowPills,
     FollowCard,
-    PopularList
+    PopularList,
+    Spinner
   },  
   data() {
     return {
       user: {
         id: -1,
+        name: '',
         tweetCount: "",        
-        name: ''
       },
+      isLoading: true
     }
   },
   created() {
-    this.fetchUser()
+    const { id: userId } = this.$route.params
+    console.log(userId)
+    this.fetchUser(userId)
   },
   methods: {
-    fetchUser() {
-      this.user = {
-        ...this.user,
-        ...dummyUser.user
-      }
+    async fetchUser(userId) {
+      try {
+        const { data } = await userAPI.getUser({ userId });
+        console.log(data)
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
+        this.user = {
+          ...this.user,
+          ...data
+        }
+        this.isLoading = false
+      } catch(error) {
+        this.isLoading = false
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者資料，請稍後再試",
+        });
+      }      
     }
   }
 }
-
 </script>
 
 <style lang="scss" scoped>

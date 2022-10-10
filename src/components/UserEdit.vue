@@ -1,5 +1,6 @@
 <template>
-  <div class="user__edit__modal">
+  <Spinner v-if="isLoading" />
+  <div v-else class="user__edit__modal">
     <div class="modal-card">
       <form @submit.stop.prevent="handleSubmit">
         <div class="edit__header">
@@ -18,8 +19,8 @@
           <div class="user__cover">
             <img
               class="user__cover__img"
-              :src="this.user.backgroundImage"
-              alt="user-cover-img"
+              :src="user.backgroundImage"
+              alt=""
             />
             <div class="user__cover__mask"></div>
             <div class="user__cover__icons">
@@ -53,7 +54,7 @@
           <div class="user__avatar">
             <img
               class="user__avatar__img"
-              :src="this.user.image"
+              :src="user.avatar"
               alt="user-avatar"
             />
             <div class="user__avatar__mask"></div>
@@ -119,30 +120,38 @@
 </template>
 
 <script>
-import { Toast } from '../utils/helpers'
-const dummyUser = {
-  user: {
-    id: 1,
-    backgroundImage: '@/assets/image/user-cover.png',
-    image: '@/assets/image/avatar-1.png',
-    name: 'John Doe',
-    introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
-  }
-}
+import userAPI from "@/apis/user";
+import { Toast } from '../utils/helpers';
+import Spinner from './../components/Spinner'
+
+// const dummyUser = {
+//   user: {
+//     id: 1,
+//     backgroundImage: '@/assets/image/user-cover.png',
+//     image: '@/assets/image/avatar-1.png',
+//     name: 'John Doe',
+//     introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
+//   }
+// }
 export default {
+  components: {
+    Spinner
+  },  
   data() {
     return {
       user: {
         id: -1,
         backgroundImage: "",
-        image: "",
+        avatar: "",
         name: "",
         introduction: "",
       },
+      isLoading: true
     };
   },
   created() {
-    this.fetchUser()
+    const { id: userId } = this.$route.params;
+    this.fetchUser(userId)
   },
   computed: {
     nameThreshold() {
@@ -167,11 +176,27 @@ export default {
     }
   },
   methods: {
-    fetchUser() {
-      this.user = {
-        ...this.user,
-        ...dummyUser.user
-      }
+    async fetchUser(userId) {
+      try {
+        const { data } = await userAPI.getUser({ userId });
+        
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
+        this.user = {
+          ...this.user,
+          ...data
+        }
+        this.isLoading = false
+      } catch (error) {
+        this.isLoading = false
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者資料，請稍後再試",
+        });
+      }   
     },
     closeUserEditModal() {
       this.$emit("after-click-button");
@@ -179,10 +204,10 @@ export default {
     handleFileChange(e) {
       const { files } = e.target;
       if (files.length === 0) {
-        this.user.image = "";
+        this.user.avatar = "";
       } else {
         const imageURL = window.URL.createObjectURL(files[0]);
-        this.user.image = imageURL;
+        this.user.avatar = imageURL;
       }
     },
     handleCoverFileChange(e) {
@@ -196,13 +221,14 @@ export default {
     },
     onPickFile(imageFile) {
       if (imageFile === 'avatar') {
+        console.log('click', 'avatar')
         this.$refs.avatarInput.click()
       } else {
         this.$refs.coverInput.click()
       }
     },
     deleteCover() {
-      this.user.backgroundImage = ''
+      this.user.backgroundImage = 'https://img.onl/nFml6y'
     },
     handleSubmit(e) {
       const form = e.target;
@@ -295,7 +321,7 @@ export default {
         .user__cover__img {
           height: 200px;
           object-fit: cover;
-          object-position: bottom;
+          object-position: center;
           opacity: 70%;
         }
         .user__cover__mask {

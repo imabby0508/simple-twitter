@@ -1,13 +1,13 @@
 <template>
-  <div class="reply__card__wrapper">
-     <!-- <p class="reply__card__name">{{ this.user.name }}</p> -->
-    <router-link v-for="reply in repliesArray" :key="reply.id" class="reply__card" :to="{ name: 'reply', params: {id: reply.tweetId}}">
+  <Spinner v-if="isLoading" />
+  <div v-else class="reply__card__wrapper">
+    <router-link v-for="reply in replies" :key="reply.id" class="reply__card" :to="{ name: 'reply', params: {id: reply.tweetId}}">
       <div class="reply__card__content">
         <div class="reply__card__title">
           <router-link :to="{ name: 'user-tweets', params: {id: reply.replyUser.id}}">
             <img
               class="reply__card__avatar"
-              src="@/assets/image/user-avatar.png"
+              :src="reply.replyUser.avatar"
               alt="avatar"
             />
           </router-link>
@@ -15,7 +15,7 @@
             <div class="reply__card__info">
               <p class="reply__card__name">{{ reply.replyUser.name }}</p>
               <p class="reply__card__account"> @{{ reply.replyUser.account }}</p>
-              <p class="reply__card__time">・{{ reply.createdAt }}</p>
+              <p class="reply__card__time">・{{ reply.createdAt | fromNow }}</p>
             </div>
             <div class="reply__card__target">
               <p>回覆</p>
@@ -24,11 +24,10 @@
               </p>
             </div>
           </div>
-        </div>
-      
+        </div>      
       
         <div class="reply__card__description">
-          {{ reply.replyContent }}
+          {{ reply.comment }}
         </div>
       </div>
     </router-link>
@@ -36,185 +35,213 @@
 </template>
 
 <script>
-// const dummyUser = {
-//   user: {
-//     id: 1,
-//     name: "John",
-//     account: "john",
-//     avatar: "",
-//   },
-// };
+import userAPI from "@/apis/user";
+import tweetAPI from "@/apis/tweet";
+import { Toast } from '@/utils/helpers'
+import { fromNowFilter } from "./../utils/mixins";
+import Spinner from './../components/Spinner'
 
-const dummyData = {
-  replies: [
-    {
-      id: 1,
-      replyContent:
-        "former apple engineer shares a simple DIY fix to seal your surgical mask",
-      createdAt: "3小時",
-      tweetId: 1,
-      tweetAuthorAccount: 'Daniel',
-      replyUser: {
-        id: 1,
-        account: "apple",
-        avatar: "",
-        name: "Apple",
-      },
-    },
-    {
-      id: 2,
-      replyContent: "Michelin Challenges Creatives to Upcycle",
-      createdAt: "12小時",
-      tweetId: 2,
-      tweetAuthorAccount: 'Daniel',
-      replyUser: {
-        id: 2,
-        account: "apple",
-        avatar: "",
-        name: "Apple",
-      },
-    },
-    {
-      id: 3,
-      replyContent: "Michelin Challenges Creatives to Upcycle",
-      createdAt: "12小時",
-      tweetId: 2,
-      tweetAuthorAccount: 'Daniel',
-      replyUser: {
-        id: 2,
-        account: "apple",
-        avatar: "",
-        name: "Apple",
-      },
-    },
-    {
-      id: 4,
-      replyContent: "Michelin Challenges Creatives to Upcycle",
-      createdAt: "12小時",
-      tweetId: 2,
-      tweetAuthorAccount: 'Daniel',
-      replyUser: {
-        id: 2,
-        account: "apple",
-        avatar: "",
-        name: "Apple",
-      },
-    },
-    {
-      id: 5,
-      replyContent: "Michelin Challenges Creatives to Upcycle",
-      createdAt: "12小時",
-      tweetId: 2,
-      tweetAuthorAccount: 'Daniel',
-      replyUser: {
-        id: 2,
-        account: "apple",
-        avatar: "",
-        name: "Apple",
-      },
-    },
-    {
-      id: 6,
-      replyContent: "Michelin Challenges Creatives to Upcycle",
-      createdAt: "12小時",
-      tweetId: 2,
-      tweetAuthorAccount: 'Daniel',
-      replyUser: {
-        id: 2,
-        account: "apple",
-        avatar: "",
-        name: "Apple",
-      },
-    },
-    {
-      id: 7,
-      replyContent: "Michelin Challenges Creatives to Upcycle",
-      createdAt: "12小時",
-      tweetId: 2,
-      tweetAuthorAccount: 'Daniel',
-      replyUser: {
-        id: 2,
-        account: "apple",
-        avatar: "",
-        name: "Apple",
-      },
-    },
-  ],
-};
+// const dummyData = {
+//   replies: [
+//     {
+//       id: 1,
+//       replyContent:
+//         "former apple engineer shares a simple DIY fix to seal your surgical mask",
+//       createdAt: "3小時",
+//       tweetId: 1,
+//       tweetAuthorAccount: 'Daniel',
+//       replyUser: {
+//         id: 1,
+//         account: "apple",
+//         avatar: "",
+//         name: "Apple",
+//       },
+//     },
+//     {
+//       id: 2,
+//       replyContent: "Michelin Challenges Creatives to Upcycle",
+//       createdAt: "12小時",
+//       tweetId: 2,
+//       tweetAuthorAccount: 'Daniel',
+//       replyUser: {
+//         id: 2,
+//         account: "apple",
+//         avatar: "",
+//         name: "Apple",
+//       },
+//     },
+//     {
+//       id: 3,
+//       replyContent: "Michelin Challenges Creatives to Upcycle",
+//       createdAt: "12小時",
+//       tweetId: 2,
+//       tweetAuthorAccount: 'Daniel',
+//       replyUser: {
+//         id: 2,
+//         account: "apple",
+//         avatar: "",
+//         name: "Apple",
+//       },
+//     },
+//     {
+//       id: 4,
+//       replyContent: "Michelin Challenges Creatives to Upcycle",
+//       createdAt: "12小時",
+//       tweetId: 2,
+//       tweetAuthorAccount: 'Daniel',
+//       replyUser: {
+//         id: 2,
+//         account: "apple",
+//         avatar: "",
+//         name: "Apple",
+//       },
+//     },
+//     {
+//       id: 5,
+//       replyContent: "Michelin Challenges Creatives to Upcycle",
+//       createdAt: "12小時",
+//       tweetId: 2,
+//       tweetAuthorAccount: 'Daniel',
+//       replyUser: {
+//         id: 2,
+//         account: "apple",
+//         avatar: "",
+//         name: "Apple",
+//       },
+//     },
+//     {
+//       id: 6,
+//       replyContent: "Michelin Challenges Creatives to Upcycle",
+//       createdAt: "12小時",
+//       tweetId: 2,
+//       tweetAuthorAccount: 'Daniel',
+//       replyUser: {
+//         id: 2,
+//         account: "apple",
+//         avatar: "",
+//         name: "Apple",
+//       },
+//     },
+//     {
+//       id: 7,
+//       replyContent: "Michelin Challenges Creatives to Upcycle",
+//       createdAt: "12小時",
+//       tweetId: 2,
+//       tweetAuthorAccount: 'Daniel',
+//       replyUser: {
+//         id: 2,
+//         account: "apple",
+//         avatar: "",
+//         name: "Apple",
+//       },
+//     },
+//   ],
+// };
 export default {
+  mixins: [fromNowFilter],
+  components: {
+    Spinner
+  },
   data() {
     return {
-      // user: {
-      //   id,
-      //   name,
-      //   account,
-      //   avatar,
+      replies: [],
+      isLoading: true,
+      // reply: {
+      //   id: -1,
+      //   replyContent: "",
+      //   createdAt: "",
+      //   tweetId: "",
+      //   tweetAuthorAccount: '',
+      //   replyUser: {
+      //     id: -1,
+      //     account: "",
+      //     name: "",
+      //     avatar: "",
+      //   },
       // },
-      reply: {
-        id: -1,
-        replyContent: "",
-        createdAt: "",
-        tweetId: "",
-        tweetAuthorAccount: '',
-        replyUser: {
-          id: -1,
-          account: "",
-          name: "",
-          avatar: "",
-        },
-      },
-      repliesArray: [],     
+      // repliesArray: [],     
     };
   },
   created() {
-    // this.fetchUser();
-    this.fetchReplies();  
+    if(this.$route.name === 'user-replies') {
+      const { id: userId } = this.$route.params;     
+      this.fetchUserReplies(userId);
+    } else if(this.$route.name === 'reply') {
+      const { id: tweetId } = this.$route.params;  
+      this.fetchReplies(tweetId);
+    }
   }, 
   methods: {
-    // fetchUser() {
-    //   const { id, name, account, avatar} = dummyUser.user
+    async fetchUserReplies(userId) {
+      try {
+        const { data } = await userAPI.getUserReplies({ userId });
+        console.log('data', data)
 
-    //   this.user = {
-    //     ...this.user,
-    //     id,
-    //     name,
-    //     account,
-    //     avatar,
-    //   };
-      
-    // },
-    fetchReplies() {
-      dummyData.replies.forEach((reply) => {
-        const { id, replyContent, createdAt, tweetId, tweetAuthorAccount, replyUser } = reply;
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
 
-        const { id: userId, account, name, avatar } = replyUser;
-
-        this.reply = {
-          ...this.reply,
-          id,
-          replyContent,
-          createdAt,
-          tweetId,
-          tweetAuthorAccount,
-          replyUser: {
-            id: userId,
-            account,
-            name,
-            avatar,
-          },
-        };
-
-        this.repliesArray.push(this.reply);
-      });
+        this.replies = {
+          ...this.replies,
+          ...data
+        }
+        this.isLoading = false         
+      } catch(error) {
+        this.isLoading = false         
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得回覆，請稍後再試",
+        })
+      }
     },
-    // addUserToReply() {
-    //   console.log(this.repliesArray)
-    //   this.repliesArray.forEach((reply) => {
-    //     reply["user"] = this.user;
-    //     this.repliesWithUser.push(reply)
-    //   });
-    //   console.log(this.repliesWithUser)
 
+    async fetchReplies(tweetId) {
+      try {
+        const { data } = await tweetAPI.getReplies({ tweetId });
+        console.log('data', data)
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
+        this.replies = {
+          ...this.replies,
+          ...data
+        }
+               
+      } catch(error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得回覆，請稍後再試",
+        })
+      }
+    },
+
+    // fetchReplies() {
+    //   dummyData.replies.forEach((reply) => {
+    //     const { id, replyContent, createdAt, tweetId, tweetAuthorAccount, replyUser } = reply;
+
+    //     const { id: userId, account, name, avatar } = replyUser;
+
+    //     this.reply = {
+    //       ...this.reply,
+    //       id,
+    //       replyContent,
+    //       createdAt,
+    //       tweetId,
+    //       tweetAuthorAccount,
+    //       replyUser: {
+    //         id: userId,
+    //         account,
+    //         name,
+    //         avatar,
+    //       },
+    //     };
+
+    //     this.repliesArray.push(this.reply);
+    //   });
     // },
   },
 };
@@ -233,6 +260,7 @@ export default {
           width: 50px;
           height: 50px;
           margin-top: 0;
+          border-radius: 50%;
         }
         .reply__card__info {
           display: flex;

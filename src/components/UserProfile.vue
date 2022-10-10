@@ -1,6 +1,6 @@
 <template>
-
-  <div class="user__profile">
+  <Spinner v-if="isLoading" />
+  <div v-else class="user__profile">
 
     <div class="user__profile__header">
       <router-link :to="{name: 'main'}">
@@ -32,8 +32,8 @@
           {{user.introduction}}
         </div>
         <div class="user__follow">
-          <router-link :to="{name: 'user-followings', params: { id: '14'}}" class="user__follow__num">{{user.followingCount}}個</router-link><p class="following">跟隨中</p>
-          <router-link :to="{name: 'user-followers', params: { id: '14'}}" class="user__follow__num">{{user.followerCount}}位</router-link><p class="follower">跟隨者</p>
+          <router-link :to="{name: 'user-followings', params: { id: user.id }}" class="user__follow__num">{{user.followingCount}}個</router-link><p class="following">跟隨中</p>
+          <router-link :to="{name: 'user-followers', params: { id: user.id }}" class="user__follow__num">{{user.followerCount}}位</router-link><p class="follower">跟隨者</p>
         </div>
       </div>      
     </div> 
@@ -42,7 +42,8 @@
 
 <script>
 import userAPI from "@/apis/user";
-import { Toast } from '@/utils/helpers'
+import { Toast } from '@/utils/helpers';
+import Spinner from './../components/Spinner'
 
 const dummyUser = {
   user: {
@@ -58,11 +59,14 @@ const dummyUser = {
     isFollow: false 
   },
   currentUser: {
-    id: 1,    
+    id: 74,    
   }
 }
 
 export default {
+  components: {
+    Spinner
+  },  
   data() {
     return {
       user: {
@@ -103,7 +107,7 @@ export default {
           throw new Error(data.message)
         }
         this.user = {
-        ...this.user,
+          ...this.user,
           id,
           account,
           name,
@@ -115,7 +119,9 @@ export default {
           followingCount,
           isFollow
         }
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         console.log("error", error);
         Toast.fire({
           icon: "error",
@@ -131,7 +137,7 @@ export default {
       }
     },
     showUserEditModal() {
-      this.$emit("after-click-button")      
+      this.$emit("after-click-button") 
     },
     addFollow(userId) {
       if(userId === this.user.id) {

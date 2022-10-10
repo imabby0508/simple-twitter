@@ -311,8 +311,10 @@ export default {
           throw new Error(data.message)
         }
 
-        this.followings = data
-       
+        this.followings = {
+          ...this.followings,
+          ...data
+        }
       } catch(error) {
         console.log("error", error);
         Toast.fire({
