@@ -1,5 +1,5 @@
 <template>
-
+  
   <div class="user__container">
 
     <MainNav />
@@ -35,13 +35,14 @@ export default {
     ProfilePills,
     TweetCard,
     PopularList,
-    UserEdit
+    UserEdit,
   },
   data() {
     return {
       isModalVisible: false,
     }    
   },
+
   methods: {
     editUserProfile() {
       this.isModalVisible = true

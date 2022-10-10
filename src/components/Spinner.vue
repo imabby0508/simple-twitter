@@ -8,9 +8,9 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .spinner {
-  padding-top: 100px;
+  padding-top: 200px;
 }
 
 .bouncing-loader {
@@ -22,7 +22,7 @@
   width: 1rem;
   height: 1rem;
   margin: 3rem 0.2rem;
-  background: #bd2333;
+  background: $brand-orange;
   border-radius: 50%;
   animation: bouncing-loader 0.6s infinite alternate;
 }
