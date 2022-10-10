@@ -69,11 +69,7 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-
         this.users = response.data
-
-        console.log(this.users)
-        console.log(typeof (this.users))
 
       } catch (error) {
 
