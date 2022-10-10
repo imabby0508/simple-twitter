@@ -13,8 +13,8 @@
         <div class="d-flex">
           <div class="user--wrapper--image">
             <img
-              src="../assets/image/user-avatar.png"
-              alt=""
+              :src="user.avatar"
+              alt="user-avatar"
             >
           </div>
           <div class="user--wrapper--info d-flex flex-column justify-content-center">
@@ -45,111 +45,9 @@
 </template>
 
 <script>
-
-const dummyData = {
-  users: [
-    {
-      id: 1,
-      avatar: '../assets/image/user-avatar.png',
-      account: "hinancyjkljlk",
-      name: "nancy202222290",
-      email: "nancy@example.com",
-      password: "$2a$10$4VljBf69Ic.oA3e5jaCDVusjsl5ovB1KbvlvM2FDU/bGlMBxgI6Tm",
-      isFollowed: false,
-      followerCounts: 20,
-    },
-    {
-      id: 2,
-      avatar: '../assets/image/user-avatar.png',
-      account: "hellonancykljljjljlk",
-      name: "nancyljlkjljkljklk",
-      email: "nancy@example.com",
-      password: "$2a$10$4VljBf69Ic.oA3e5jaCDVusjsl5ovB1KbvlvM2FDU/bGlMBxgI6Tm",
-      isFollowed: true,
-      followerCounts: 20,
-    },
-    {
-      id: 3,
-      avatar: '../assets/image/user-avatar.png',
-      account: "halonancyaaaaaaaaaaaa",
-      name: "nancy",
-      email: "nancy@example.com",
-      password: "$2a$10$4VljBf69Ic.oA3e5jaCDVusjsl5ovB1KbvlvM2FDU/bGlMBxgI6Tm",
-      isFollowed: true,
-      followerCounts: 20,
-    },
-    {
-      id: 4,
-      avatar: '../assets/image/user-avatar.png',
-      account: "halonancyaaaaaaaaaaaa",
-      name: "nancyjkljlkjl",
-      email: "nancy@example.com",
-      password: "$2a$10$4VljBf69Ic.oA3e5jaCDVusjsl5ovB1KbvlvM2FDU/bGlMBxgI6Tm",
-      isFollowed: true,
-      followerCounts: 20,
-    },
-    {
-      id: 5,
-      avatar: '../assets/image/user-avatar.png',
-      account: "halonancyaaaaaaaaaaaa",
-      name: "nancy",
-      email: "nancy@example.com",
-      password: "$2a$10$4VljBf69Ic.oA3e5jaCDVusjsl5ovB1KbvlvM2FDU/bGlMBxgI6Tm",
-      isFollowed: false,
-      followerCounts: 20,
-    },
-    {
-      id: 6,
-      avatar: '../assets/image/user-avatar.png',
-      account: "halonancyaaaaaaaaaaaa",
-      name: "nancy",
-      email: "nancy@example.com",
-      password: "$2a$10$4VljBf69Ic.oA3e5jaCDVusjsl5ovB1KbvlvM2FDU/bGlMBxgI6Tm",
-      isFollowed: false,
-      followerCounts: 20,
-    },
-    {
-      id: 7,
-      avatar: '../assets/image/user-avatar.png',
-      account: "halonancyaaaaaaaaaaaa",
-      name: "nancybdbdbdbdb",
-      email: "nancy@example.com",
-      password: "$2a$10$4VljBf69Ic.oA3e5jaCDVusjsl5ovB1KbvlvM2FDU/bGlMBxgI6Tm",
-      isFollowed: true,
-      followerCounts: 20,
-    },
-    {
-      id: 8,
-      avatar: '../assets/image/user-avatar.png',
-      account: "halonancyaaaaaaaaaaaa",
-      name: "nancy",
-      email: "nancy@example.com",
-      password: "$2a$10$4VljBf69Ic.oA3e5jaCDVusjsl5ovB1KbvlvM2FDU/bGlMBxgI6Tm",
-      isFollowed: false,
-      followerCounts: 20,
-    },
-    {
-      id: 9,
-      avatar: '../assets/image/user-avatar.png',
-      account: "halonancyaaaaaaaaaaaa",
-      name: "nancyqpqpqp",
-      email: "nancy@example.com",
-      password: "$2a$10$4VljBf69Ic.oA3e5jaCDVusjsl5ovB1KbvlvM2FDU/bGlMBxgI6Tm",
-      isFollowed: false,
-      followerCounts: 20,
-    },
-    {
-      id: 10,
-      avatar: '../assets/image/user-avatar.png',
-      account: "halonancyaaaaaaaaaaaa",
-      name: "nancy",
-      email: "nancy@example.com",
-      password: "$2a$10$4VljBf69Ic.oA3e5jaCDVusjsl5ovB1KbvlvM2FDU/bGlMBxgI6Tm",
-      isFollowed: false,
-      followerCounts: 20,
-    },
-  ]
-}
+import userAPI from '../apis/user'
+import followshipAPI from '../apis/followship'
+import { Toast } from '../utils/helpers'
 
 export default {
   data() {
@@ -161,8 +59,29 @@ export default {
     this.fetchPopularList()
   },
   methods: {
-    fetchPopularList() {
-      this.users = dummyData.users
+    async fetchPopularList() {
+
+      try {
+
+        const response = await userAPI.getPopularUsers()
+        const { data } = response
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        this.users = response.data
+
+      } catch (error) {
+
+        console.error("error", error);
+
+        Toast.fire({
+          icon: "error",
+          title: "無法取得熱門使用者，請稍後再試",
+        })
+
+      }
+      
     },
     deleteFollow(userId) {
 
@@ -177,18 +96,40 @@ export default {
         }
       })
     },
-    addFollow(userId) {
+    async addFollow(userId) {
 
-      this.users = this.users.map(user => {
-        if (user.id === userId) {
-          return {
-            ...user,
-            isFollowed: true
-          }
-        } else {
-          return user
+      try {
+
+        const response = await followshipAPI.addFollow({
+          id: userId
+        })
+        const { data } = response
+        console.log(response)
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
         }
-      })
+
+        this.users = this.users.map(user => {
+          if (user.id === userId) {
+            return {
+              ...user,
+              isFollowed: true
+            }
+          } else {
+            return user
+          }
+        })
+
+      } catch (error) {
+
+        console.error("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法追蹤使用者，請稍後再試",
+        })
+
+      }
     }
   },
 }
@@ -222,6 +163,7 @@ export default {
       &--image img {
         width: 50px;
         height: 50px;
+        border-radius: 50%;
       }
 
       &--info {

@@ -81,6 +81,7 @@ import tweetAPI from "@/apis/tweet";
 import { Toast } from '@/utils/helpers'
 import { fromNowFilter } from "./../utils/mixins";
 import Spinner from './../components/Spinner'
+import { mapState } from 'vuex'
 
 export default {
   mixins: [fromNowFilter],
@@ -118,20 +119,20 @@ export default {
       this.fetchTweets();
     }
   },
+  computed: {
+    ...mapState(['currentUser']),
+  },
   methods: {
     async fetchUserTweets(userId) {
       try {
         const { data } = await userAPI.getUserTweets({ userId });
-        console.log('data', data)
+        // console.log('data', data)
 
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
-        this.tweets = {
-          ...this.tweets,
-          ...data,
-        }
+        this.tweets = Object.values(data).map(ele => ele)
 
         this.isLoading = false               
       } catch(error) {
@@ -180,7 +181,7 @@ export default {
     async fetchTweets() {
       try {              
         const { data } = await tweetAPI.getTweets();
-        console.log('data', data)
+        // console.log('data', data)
 
         if (data.status === 'error') {
           throw new Error(data.message)
@@ -199,10 +200,12 @@ export default {
         })
       }
     },
-    
     async addLike(tweetId) {
       try {
-        const { data } = await tweetAPI.addLike({ tweetId });
+        const { data } = await tweetAPI.addLike({
+          tweet_id: tweetId,
+          userId: this.currentUser.id
+        });
         console.log(data)
 
         if (data.status === 'error') {
@@ -210,7 +213,7 @@ export default {
         }             
   
         this.tweets = this.tweets.map(tweet => {
-          console.log(tweet)
+          // console.log(tweet)
           if(tweet.id === tweetId) {
             return {
               ...tweet,
@@ -222,11 +225,13 @@ export default {
         })
 
       } catch (error) {
-        console.log("error", error);
+        console.error("error", error);
+
         Toast.fire({
           icon: "error",
           title: "無法對推文按愛心，請稍後再試",
         })
+
       }     
       // this.tweetsArray = this.tweetsArray.map(tweetContent => {
       //   if(tweetId === tweetContent.id) {          
@@ -240,19 +245,55 @@ export default {
       //   }
       // })  
     },
-    deleteLike(tweetId) {
-      this.tweetsArray = this.tweetsArray.map(tweetContent => {
-        if (tweetId === tweetContent.id) {
-          return {
-            ...tweetContent,
-            isLiked: false,
-            likeCounts: tweetContent.likeCounts - 1
-          }
-        } else {
-          return tweetContent
+    async deleteLike(tweetId) {
+      try {
+        const { data } = await tweetAPI.deleteLike({
+          tweet_id: tweetId,
+          userId: this.currentUser.id
+        });
+        console.log(data)
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
         }
-      })  
+
+        this.tweets = this.tweets.map(tweet => {
+          // console.log(tweet)
+          if (tweet.id === tweetId) {
+            return {
+              ...tweet,
+              isLiked: false
+            }
+          } else {
+            return tweet
+          }
+        })
+
+      } catch (error) {
+        console.error("error", error);
+
+        Toast.fire({
+          icon: "error",
+          title: "無法對推文取消愛心，請稍後再試",
+        })
+
+      }
     },
+    // deleteLike(tweetId) {
+
+      
+    //   this.tweetsArray = this.tweetsArray.map(tweetContent => {
+    //     if (tweetId === tweetContent.id) {
+    //       return {
+    //         ...tweetContent,
+    //         isLiked: false,
+    //         likeCounts: tweetContent.likeCounts - 1
+    //       }
+    //     } else {
+    //       return tweetContent
+    //     }
+    //   })  
+    // },
 
 
   },

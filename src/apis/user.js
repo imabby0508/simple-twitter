@@ -2,6 +2,17 @@ import { apiHelper } from "./../utils/helpers";
 const getToken = () => localStorage.getItem('token')
 
 export default {
+  // TODO：先用 signin api代替
+  getCurrentUser({ account, password }) {
+    return apiHelper.post('api/users/signin', {
+      account, password
+    })
+  },
+  getPopularUsers () {
+    return apiHelper.get('/api/users/popularUsers', {
+      headers: { Authorization: `Bearer ${getToken()}` },
+    })
+  },
   getUser({ userId }) {
     // const searchParams = new URLSearchParams({ userId });
     return apiHelper.get(`/api/users/${userId}`, {

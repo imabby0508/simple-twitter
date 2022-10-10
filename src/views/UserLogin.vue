@@ -14,7 +14,7 @@
       >
       註冊</router-link>
       <span class="d-inline-block mx-2">・</span>
-      <router-link to='/signin/admin'>後台登入</router-link>
+      <router-link to='/admin/signin'>後台登入</router-link>
     </div>
   </div>
 

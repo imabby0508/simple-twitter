@@ -27,14 +27,25 @@
         v-model="password"
       >
     </div>
-    <div>
+
+    <div v-if="$route.name === 'sign-in'">
       <button
-      :class="{disabled: isProcessing}"
-      :disabled="isProcessing"
-      type="button"
-      @click.stop.prevent="submitSignIn"
+        :class="{disabled: isProcessing}"
+        :disabled="isProcessing"
+        type="button"
+        @click.stop.prevent="submitUserSignIn"
       >登入</button>
     </div>
+
+    <div v-else>
+      <button
+        :class="{disabled: isProcessing}"
+        :disabled="isProcessing"
+        type="button"
+        @click.stop.prevent="submitAdminSignIn"
+      >登入</button>
+    </div>
+
   </div>
 </template>
 
@@ -51,7 +62,7 @@ export default {
     }
   },
   methods: {
-    async submitSignIn () {
+    async submitUserSignIn () {
 
       try {
 
@@ -77,6 +88,7 @@ export default {
         }
 
         localStorage.setItem('token', data.data.token)
+        this.$store.commit('setCurrentUser', data.data.user)
         this.$router.push('main')
 
       } catch (error) {

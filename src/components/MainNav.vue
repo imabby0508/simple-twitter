@@ -34,14 +34,14 @@
         </router-link>
       
         <router-link
-          :to="{name: 'user-tweets', params: {id: id}}"
+          :to="{name: 'user-tweets', params: {id: currentUser.id}}"
           class="d-flex align-items-center"
         >
           <img
             src="../assets/image/profile-icon_active.png"
             alt="profile-page"
             class="icon"
-            v-if="$route.name === 'user-tweets'"
+            v-if="$route.name === 'user-tweets' && $route.params.id === currentUser.id"
           >
           <img
             src="../assets/image/profile-icon.png"
@@ -107,6 +107,7 @@
 
 <script>
 import TweetModal from '../components/TweetModal.vue'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -114,9 +115,12 @@ export default {
   },
   data () {
     return {
-      showTweetModal: false
+      showTweetModal: false,
     }
-  }
+  },
+  computed: {
+    ...mapState(['currentUser']),
+  },
 }
 </script>
 
