@@ -48,12 +48,16 @@
 import userAPI from '../apis/user'
 import followshipAPI from '../apis/followship'
 import { Toast } from '../utils/helpers'
+import { mapState } from 'vuex'
 
 export default {
   data() {
     return {
       users: []
     }
+  },
+  computed: {
+    ...mapState(['currentUser']),
   },
   created() {
     this.fetchPopularList()
@@ -100,9 +104,19 @@ export default {
 
       try {
 
+        if (this.currentUser.id === userId) {
+          Toast.fire({
+            icon: "warning",
+            title: "無法追蹤自己，謝謝",
+          })
+          return
+        }
+
         const response = await followshipAPI.addFollow({
           id: userId
         })
+
+        console.log(response)
         const { data } = response
         console.log(response)
 

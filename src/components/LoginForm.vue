@@ -51,6 +51,7 @@
 
 <script>
 import authorizationAPI from '@/apis/authorization'
+import adminAPI from '@/apis/admin'
 import { Toast } from '@/utils/helpers'
 
 export default {
@@ -88,6 +89,60 @@ export default {
         }
 
         localStorage.setItem('token', data.data.token)
+
+        Toast.fire({
+          icon: 'success',
+          title: '成功登入'
+        })
+
+        this.$store.commit('setCurrentUser', data.data.user)
+        this.$router.push('main')
+
+      } catch (error) {
+        this.password = ''
+
+        Toast.fire({
+          icon: 'warning',
+          title: '請確認您輸入了正確的帳號密碼'
+        })
+
+        this.isProcessing = false
+        console.log('error', error)
+
+      }
+    },
+    async submitAdminSignIn() {
+
+      try {
+
+        if (!this.account || !this.password) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請填入帳號和密碼'
+          })
+          return
+        }
+
+        this.isProcessing = true
+
+        const response = await adminAPI.adminSignIn({
+          account: this.account,
+          password: this.password
+        })
+
+        const { data } = response
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
+        localStorage.setItem('token', data.data.token)
+
+        Toast.fire({
+          icon: 'success',
+          title: '成功登入'
+        })
+
         this.$store.commit('setCurrentUser', data.data.user)
         this.$router.push('main')
 
@@ -104,7 +159,7 @@ export default {
 
       }
     }
-  }
+  },
 }
 </script>
 

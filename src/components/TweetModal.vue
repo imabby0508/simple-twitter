@@ -28,6 +28,8 @@
             <span>{{!tweetContentCount ? '內容不可空白' : ''}}</span>
             <button
               @click.stop.prevent="submitTweet"
+              :class="{disabled: isProcessing}"
+              :disabled="isProcessing"
             >
               推文
             </button>
@@ -41,47 +43,61 @@
 </template>
 
 <script>
+import tweetAPI from '@/apis/tweet'
+import { mapState } from 'vuex'
 import { Toast } from '../utils/helpers.js'
-
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    avatar: '../assets/image/avatar-1.png',
-    name: 'Michael',
-  },
-}
 
 export default {
   data () {
     return {
-      currentUser: {},
-      tweetContent: ""
+      tweetContent: "",
+      isProcessing: false
     }
   },
-  created () {
-    this.fetchCurrentUser()
+  computed: {
+    ...mapState(['currentUser'])
   },
   methods: {
-    fetchCurrentUser () {
-      this.currentUser = dummyUser.currentUser
-    },
-    submitTweet () {
+    async submitTweet () {
 
-      if (!this.tweetContent) {
-        Toast.fire({
-          icon: 'warning',
-          title: '推文內容不可空白'
+      try {
+
+        if (!this.tweetContent) {
+          Toast.fire({
+            icon: 'warning',
+            title: '推文內容不可空白'
+          })
+          return
+        } else if (this.tweetContent.length > 140) {
+          Toast.fire({
+            icon: 'warning',
+            title: '推文內容不可超過 140字'
+          })
+          return
+        }
+
+        this.isProcessing = true
+
+        const { data } = await tweetAPI.addTweet({
+          description: this.tweetContent
         })
-        return
-      } else if (this.tweetContent.length > 140) {
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        
+        this.isProcessing = false
+        this.$emit('close')
+
+      } catch (error) {
+        this.isProcessing = false
+        console.error(error)        
         Toast.fire({
-          icon: 'warning',
-          title: '推文內容不可超過 140字'
+          icon: 'error',
+          title: '目前無法發推文，請稍後再試'
         })
-        return
       }
 
-      this.$emit('close')
     }
   },
   computed: {
@@ -163,6 +179,9 @@ export default {
       color: $scale-gray1;
       padding: 8px 24px;
       margin: 0 16px 16px 0;
+      &.disabled {
+        opacity: 0.5;
+      }
     }
     span {
       color: $error-red;

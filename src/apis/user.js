@@ -29,8 +29,8 @@ export default {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
   },
-  getUserTweets({ userId }) {
-    return apiHelper.get(`/api/users/${userId}/tweets`, {
+  getUserTweets({ id }) {
+    return apiHelper.get(`/api/users/${id}/tweets`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
   },
@@ -39,8 +39,8 @@ export default {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
   },
-  getUserLikes({ userId }) {
-    return apiHelper.get(`/api/users/${userId}/likes`, {
+  getUserLikes({ id }) {
+    return apiHelper.get(`/api/users/${ id }/likes`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
   },

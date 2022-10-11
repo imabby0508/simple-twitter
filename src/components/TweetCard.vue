@@ -149,12 +149,13 @@
 
 <script>
 import ReplyModal from './ReplyModal.vue';
-import userAPI from "@/apis/user";
-import tweetAPI from "@/apis/tweet";
 import { Toast } from '@/utils/helpers'
 import { fromNowFilter } from "./../utils/mixins";
 import Spinner from './../components/Spinner'
 import { mapState } from 'vuex'
+
+import userAPI from "@/apis/user";
+import tweetAPI from "@/apis/tweet";
 
 export default {
   mixins: [fromNowFilter],
@@ -167,26 +168,11 @@ export default {
       tweets: [],
       isLoading: true,
       isUserLikesPage: false
-      // tweet: {
-      //   id: -1,
-      //   description: "",
-      //   createdAt: "",        
-      //   tweetAuthor: {
-      //     id: -1,
-      //     account: "",
-      //     name: "",
-      //     avatar: "",
-      //   },
-      //   replyCounts: "",
-      //   likeCounts: "",
-      //   isLiked: false,
-      // },
-      
-      // tweetsArray: []
     };
   },
   created() {      
-    const { id: userId } = this.$route.params;  
+    const { id: userId } = this.$route.params;
+
     if(this.$route.name === 'user-tweets') {
       this.fetchUserTweets(userId);
     } else if (this.$route.name === 'user-likes') {
@@ -202,115 +188,89 @@ export default {
     ...mapState(['currentUser']),
   },
   methods: {
+    // 在首頁瀏覽所有推文
+    async fetchTweets() {
+      try {
+        const response = await tweetAPI.getTweets();
+        const { data }  =response
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
+        // data的格式是陣列，把 data裡一個一個值放進 tweets陣列
+        this.tweets = [
+          ...data
+        ]
+
+        this.isLoading = false
+      } catch (error) {
+        this.isLoading = false
+        console.error("error", error);
+
+        Toast.fire({
+          icon: "error",
+          title: "無法取得推文，請稍後再試",
+        })
+
+      }
+    },
+    // 使用者查看個人檔案並看到該使用者的推文
     async fetchUserTweets(userId) {
       try {
-        const { data } = await userAPI.getUserTweets({ userId });
-        // console.log('data', data)
+        const response = await userAPI.getUserTweets({ id: userId });
+        const { data } = response
 
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
-        this.tweets = Object.values(data).map(ele => ele)
+        this.tweets = [
+          ...data
+        ]
 
         this.isLoading = false               
       } catch(error) {
         this.isLoading = false
-        console.log("error", error);
+        console.error("error", error);
+
         Toast.fire({
           icon: "error",
           title: "無法取得推文，請稍後再試",
         })
-      }
-
-      // dummyData.tweets.forEach((tweet) => {        
-      //   const {
-      //     id,
-      //     description,
-      //     createdAt,
-      //     replyCounts,
-      //     likeCounts,
-      //     isLiked,
-      //     user,
-      //   } = tweet;
-        
-      //   const { id: userId, account, name, avatar } = user;
-
-      //   this.tweet = {
-      //     ...this.tweet,
-      //     id,
-      //     description,
-      //     createdAt,
-      //     replyCounts,
-      //     likeCounts,
-      //     isLiked,
-      //     user: {
-      //       id: userId,
-      //       account,
-      //       name,
-      //       avatar,
-      //     },
-      //     showReplyModal: false
-      //   };        
-        
-      //   this.tweetsArray.push(this.tweet)
-      // });   
+      } 
     },
-
+    // 使用者查看個人檔案並看到該使用者按讚的推文
     async fetchUserLikes(userId) {
       try {
-        const { data } = await userAPI.getUserLikes({ userId });
-        console.log('data', data)
+        const response = await userAPI.getUserLikes({ id: userId });
+        const { data } = response
 
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
-        this.tweets = Object.values(data).map(ele => ele)
+        this.tweets = [
+          ...data
+        ]
 
         this.isLoading = false               
       } catch(error) {
         this.isLoading = false
-        console.log("error", error);
+        console.error("error", error);
+
         Toast.fire({
           icon: "error",
           title: "無法取得推文，請稍後再試",
         })
       }
     },
-
-    async fetchTweets() {
-      try {              
-        const { data } = await tweetAPI.getTweets();
-        // console.log('data', data)
-
-        if (data.status === 'error') {
-          throw new Error(data.message)
-        }
-
-        this.tweets = {
-          ...this.tweets,
-          ...data
-        }
-         
-        this.isLoading = false 
-      } catch(error) {
-        this.isLoading = false
-        console.log("error", error);
-        Toast.fire({
-          icon: "error",
-          title: "無法取得推文，請稍後再試",
-        })
-      }
-    },
-
     async addLike(tweetId) {
       try {
         const { data } = await tweetAPI.addLike({
           tweet_id: tweetId,
           userId: this.currentUser.id
         });
-        console.log(data)
 
         if (data.status === 'error') {
           throw new Error(data.message)
@@ -337,17 +297,6 @@ export default {
         })
 
       }     
-      // this.tweetsArray = this.tweetsArray.map(tweetContent => {
-      //   if(tweetId === tweetContent.id) {          
-      //     return {
-      //       ...tweetContent,
-      //       isLiked: true,
-      //       likeCounts: tweetContent.likeCounts + 1   
-      //     }
-      //   } else {
-      //     return tweetContent
-      //   }
-      // })  
     },
     async deleteLike(tweetId) {
       console.log(tweetId)
@@ -356,7 +305,6 @@ export default {
           tweet_id: tweetId,
           userId: this.currentUser.id
         });
-        console.log(data)
 
         if (data.status === 'error') {
           throw new Error(data.message)
@@ -384,23 +332,6 @@ export default {
 
       }
     },
-    // deleteLike(tweetId) {
-
-      
-    //   this.tweetsArray = this.tweetsArray.map(tweetContent => {
-    //     if (tweetId === tweetContent.id) {
-    //       return {
-    //         ...tweetContent,
-    //         isLiked: false,
-    //         likeCounts: tweetContent.likeCounts - 1
-    //       }
-    //     } else {
-    //       return tweetContent
-    //     }
-    //   })  
-    // },
-
-
   },
 };
 </script>
