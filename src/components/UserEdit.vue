@@ -17,17 +17,13 @@
 
         <div class="user__edit__image">
           <div class="user__cover">
-            <img
-              class="user__cover__img"
-              :src="user.backgroundImage"
-              alt=""
-            />
+            <img class="user__cover__img" :src="user.backgroundImage" alt="" />
             <div class="user__cover__mask"></div>
             <div class="user__cover__icons">
               <input
-                id="coverImage"
+                id="backgroundImage"
                 type="file"
-                name="coverImage"
+                name="backgroundImage"
                 accept="image/*"
                 class="upload__coverImage__file d-none"
                 ref="coverInput"
@@ -60,18 +56,21 @@
             <div class="user__avatar__mask"></div>
 
             <input
-              id="avatarImage"
+              id="avatar"
               type="file"
-              name="avatarImage"
+              name="avatar"
               accept="image/*"
               class="upload__avatarImage__file d-none"
               ref="avatarInput"
               @change="handleFileChange"
             />
             <button @click.stop.prevent="onPickFile('avatar')">
-              <img class="upload" src="@/assets/image/upload.png" alt="upload" />
+              <img
+                class="upload"
+                src="@/assets/image/upload.png"
+                alt="upload"
+              />
             </button>
-            
           </div>
         </div>
 
@@ -102,7 +101,9 @@
               type="text"
               id="introduction"
               name="introduction"
-              :placeholder="user.introduction ? user.introduction : '請輸入自我介紹'"              
+              :placeholder="
+                user.introduction ? user.introduction : '請輸入自我介紹'
+              "
               class="d-block introduction"
               v-model="user.introduction"
             ></textarea>
@@ -121,8 +122,8 @@
 
 <script>
 import userAPI from "@/apis/user";
-import { Toast } from '../utils/helpers';
-import Spinner from './../components/Spinner'
+import { Toast } from "../utils/helpers";
+import Spinner from "./../components/Spinner";
 
 // const dummyUser = {
 //   user: {
@@ -135,8 +136,8 @@ import Spinner from './../components/Spinner'
 // }
 export default {
   components: {
-    Spinner
-  },  
+    Spinner,
+  },
   data() {
     return {
       user: {
@@ -146,12 +147,13 @@ export default {
         name: "",
         introduction: "",
       },
-      isLoading: true
+      isLoading: true,
+      backgroundImageIsDefault: false,
     };
   },
   created() {
     const { id: userId } = this.$route.params;
-    this.fetchUser(userId)
+    this.fetchUser(userId);
   },
   computed: {
     nameThreshold() {
@@ -170,33 +172,35 @@ export default {
       document.getElementById("name").style.borderBottomColor = null;
     }
     if (this.introductionThreshold > 160) {
-      document.getElementById("introduction").style.borderBottomColor = "#FC5A5A";
+      document.getElementById("introduction").style.borderBottomColor =
+        "#FC5A5A";
     } else {
       document.getElementById("introduction").style.borderBottomColor = null;
     }
   },
+
   methods: {
     async fetchUser(userId) {
       try {
         const { data } = await userAPI.getUser({ userId });
-        
-        if (data.status === 'error') {
-          throw new Error(data.message)
+
+        if (data.status === "error") {
+          throw new Error(data.message);
         }
 
         this.user = {
           ...this.user,
-          ...data
-        }
-        this.isLoading = false
+          ...data,
+        };
+        this.isLoading = false;
       } catch (error) {
-        this.isLoading = false
+        this.isLoading = false;
         console.log("error", error);
         Toast.fire({
           icon: "error",
           title: "無法取得使用者資料，請稍後再試",
         });
-      }   
+      }
     },
     closeUserEditModal() {
       this.$emit("after-click-button");
@@ -217,54 +221,76 @@ export default {
       } else {
         const imageURL = window.URL.createObjectURL(files[0]);
         this.user.backgroundImage = imageURL;
+        this.backgroundImageIsDefault = false;
       }
     },
     onPickFile(imageFile) {
-      if (imageFile === 'avatar') {
-        console.log('click', 'avatar')
-        this.$refs.avatarInput.click()
+      if (imageFile === "avatar") {
+        this.$refs.avatarInput.click();
       } else {
-        this.$refs.coverInput.click()
+        this.$refs.coverInput.click();
       }
     },
     deleteCover() {
-      this.user.backgroundImage = 'https://img.onl/nFml6y'
+      this.user.backgroundImage = require("./../assets/image/user-cover.png");
+      this.backgroundImageIsDefault = true;
     },
-    handleSubmit(e) {
+    async handleSubmit(e) {
       const form = e.target;
-      const formData = new FormData(form)
-      for (let [name, value] of formData.entries()) {
-        console.log(name + ': ' + value)
+      const formData = new FormData(form);
+
+      if (this.backgroundImageIsDefault) {
+        const response = await fetch("https://i.imgur.com/4kLBkAL.jpeg");
+        const blob = await response.blob();
+        const file = new File([blob], "default.jpeg", { type: "image/jpeg" });
+        formData.set("backgroundImage", file);
       }
 
-      Toast.fire({
-        icon: 'success',
-        title: '成功儲存'
-      })
-      
-      if (!this.user.name) {
+      try {
+        if (!this.user.name) {
+          Toast.fire({
+            icon: "warning",
+            title: "名稱不可空白",
+          });
+          return;
+        } else if (this.user.name.length > 50) {
+          Toast.fire({
+            icon: "warning",
+            title: "名稱不可超過50字",
+          });
+          return;
+        }
+
+        if (this.user.introduction.length > 160) {
+          Toast.fire({
+            icon: "warning",
+            title: "自我介紹不可超過160字",
+          });
+          return;
+        }
+        const { data } = await userAPI.update({
+          userId: this.user.id,
+          formData,
+        });
+
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
         Toast.fire({
-          icon: 'warning',
-          title: '名稱不可空白'
-        })
-        return
-      } else if (this.user.name.length > 50) {
+          icon: "success",
+          title: "成功儲存",
+        });
+
+      } catch (error) {
+        console.log("error", error);
         Toast.fire({
-          icon: 'warning',
-          title: '名稱不可超過50字'
-        })
-        return
+          icon: "error",
+          title: "無法更新使用者資料，請稍後再試",
+        });
       }
-      
-      if (!this.user.introduction.length > 160) {
-        Toast.fire({
-          icon: 'warning',
-          title: '自我介紹不可超過160字'
-        })
-        return
-      }
-    }
-  }, 
+    },
+  },
 };
 </script>
 

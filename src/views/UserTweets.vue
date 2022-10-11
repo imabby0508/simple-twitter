@@ -5,7 +5,7 @@
     <MainNav />
 
     <div class="user__info__wrapper">
-      <UserProfile @after-click-button="editUserProfile"/>
+      <UserProfile @after-click-button="editUserProfile" :is-updated="isUpdated"/>
       
       <ProfilePills />
 
@@ -40,15 +40,18 @@ export default {
   data() {
     return {
       isModalVisible: false,
+      isUpdated: false
     }    
   },
 
   methods: {
     editUserProfile() {
-      this.isModalVisible = true
+      this.isModalVisible = true,
+      this.isUpdated = false
     },
     closeUserEditModal() {
-      this.isModalVisible = false
+      this.isModalVisible = false,
+      this.isUpdated = true
     }
   } 
 }
