@@ -44,4 +44,13 @@ export default {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
   },
+  update({ userId, formData }) {
+    console.log('inside API:', userId);
+    for (let [name, value] of formData.entries()) {
+      console.log(name + ": " + value);
+    }
+    return apiHelper.put(`/api/users/${userId}`, formData, {
+      headers: { Authorization: `Bearer ${getToken()}` },
+    });
+  },
 };
