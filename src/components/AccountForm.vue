@@ -114,7 +114,8 @@
 </template>
 
 <script>
-
+import authorizationAPI from '../apis/authorization'
+import { Toast } from '../utils/helpers'
 
 export default {
   props: {
@@ -124,7 +125,15 @@ export default {
     },
     initialUser: {
       type: Object,
-      required: true
+      default: () => {
+        return {
+          account: '',
+          name: '',
+          email: '',
+          password: '',
+          checkPassword: ''
+        }
+      }
     }
   },
   data() {
@@ -133,7 +142,18 @@ export default {
       name: '',
       email: '',
       password: '',
-      checkPassword: ''
+      checkPassword: '',
+    }
+  },
+  watch: {
+    initialUser: {
+      handler(newData) {
+        this.account = newData.account
+        this.name = newData.name
+        this.email = newData.email
+        this.password = newData.password
+        this.checkPassword = newData.checkPassword
+      }
     }
   },
   // for Setting views only
@@ -147,17 +167,78 @@ export default {
       this.name = this.initialUser.name
       this.email = this.initialUser.email
     },
-    submitSignUp() {
-      const data = JSON.stringify({
-        account: this.account,
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        checkPassword: this.checkPassword
-      })
-      console.log(data)
-      // 註冊成功新增到 server後，router轉到 signin
-      this.$router.push('/signin')
+    async submitSignUp() {
+
+      try {
+
+        // 擋掉使用者拿掉 input required
+        if (!this.account || !this.name || !this.email || !this.password || !this.checkPassword) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請確認已填寫所有欄位'
+          })
+          return
+        }
+
+        // 擋掉使用者 account超過 10個字
+        if (this.account.length > 10) {
+          Toast.fire({
+            icon: 'warning',
+            title: '帳號字數超過上限'
+          })
+          return
+        }
+
+        // 擋掉使用者 name超過 50個字
+        if (this.name.length > 50) {
+          Toast.fire({
+            icon: 'warning',
+            title: '名稱字數超過上限'
+          })
+          return
+        }
+
+        // 擋掉使用者密碼設定不一致
+        if (this.password !== this.checkPassword) {
+          Toast.fire({
+            icon: 'warning',
+            title: '密碼確認沒有正確輸入'
+          })
+          return
+        }
+
+        const response = await authorizationAPI.signUp({
+          account: this.account,
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          checkPassword: this.checkPassword
+        })
+
+        const { data } = response
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        
+        Toast.fire({
+          icon: 'success',
+          title: '註冊成功了'
+        })
+
+        // 註冊成功新增到 server後，router轉到 signin
+        this.$router.push('/signin')
+
+      } catch (error) {
+        console.error(error)
+
+        // account 和 email 不能與其他人重複，重複時跳 toast
+        Toast.fire({
+          icon: 'error',
+          title: error.response.data.message
+        })
+      }
+
     },
     submitSetting() {
       const data = JSON.stringify({

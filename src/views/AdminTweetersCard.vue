@@ -12,7 +12,7 @@
         <div class="tweet__card__wrapper">
           <div class="card d-flex flex-column" v-for="user in users" :key="user.id">
             <img class="card--cover" :src="user.backgroundImage" alt="user-cover">
-            <img class="card--avatar" :src="user.avatar" alt="user-avatar">
+            <img class="card--avatar" :src="user.avatar | emptyAvatar" alt="user-avatar">
 
             <div class="card--info text-center">
               <p class="card--info--name">{{user.name}}</p>
@@ -46,217 +46,11 @@
 
 <script>
 import AdminNav from '@/components/AdminNav.vue';
-
-const dummyData = {
-  users: [
-    {
-      id: 1,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-      avatar: "https://picsum.photos/150",
-      backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 2,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-      avatar: "https://picsum.photos/150",
-      backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 3,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-      avatar: "https://picsum.photos/150",
-      backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 4,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-      avatar: "https://picsum.photos/150",
-      backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 5,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-    avatar: "https://picsum.photos/150",
-    backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 6,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-    avatar: "https://picsum.photos/150",
-    backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 7,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-      avatar: "https://picsum.photos/150",
-      backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 8,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-      avatar: "https://picsum.photos/150",
-      backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 9,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-      avatar: "https://picsum.photos/150",
-      backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 10,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-      avatar: "https://picsum.photos/150",
-      backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 11,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-      avatar: "https://picsum.photos/150",
-      backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-    {
-      id: 12,
-      account: "root",
-      email: "root@example.com",
-      passwor: "$2a$10$0svlV32uVwK3XCsCbOnyG.Aphf8NcHVEA9ZNrrlCnKCyVF0GQEUGa",
-      name: "root",
-      avatar: "https://picsum.photos/150",
-      backgroundImage: "https://picsum.photos/300/150",
-      introduction: "Repellat ut voluptatem. Natus amet aliquam sint et quae ut fuga aut.",
-      role: "admin",
-      createdAt: "2022-10-04T10:14:28.000Z",
-      updatedAt: "2022-10-04T10:14:28.000Z",
-      tweetCount: 10,
-      likeCount: 3,
-      followerCount: 2,
-      followingCount: 2
-    },
-  ]
-}
+import adminAPI from '../apis/admin'
+import { emptyAvatarFilter } from '../utils/mixins'
 
 export default {
+  mixins: [emptyAvatarFilter],
   components: {
     AdminNav,
   },
@@ -269,8 +63,27 @@ export default {
     this.fetchUsers();
   },
   methods: {
-    fetchUsers() {
-      this.users = dummyData.users
+    async fetchUsers() {
+
+      try {
+
+        const response = await adminAPI.getUsers()
+        const { data } = response
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
+        this.users = data
+
+      } catch {
+        console.error(error)
+
+        Toast.fire({
+          icon: 'error',
+          title: '目前無法取得使用者列表，請稍後再試'
+        })
+      }
+
     },
   },
 }

@@ -9,7 +9,7 @@
       <div class="setting__post">
         <AccountForm
         :isSignUp="false"
-        :initialUser = "user"
+        :initialUser = "currentUser"
         />
       </div>
     </div>
@@ -19,47 +19,16 @@
 <script>
 import MainNav from "./../components/MainNav";
 import AccountForm from "@/components/AccountForm.vue";
-
-const dummyUser = {
-  user: {
-    id: 1,
-    name: "John Doe",
-    account: "heyjohn",
-    avatar: "",
-    email: "john@gmail.com"
-  },
-};
+import { mapState } from 'vuex'
 
 export default {
+  computed: {
+    ...mapState(['currentUser'])
+  },
   components: {
     MainNav,
     AccountForm,
   },
-  data () {
-    return {
-      user: {
-        id: -1,
-        name: '',
-        account: '',
-        email: ''
-      }
-    }
-  },
-  created () {
-    this.fetchCurrentUser()
-  },
-  methods: {
-    fetchCurrentUser () {
-      const {id, name, account, email} = dummyUser.user
-      this.user = {
-        ...this.user,
-        id,
-        name,
-        account,
-        email
-      }
-    }
-  }
 }
 
 </script>

@@ -41,7 +41,7 @@
             src="../assets/image/profile-icon_active.png"
             alt="profile-page"
             class="icon"
-            v-if="$route.name === 'user-tweets' && $route.params.id === currentUser.id"
+            v-if="($route.params.id === currentUser.id || $route.name === 'user-tweets')"
           >
           <img
             src="../assets/image/profile-icon.png"
@@ -98,7 +98,9 @@
           alt="setting-page"
           class="icon"
         >
-        <span>登出</span>
+        <span
+        @click.stop.prevent="logout"
+        >登出</span>
       </router-link>
     </div>
 
@@ -121,6 +123,12 @@ export default {
   computed: {
     ...mapState(['currentUser']),
   },
+  methods: {
+    logout () {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
+    }
+  }
 }
 </script>
 
@@ -179,7 +187,7 @@ export default {
     padding: 8px 0;
     margin-top: 24px;
   }
-
+  
   .router-link-exact-active {
     span {
       color: $brand-orange;

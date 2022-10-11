@@ -14,17 +14,16 @@
             v-for="tweet in tweetsArray"
             :key="tweet.id"
             class="tweet__card"
-            :to="{name: 'reply', params: {id: tweet.id}}"
           >
             <div class="tweet__card__content">
               <div class="tweet__card__title">
                 <img
                   class="tweet__card__avatar"
-                  src="@/assets/image/user-avatar.png"
+                  :src="tweet.tweetAuthor.avatar"
                   alt="avatar"/>
-                <p class="tweet__card__name">{{ tweet.user.name }}</p>
-                <p class="tweet__card__account">@{{ tweet.user.account }}</p>
-                <p class="tweet__card__time">・{{ tweet.createdAt }}</p>
+                <p class="tweet__card__name">{{ tweet.tweetAuthor.name }}</p>
+                <p class="tweet__card__account">@{{ tweet.tweetAuthor.account }}</p>
+                <p class="tweet__card__time">・{{ tweet.createdAt | fromNow }}</p>
               </div>
               <div class="tweet__card__description">
                 {{ tweet.description }}
@@ -46,152 +45,17 @@
 
 <script>
 import AdminNav from '@/components/AdminNav.vue';
-
-const dummyData = {
-  tweets: [
-    {
-      id: 1,
-      description:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      createdAt: "3小時",
-      replyCounts: 13,
-      likeCounts: 76,
-      isLiked: false,
-      user: {
-        id: 1,
-        account: "apple",
-        name: "Apple",
-        avatar: "",
-      },
-    },
-    {
-      id: 2,
-      description:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      createdAt: "3小時",
-      replyCounts: 13,
-      likeCounts: 76,
-      isLiked: true,
-      user: {
-        id: 2,
-        account: "apple",
-        name: "Apple",
-        avatar: "",
-      },
-    },
-    {
-      id: 3,
-      description:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      createdAt: "3小時",
-      replyCounts: 13,
-      likeCounts: 76,
-      isLiked: true,
-      user: {
-        id: 2,
-        account: "apple",
-        name: "Apple",
-        avatar: "",
-      },
-    },
-    {
-      id: 4,
-      description:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      createdAt: "3小時",
-      replyCounts: 13,
-      likeCounts: 76,
-      isLiked: true,
-      user: {
-        id: 2,
-        account: "apple",
-        name: "Apple",
-        avatar: "",
-      },
-    },
-    {
-      id: 5,
-      description:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      createdAt: "3小時",
-      replyCounts: 13,
-      likeCounts: 76,
-      isLiked: true,
-      user: {
-        id: 2,
-        account: "apple",
-        name: "Apple",
-        avatar: "",
-      },
-    },
-    {
-      id: 6,
-      description:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      createdAt: "3小時",
-      replyCounts: 13,
-      likeCounts: 76,
-      isLiked: true,
-      user: {
-        id: 2,
-        account: "apple",
-        name: "Apple",
-        avatar: "",
-      },
-    },
-    {
-      id: 7,
-      description:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      createdAt: "3小時",
-      replyCounts: 13,
-      likeCounts: 76,
-      isLiked: true,
-      user: {
-        id: 2,
-        account: "apple",
-        name: "Apple",
-        avatar: "",
-      },
-    },
-    {
-      id: 8,
-      description:
-        "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-      createdAt: "3小時",
-      replyCounts: 13,
-      likeCounts: 76,
-      isLiked: true,
-      user: {
-        id: 2,
-        account: "apple",
-        name: "Apple",
-        avatar: "",
-      },
-    },
-  ],
-};
+import adminAPI from '../apis/admin'
+import { fromNowFilter } from "./../utils/mixins";
+import { Toast } from '../utils/helpers'
 
 export default {
+  mixins: [fromNowFilter],
   components: {
     AdminNav,
   },
   data() {
     return {
-      tweet: {
-        id: -1,
-        description: "",
-        createdAt: "",
-        replyCounts: "",
-        likeCounts: "",
-        isLiked: false,
-        user: {
-          id: -1,
-          account: "",
-          name: "",
-          avatar: "",
-        },
-      },
       tweetsArray: []
     };
   },
@@ -199,42 +63,45 @@ export default {
     this.fetchTweets();
   },
   methods: {
-    fetchTweets() {
-      dummyData.tweets.forEach((tweet) => {
-        const {
-          id,
-          description,
-          createdAt,
-          replyCounts,
-          likeCounts,
-          isLiked,
-          user,
-        } = tweet;
+    async fetchTweets() {
 
-        const { id: userId, account, name, avatar } = user;
+      try {
 
-        this.tweet = {
-          ...this.tweet,
-          id,
-          description,
-          createdAt,
-          replyCounts,
-          likeCounts,
-          isLiked,
-          user: {
-            id: userId,
-            account,
-            name,
-            avatar,
-          },
-          showReplyModal: false
-        };
+        const response = await adminAPI.getTweets()
+        const { data } = response
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        this.tweetsArray = data
+        
+      } catch (error) {
+        console.error(error)
 
-        this.tweetsArray.push(this.tweet)
-      });
+        Toast.fire({
+          icon: 'error',
+          title: '目前無法取得推文清單，請稍後再試'
+        })
+      }
     },
-    deleteTweet (tweetId) {
-      this.tweetsArray = this.tweetsArray.filter(tweet => (tweet.id !== tweetId))
+    async deleteTweet (tweetId) {
+      try {
+
+        const { data } = await adminAPI.deleteTweet({ id: tweetId })
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
+        this.tweetsArray = this.tweetsArray.filter(tweet => (tweet.id !== tweetId))
+
+      } catch (error) {
+        console.error(error)
+
+        Toast.fire({
+          icon: 'error',
+          title: '目前無法刪除該推文，請稍後再試'
+        })
+      }
     }
   },
 }
@@ -269,6 +136,9 @@ export default {
     height: 100vh;
     top: 80px;
     bottom: 0;
+  }
+
+  .tweet__card__wrapper {
     border-left: 1px solid $border;
     border-right: 1px solid $border;
   }
