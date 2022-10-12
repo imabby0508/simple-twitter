@@ -19,7 +19,7 @@
               <div class="tweet__card__title">
                 <img
                   class="tweet__card__avatar"
-                  :src="tweet.tweetAuthor.avatar"
+                  :src="tweet.tweetAuthor.avatar | emptyAvatar"
                   alt="avatar"/>
                 <p class="tweet__card__name">{{ tweet.tweetAuthor.name }}</p>
                 <p class="tweet__card__account">@{{ tweet.tweetAuthor.account }}</p>
@@ -47,10 +47,11 @@
 import AdminNav from '@/components/AdminNav.vue';
 import adminAPI from '../apis/admin'
 import { fromNowFilter } from "./../utils/mixins";
-import { Toast } from '../utils/helpers'
+import { Toast } from '../utils/helpers';
+import { emptyAvatarFilter } from '../utils/mixins'
 
 export default {
-  mixins: [fromNowFilter],
+  mixins: [fromNowFilter, emptyAvatarFilter],
   components: {
     AdminNav,
   },

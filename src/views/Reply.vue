@@ -12,32 +12,32 @@
         </div>
         <div class="tweet__content">
           <div class="tweet__title">
-            <router-link :to="{ name: 'user-tweets', params: {id: tweet.user.id}}">
-              <img class="tweet__avatar" src="@/assets/image/user-avatar.png" alt="avatar" />
+            <router-link :to="{ name: 'user-tweets', params: {id: tweet.tweetAuthor.id}}">
+              <img class="tweet__avatar" :src="tweet.tweetAuthor.avatar | emptyAvatar" alt="avatar" />
             </router-link>
 
             <div>
-              <p class="tweet__name">{{this.tweet.user.name}}</p>
-              <p class="tweet__account">@{{this.tweet.user.account}}</p>
+              <p class="tweet__name">{{tweet.tweetAuthor.name}}</p>
+              <p class="tweet__account">@{{tweet.tweetAuthor.account}}</p>
             </div>            
           </div>
           <div class="tweet__description">
-            {{this.tweet.content}}
+            {{tweet.description}}
           </div>
-          <div class="tweet__time">{{this.tweet.crearedAt}}</div>
+          <div class="tweet__time">{{tweet.createdAt | timeFormat}}</div>
 
           <hr />
 
           <div class="tweet__count"> 
-            <p class="tweet__num">{{this.tweet.replyCounts}}</p><p class="tweet__reply">回覆</p>
-            <p class="tweet__num">{{this.tweet.likeCounts}}</p><p class="tweet__like">喜歡次數</p>
+            <p class="tweet__num">{{tweet.replyCounts}}</p><p class="tweet__reply">回覆</p>
+            <p class="tweet__num">{{tweet.likeCounts}}</p><p class="tweet__like">喜歡次數</p>
           </div>
 
           <hr />
 
           <div class="tweet__card__footer" >
             <img src="@/assets/image/reply-icon.png" alt="reply">
-            <img v-if="this.tweet.isLiked" src="@/assets/image/red-like-icon.png" alt="like" @click.stop.prevent="deleteLike(tweet.id)"/>
+            <img v-if="tweet.isLiked" src="@/assets/image/red-like-icon.png" alt="like" @click.stop.prevent="deleteLike(tweet.id)"/>
             <img v-else src="@/assets/image/like-icon.png" alt="like" @click.stop.prevent="addLike(tweet.id)"/>         
           </div>
         </div>
@@ -54,25 +54,15 @@
 import MainNav from "./../components/MainNav";
 import ReplyCard from "./../components/ReplyCard";
 import PopularList from "./../components/PopularList";
-
-const dummyData = {
-  tweet: {
-    id: 1,
-    crearedAt: '上午10:05·2021年11月10日',
-    content: 'Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt.',
-    replyCounts: 34,
-    likeCounts: 808,
-    isLiked: true,
-    user: {
-      id: 1,
-      image: '',
-      name: 'Daniel',
-      account: 'daniel'
-    }
-  }
-}
+import tweetAPI from "@/apis/tweet";
+import { fromNowFilter } from "./../utils/mixins";
+import { timeFormatFilter } from "./../utils/mixins";
+import { emptyAvatarFilter } from '../utils/mixins';
+import { mapState } from 'vuex';
+import { Toast } from '@/utils/helpers'
 
 export default {
+  mixins: [fromNowFilter, timeFormatFilter, emptyAvatarFilter],
   components: {
     MainNav,
     ReplyCard,
@@ -82,50 +72,97 @@ export default {
     return {
       tweet: {
         id: -1,
-        crearedAt: '',
-        content: '',
-        replyCounts: '',
-        likeCounts: '',
-        isLiked: false,
-        user: {
+        description: '',
+        createdAt: '',
+        tweetAuthor: {
           id: -1,
-          image: '',
+          avatar: '',
           name: '',
           account: ''
-        }
+        },
+        isLiked: false,
+        likeCounts: '',
+        replyCounts: '',      
       }
     }
   },
+  computed: {
+    ...mapState(['currentUser']),
+  },
   created() {
-    this.fetchTweet()
+    this.fetchTweet(this.$route.params.id)  
   },
   methods: {
-    fetchTweet() {
-      const {id, crearedAt, content, replyCounts, likeCounts, isLiked, user} = dummyData.tweet
-      this.tweet = {
-        ...this.tweet,
-        id,
-        crearedAt,
-        content,
-        replyCounts,
-        likeCounts,
-        isLiked,
-        user,
-      }
-    },
-    addLike(tweetId) {
-      this.tweet = {
-        ...this.tweet,
-        isLiked: true,
-        likeCounts: this.tweet.likeCounts + 1   
-      }
+    async fetchTweet(tweetId) {
+      try {
+        const { data } = await tweetAPI.getTweet({ tweetId });
 
+        this.tweet = {
+          ...this.tweet,
+          ...data
+        }
+
+      } catch(error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得推文，請稍後再試",
+        })
+      }
     },
-    deleteLike(tweetId) {
-      this.tweet = {
-        ...this.tweet,
-        isLiked: false,
-        likeCounts: this.tweet.likeCounts - 1      
+    async addLike(tweetId) {
+      try {
+
+        const response = await tweetAPI.addLike({
+          tweet_id: tweetId,
+          userId: this.currentUser.id
+        });
+        
+        const {data} = response
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        } 
+
+        this.tweet = {
+          ...this.tweet,
+          isLiked: true,
+          likeCounts: this.tweet.likeCounts + 1   
+        }
+
+      } catch(error) {
+        console.error("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法對推文按愛心，請稍後再試",
+        })
+      }
+    },
+    async deleteLike(tweetId) {
+      try {
+        const response = await tweetAPI.deleteLike({
+          tweet_id: tweetId,
+          userId: this.currentUser.id
+        });
+
+        const {data} = response
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
+        this.tweet = {
+          ...this.tweet,
+          isLiked: false,
+          likeCounts: this.tweet.likeCounts - 1      
+        }
+
+      } catch(error) {
+        console.error("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法對推文取消愛心，請稍後再試",
+        })
       }
     }
   }
@@ -160,6 +197,7 @@ export default {
       .tweet__avatar {
         width: 50px;
         height: 50px;
+        border-radius: 50%;
         margin-right: 8px;
       }
       .tweet__name {
@@ -207,6 +245,7 @@ export default {
         width: 25px;
         height: 23px;
         margin-right: 134px;
+        cursor: pointer;
       }
     }
     hr {

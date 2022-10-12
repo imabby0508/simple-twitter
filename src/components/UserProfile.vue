@@ -17,7 +17,7 @@
         :src="user.backgroundImage"
         alt="user-cover-img"
       />
-      <img class="user__avatar" :src="user.avatar" alt="user-avatar" />
+      <img class="user__avatar" :src="user.avatar | emptyAvatar" alt="user-avatar" />
       <template v-if="user.id === currentUser.id">
         <button
           @click.stop.prevent="showUserEditModal()"
@@ -37,6 +37,7 @@
           v-if="user.isFollowed"
           class="following__btn"
           @click.stop.prevent="deleteFollow(user.id)"
+          :disabled="isProcessing"
         >
           正在跟隨
         </button>
@@ -44,6 +45,7 @@
           v-else
           class="unfollowing__btn"
           @click.stop.prevent="addFollow(user.id)"
+          :disabled="isProcessing"
         >
           跟隨
         </button>
@@ -80,26 +82,10 @@ import userAPI from "./../apis/user";
 import followshipAPI from "./../apis/followship";
 import { Toast } from "./../utils/helpers";
 import Spinner from "./../components/Spinner";
-
-// const dummyUser = {
-//   user: {
-//     id: 1,
-//     tweetCount: 25,
-//     backgroundImage: '@/assets/image/user-cover.png',
-//     image: '@/assets/image/avatar-1.png',
-//     name: 'John Doe',
-//     account: 'heyjohn',
-//     introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
-//     followingCount: 34,
-//     followerCount: 59,
-//     isFollow: false
-//   },
-//   currentUser: {
-//     id: 74,
-//   }
-// }
+import { emptyAvatarFilter } from '../utils/mixins'
 
 export default {
+  mixins: [emptyAvatarFilter],
   components: {
     Spinner,
   },
@@ -124,6 +110,7 @@ export default {
         isFollowed: false,
       },
       isLoading: true,
+      isProcessing: false,
     };
   },
   computed: {
@@ -197,6 +184,7 @@ export default {
     },
     async addFollow(userId) {
       try {
+        this.isProcessing = true
         const { data } = await followshipAPI.addFollow({ id: userId });
 
         if (data.status === "error") {
@@ -212,7 +200,9 @@ export default {
         } else {
           return user;
         }
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         console.error("error", error);
         Toast.fire({
           icon: "error",
@@ -222,9 +212,8 @@ export default {
     },
     async deleteFollow(userId) {
       try {
-        const { data } = await followshipAPI.deleteFollow({
-          followingId: userId
-        });
+        this.isProcessing = true
+        const { data } = await followshipAPI.deleteFollow({ followingId: userId });
 
         if (data.status === "error") {
           throw new Error(data.message);
@@ -239,7 +228,9 @@ export default {
         } else {
           return user;
         }
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         console.error("error", error);
         Toast.fire({
           icon: "error",

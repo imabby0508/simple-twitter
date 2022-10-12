@@ -50,7 +50,7 @@
           <div class="user__avatar">
             <img
               class="user__avatar__img"
-              :src="user.avatar"
+              :src="user.avatar | emptyAvatar"
               alt="user-avatar"
             />
             <div class="user__avatar__mask"></div>
@@ -124,17 +124,10 @@
 import userAPI from "@/apis/user";
 import { Toast } from "../utils/helpers";
 import Spinner from "./../components/Spinner";
+import { emptyAvatarFilter } from '../utils/mixins'
 
-// const dummyUser = {
-//   user: {
-//     id: 1,
-//     backgroundImage: '@/assets/image/user-cover.png',
-//     image: '@/assets/image/avatar-1.png',
-//     name: 'John Doe',
-//     introduction: "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
-//   }
-// }
 export default {
+  mixins: [emptyAvatarFilter],
   components: {
     Spinner,
   },
