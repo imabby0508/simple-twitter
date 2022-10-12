@@ -192,11 +192,13 @@ export default {
     async fetchTweets() {
       try {
         const response = await tweetAPI.getTweets();
-        const { data }  =response
+        let { data }  =response
 
         if (data.status === 'error') {
           throw new Error(data.message)
         }
+
+        data = data.filter(item => item.tweetAuthor !== null)
 
         // data的格式是陣列，把 data裡一個一個值放進 tweets陣列
         this.tweets = [

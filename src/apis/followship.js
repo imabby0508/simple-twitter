@@ -13,7 +13,7 @@ export default {
       }
     );
   },
-  deleteFollow(followingId) {
+  deleteFollow({followingId}) {
     return apiHelper.delete(`/api/followships/${followingId}`, {
       headers: {
         Authorization: `Bearer ${getToken()}`,
