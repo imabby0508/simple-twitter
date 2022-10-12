@@ -222,7 +222,9 @@ export default {
     },
     async deleteFollow(userId) {
       try {
-        const { data } = await followshipAPI.deleteFollow(userId);
+        const { data } = await followshipAPI.deleteFollow({
+          followingId: userId
+        });
 
         if (data.status === "error") {
           throw new Error(data.message);

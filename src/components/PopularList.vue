@@ -87,18 +87,33 @@ export default {
       }
       
     },
-    deleteFollow(userId) {
+    async deleteFollow(userId) {
 
-      this.users = this.users.map(user => {
-        if (user.id === userId) {
-          return {
-            ...user,
-            isFollowed: false
-          }
-        } else {
-          return user
+      try {
+        const { data } = await followshipAPI.deleteFollow({
+          followingId: userId
+        });
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
         }
-      })
+        this.users = this.users.map(user => {
+          if (user.id === userId) {
+            return {
+              ...user,
+              isFollowed: false
+            }
+          } else {
+            return user
+          }
+        })
+      } catch (error) {
+        console.error("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取消追蹤使用者，請稍後再試",
+        })
+      }
     },
     async addFollow(userId) {
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form @submit.stop.prevent="submitSetting">
     <div class="form-wrapper">
       <label
         for="account"
@@ -103,18 +103,17 @@
     <template v-else>
       <div class="d-flex justify-content-end">
         <button
-          type="button"
+          type="submit"
           style="width: 88px"
-          @click.stop.prevent="submitSetting"
         >儲存</button>
       </div>
     </template>
-
-  </div>
+  </form>
 </template>
 
 <script>
 import authorizationAPI from '../apis/authorization'
+import userAPI from '../apis/user'
 import { Toast } from '../utils/helpers'
 
 export default {
@@ -127,6 +126,7 @@ export default {
       type: Object,
       default: () => {
         return {
+          id: '',
           account: '',
           name: '',
           email: '',
@@ -138,6 +138,7 @@ export default {
   },
   data() {
     return {
+      id: '',
       account: '',
       name: '',
       email: '',
@@ -148,6 +149,7 @@ export default {
   watch: {
     initialUser: {
       handler(newData) {
+        this.id = newData.id
         this.account = newData.account
         this.name = newData.name
         this.email = newData.email
@@ -240,18 +242,28 @@ export default {
       }
 
     },
-    submitSetting() {
-      const data = JSON.stringify({
-        account: this.account,
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        checkPassword: this.checkPassword
-      })
-      console.log(data)
+    async submitSetting(event) {
+      try {
+        const form = event.target //取得 submit的 form
+        const formData = new FormData(form) //透過 new FormData產生物件實例，並存在 變數裡
+        const response = await userAPI.updateSetting({
+          id: this.id,
+          formData
+        })
+        const { data } = response
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
 
-      // setting成功更新到 server後，router轉到 main
-      this.$router.push('/main')
+        // setting成功更新到 server後，router轉到 main
+        this.$router.push('/main')
+      } catch (error) {
+        console.error(error)
+        Toast.fire({
+          icon: 'error',
+          title: 'response.data.message'
+        })
+      }
     }
   },
   computed: {
