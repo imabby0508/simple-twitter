@@ -3,10 +3,9 @@ const getToken = () => localStorage.getItem('token')
 
 export default {
   // TODO：先用 signin api代替
-  getCurrentUser({ account, password }) {
-    return apiHelper.post("api/users/signin", {
-      account,
-      password,
+  getCurrentUser() {
+    return apiHelper.get('/api/users/currentUser', {
+      headers: { Authorization: `Bearer ${getToken()}` },
     });
   },
   getPopularUsers() {
@@ -43,5 +42,10 @@ export default {
     return apiHelper.get(`/api/users/${ id }/likes`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
+  },
+  updateSetting({ id, formData}) {
+    return apiHelper.put(`/api/users/${ id }/account`, formData, {
+      headers: { Authorization: `Bearer ${getToken()}` },
+    })
   },
 };
