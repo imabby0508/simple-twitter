@@ -19,7 +19,7 @@
           <router-link :to="{name: 'user-tweets', params: {id: tweet.Tweet.tweetAuthor.id}}" class="avatar">
             <img
               class="tweet__card__avatar"
-              :src="tweet.Tweet.tweetAuthor.avatar"
+              :src="tweet.Tweet.tweetAuthor.avatar | emptyAvatar"
               alt="avatar"
             />
           </router-link>
@@ -60,12 +60,14 @@
           src="@/assets/image/red-like-icon.png"
           alt="like"
           @click.stop.prevent="deleteLike(tweet.Tweet.id)"
+          :disabled="isProcessing"
         />
         <img
           v-else
           src="@/assets/image/like-icon.png"
           alt="like"
           @click.stop.prevent="addLike(tweet.Tweet.id)"
+          :disabled="isProcessing"
         />
         <p>{{ tweet.likeCounts }}</p>
       
@@ -89,7 +91,7 @@
           <router-link :to="{name: 'user-tweets', params: {id: tweet.tweetAuthor.id}}" class="avatar">
             <img
               class="tweet__card__avatar"
-              src="@/assets/image/user-avatar.png"
+              :src="tweet.tweetAuthor.avatar | emptyAvatar"
               alt="avatar"
             />
           </router-link>
@@ -130,12 +132,14 @@
           src="@/assets/image/red-like-icon.png"
           alt="like"
           @click.stop.prevent="deleteLike(tweet.id)"
+          :disabled="isProcessing"
         />
         <img
           v-else
           src="@/assets/image/like-icon.png"
           alt="like"
           @click.stop.prevent="addLike(tweet.id)"
+          :disabled="isProcessing"
         />
         <p>{{ tweet.likeCounts }}</p>
       
@@ -152,13 +156,14 @@ import ReplyModal from './ReplyModal.vue';
 import { Toast } from '@/utils/helpers'
 import { fromNowFilter } from "./../utils/mixins";
 import Spinner from './../components/Spinner'
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
+import { emptyAvatarFilter } from '../utils/mixins'
 
 import userAPI from "@/apis/user";
 import tweetAPI from "@/apis/tweet";
 
 export default {
-  mixins: [fromNowFilter],
+  mixins: [fromNowFilter, emptyAvatarFilter],
   components: {
     ReplyModal,
     Spinner
@@ -167,6 +172,7 @@ export default {
     return {
       tweets: [],
       isLoading: true,
+      isProcessing: false,
       isUserLikesPage: false
     };
   },
@@ -269,28 +275,46 @@ export default {
     },
     async addLike(tweetId) {
       try {
-        const { data } = await tweetAPI.addLike({
+        this.isProcessing = true
+        const response = await tweetAPI.addLike({
           tweet_id: tweetId,
           userId: this.currentUser.id
         });
 
+        const { data } = response
+
         if (data.status === 'error') {
           throw new Error(data.message)
-        }             
-  
-        this.tweets = this.tweets.map(tweet => {
-          if(tweet.id === tweetId) {
-            return {
-              ...tweet,
-              isLiked: true,
-              likeCounts: tweet.likeCounts + 1
-            }            
-          } else {
-            return tweet
-          }
-        })
-
+        }  
+        
+        if (this.isUserLikesPage) {
+          this.tweets = this.tweets.map(tweet => {
+            if (tweet.Tweet.id === tweetId) {
+              return {
+                ...tweet,
+                isLiked: true,
+                likeCounts: tweet.likeCounts + 1
+              }
+            } else {
+              return tweet
+            }
+          })
+        } else {
+          this.tweets = this.tweets.map(tweet => {
+            if(tweet.id === tweetId) {
+              return {
+                ...tweet,
+                isLiked: true,
+                likeCounts: tweet.likeCounts + 1
+              }            
+            } else {
+              return tweet
+            }
+          })
+        }
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         console.error("error", error);
 
         Toast.fire({
@@ -301,30 +325,47 @@ export default {
       }     
     },
     async deleteLike(tweetId) {
-      console.log(tweetId)
       try {
-        const { data } = await tweetAPI.deleteLike({
+        this.isProcessing = true
+        const response = await tweetAPI.deleteLike({
           tweet_id: tweetId,
           userId: this.currentUser.id
         });
+
+        const { data } = response
 
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
-        this.tweets = this.tweets.map(tweet => {
-          if (tweet.id === tweetId) {
-            return {
-              ...tweet,
-              isLiked: false,
-              likeCounts: tweet.likeCounts - 1
+        if (this.isUserLikesPage) {
+          this.tweets = this.tweets.map(tweet => {
+            if (tweet.Tweet.id === tweetId) {
+              return {
+                ...tweet,
+                isLiked: false,
+                likeCounts: tweet.likeCounts - 1
+              }
+            } else {
+              return tweet
             }
-          } else {
-            return tweet
-          }
-        })
-
+          })
+        } else {
+          this.tweets = this.tweets.map(tweet => {
+            if (tweet.id === tweetId) {
+              return {
+                ...tweet,
+                isLiked: false,
+                likeCounts: tweet.likeCounts - 1
+              }
+            } else {
+              return tweet
+            }
+          })
+        }        
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         console.error("error", error);
 
         Toast.fire({

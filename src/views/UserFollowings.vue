@@ -56,14 +56,12 @@ export default {
   },
   created() {
     const { id: userId } = this.$route.params
-    console.log(userId)
     this.fetchUser(userId)
   },
   methods: {
     async fetchUser(userId) {
       try {
         const { data } = await userAPI.getUser({ userId });
-        console.log(data)
 
         if (data.status === 'error') {
           throw new Error(data.message)

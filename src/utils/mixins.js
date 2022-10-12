@@ -8,6 +8,17 @@ export const fromNowFilter = {
   },
 };
 
+export const timeFormatFilter = {
+  filters: {
+    timeFormat(datetime) {
+      moment.locale("zh-tw");
+      return datetime
+        ? moment(datetime).format("A hh:mm ・ YYYY年MM月DD日")
+        : "-";
+    },
+  },
+};
+
 export const emptyAvatarFilter = {
   filters: {
     emptyAvatar (src) {

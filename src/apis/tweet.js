@@ -8,7 +8,7 @@ export default {
     });
   },
   getReplies({ tweetId }) {
-    return apiHelper.get(`/api/tweets/${tweetId}/replies`, {
+    return apiHelper.get(`/api/tweets/${ tweetId }/replies`, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
   },
@@ -18,7 +18,7 @@ export default {
     });
   },
   deleteLike({ tweet_id, userId }) {
-    return apiHelper.post(`/api/tweets/${tweet_id}/unlike`, { userId }, {
+    return apiHelper.post(`/api/tweets/${ tweet_id }/unlike`, { userId }, {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
   },
@@ -26,5 +26,10 @@ export default {
     return apiHelper.post('/api/tweets', { description }, {
       headers: { Authorization: `Bearer ${getToken()}` },
     })
+  },
+  getTweet({ tweetId }) {
+    return apiHelper.get(`/api/tweets/${ tweetId }`, {
+      headers: { Authorization: `Bearer ${getToken()}` },
+    });
   }
 };

@@ -14,7 +14,7 @@
               >
                 <img
                   class="follow__card__avatar"
-                  src="@/assets/image/user-avatar.png"
+                  :src="follower.avatar | emptyAvatar"
                   alt="avatar"
                 />
               </router-link>
@@ -27,6 +27,7 @@
               @click.stop.prevent="deleteFollower(follower.id)"
               v-if="follower.isFollowed"
               class="follow__card__btn--following"
+              :disabled="isProcessing"
             >
               正在跟隨
             </button>
@@ -35,6 +36,7 @@
               @click.stop.prevent="addFollower(follower.id)"
               v-else
               class="follow__card__btn--unfollowing"
+              :disabled="isProcessing"
             >
               跟隨
             </button>
@@ -60,7 +62,7 @@
               >
                 <img
                   class="follow__card__avatar"
-                  src="@/assets/image/user-avatar.png"
+                  :src="following.avatar | emptyAvatar"
                   alt="avatar"
                 />
               </router-link>
@@ -74,6 +76,7 @@
               @click.stop.prevent="deleteFollowing(following.id)"
               v-if="following.isFollowed"
               class="follow__card__btn--following"
+              :disabled="isProcessing"
             >
               正在跟隨
             </button>
@@ -82,6 +85,7 @@
               @click.stop.prevent="addFollowing(following.id)"
               v-else
               class="follow__card__btn--unfollowing"
+              :disabled="isProcessing"
             >
               跟隨
             </button>
@@ -97,187 +101,22 @@
 
 <script>
 import userAPI from "@/apis/user";
-import { Toast } from '@/utils/helpers'
-
-// const dummyData = {
-//   followers: [
-//     {
-//       id: 1,
-//       name: "Apple",
-//       account: "apple",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: true,
-//       isFollowed: true,
-//     },
-//     {
-//       id: 2,
-//       name: "Bob",
-//       account: "bob",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: false,
-//       isFollowed: true,
-//     },
-//     {
-//       id: 3,
-//       name: "Bob",
-//       account: "bob",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: false,
-//       isFollowed: true,
-//     },
-//     {
-//       id: 4,
-//       name: "Bob",
-//       account: "bob",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: false,
-//       isFollowed: true,
-//     },
-//     {
-//       id: 5,
-//       name: "Bob",
-//       account: "bob",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: false,
-//       isFollowed: true,
-//     },
-//     {
-//       id: 6,
-//       name: "Bob",
-//       account: "bob",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: false,
-//       isFollowed: true,
-//     },
-//     {
-//       id: 7,
-//       name: "Bob",
-//       account: "bob",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: false,
-//       isFollowed: true,
-//     },
-//     {
-//       id: 8,
-//       name: "Bob",
-//       account: "bob",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: false,
-//       isFollowed: true,
-//     },
-//   ],
-//   followings: [
-//     {
-//       id: 13,
-//       name: "Apple",
-//       account: "apple",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: true,
-//       isFollowed: true,
-//     },
-//     {
-//       id: 14,
-//       name: "Cindy",
-//       account: "cindy",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: true,
-//       isFollowed: false,
-//     },
-//     {
-//       id: 15,
-//       name: "Cindy",
-//       account: "cindy",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: true,
-//       isFollowed: false,
-//     },
-//     {
-//       id: 16,
-//       name: "Cindy",
-//       account: "cindy",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: true,
-//       isFollowed: false,
-//     },
-//     {
-//       id: 17,
-//       name: "Cindy",
-//       account: "cindy",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: true,
-//       isFollowed: false,
-//     },
-//     {
-//       id: 18,
-//       name: "Cindy",
-//       account: "cindy",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: true,
-//       isFollowed: false,
-//     },
-//     {
-//       id: 19,
-//       name: "Cindy",
-//       account: "cindy",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: true,
-//       isFollowed: false,
-//     },
-//     {
-//       id: 20,
-//       name: "Cindy",
-//       account: "cindy",
-//       image: "",
-//       introduction:
-//         "Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation incididunt aliquip deserunt reprehenderit elit laborum. ",
-//       isFollowing: true,
-//       isFollowed: false,
-//     },
-//   ],
-// };
+import followshipAPI from "./../apis/followship";
+import { mapState } from 'vuex';
+import { Toast } from '@/utils/helpers';
+import { emptyAvatarFilter } from '../utils/mixins'
 
 export default {
-  // props: {
-  //   user: {
-  //     type: Object,
-  //     required: true
-  //   }
-  // },
+  mixins: [emptyAvatarFilter],
   data() {
     return {
       followers: [],
       followings: [],
+      isProcessing: false
     };
+  },
+  computed: {
+    ...mapState(['currentUser']),
   },
   created() {
     const { id: userId } = this.$route.params;    
@@ -293,7 +132,9 @@ export default {
           throw new Error(data.message)
         }
 
-        this.followers = data
+        this.followers = [
+          ...data
+        ]
 
       } catch(error) {
         console.log("error", error);
@@ -311,10 +152,10 @@ export default {
           throw new Error(data.message)
         }
 
-        this.followings = {
-          ...this.followings,
+        this.followings = [
           ...data
-        }
+        ]
+
       } catch(error) {
         console.log("error", error);
         Toast.fire({
@@ -323,81 +164,147 @@ export default {
         })
       }
     },
-    // async fetchFollowings() {
-    //   try {
-    //     const { data } = await userAPI.getFollowings({ userId });
-    //     const {id, name, account, avatar, introduction, followingId, isFollowed} = data
+  
+    async deleteFollower(followerId) {
+      try {
+        this.isProcessing = true
 
-    //     if (data.status === 'error') {
-    //       throw new Error(data.message)
-    //     }
-    //     this.followings = {
-    //     ...this.followings,
-    //       id,          
-    //       name,
-    //       account,
-    //       avatar,
-    //       introduction,
-    //       followingId,
-    //       isFollowed
-    //     }
-    //   } catch(error) {
-    //     console.log("error", error);
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: "無法取得使用者資料，請稍後再試",
-    //     })
-    //   }
-    // },
-    deleteFollower(followId) {
-      this.followers = this.followers.map((follow) => {
-        if (follow.id === followId) {
-          return {
-            ...follow,
-            isFollowing: false,
-          };
-        } else {
-          return follow;
-        }
-      });
-    },
-    addFollower(followId) {
-      this.followers = this.followers.map((follow) => {
-        if (follow.id === followId) {
-          return {
-            ...follow,
-            isFollowing: true,
-          };
-        } else {
-          return follow;
-        }
-      });
-    },
-    deleteFollowing(followId) {
-      this.followings = this.followings.map((follow) => {
-        if (follow.id === followId) {
-          return {
-            ...follow,
-            isFollowing: false,
-          };
-        } else {
-          return follow;
-        }
-      });
-    },
-    addFollowing(followId) {
-      this.followings = this.followings.map((follow) => {
-        if (follow.id === followId) {
-          return {
-            ...follow,
-            isFollowing: true,
-          };
-        } else {
-          return follow;
-        }
-      });
-    },
+        const { data } = await followshipAPI.deleteFollow({ followingId: followerId });
 
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
+        this.followers = this.followers.map((follower) => {
+          if (follower.id === followerId) {
+            return {
+              ...follower,
+              isFollowed: false,
+            }
+          } else {
+            return follower;
+          }
+        })
+
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.error("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取消追蹤使用者，請稍後再試",
+        });
+      }
+    },
+    async addFollower(followerId) {
+      try {
+        this.isProcessing = true
+
+        if (this.currentUser.id === followerId) {
+          Toast.fire({
+            icon: "warning",
+            title: "無法追蹤自己，謝謝",
+          })
+          this.isProcessing = false
+          return
+        }
+
+        const { data } = await followshipAPI.addFollow({ id: followerId });
+       
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
+        this.followers = this.followers.map((follower) => {
+          if (follower.id === followerId) {
+            return {
+              ...follower,
+              isFollowed: true,             
+            };
+          } else {
+            return follower;
+          }
+        });
+
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.error("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法追蹤使用者，請稍後再試",
+        });
+      }      
+    },
+    async deleteFollowing(followingId) {
+      try {
+        this.isProcessing = true
+
+        const { data } = await followshipAPI.deleteFollow({ followingId: followingId });
+
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+  
+        this.followings = this.followings.map((following) => {
+          if (following.id === followingId) {
+            return {
+              ...following,
+              isFollowed: false,
+            }
+          } else {
+            return following;
+          }
+        })
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.error("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法取消追蹤使用者，請稍後再試",
+        });
+      }  
+    },
+    async addFollowing(followingId) {
+      try {
+        this.isProcessing = true
+
+        if (this.currentUser.id === followingId) {
+          Toast.fire({
+            icon: "warning",
+            title: "無法追蹤自己，謝謝",
+          })
+          this.isProcessing = false
+          return
+        }
+
+        const { data } = await followshipAPI.addFollow({ id: followingId });
+        
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
+        this.followings = this.followings.map((following) => {
+          if (following.id === followingId) {
+            return {
+              ...following,
+              isFollowed: true,              
+            };
+          } else {
+            return following;
+          }
+        });
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.error("error", error);
+        Toast.fire({
+          icon: "error",
+          title: "無法追蹤使用者，請稍後再試",
+        });
+      }
+    }
   },
 };
 </script>
