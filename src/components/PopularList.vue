@@ -11,12 +11,17 @@
         :key="user.id"
       >
         <div class="d-flex">
-          <div class="user--wrapper--image">
+
+          <router-link
+            :to="{name: 'user-tweets', params: {id: user.id}}"
+            class="user--wrapper--image"
+          >
             <img
-              :src="user.avatar | emptyAvatar"
+              :src="user.avatar"
               alt="user-avatar"
             >
-          </div>
+          </router-link>
+
           <div class="user--wrapper--info d-flex flex-column justify-content-center">
             <h3>{{user.name}}</h3>
             <p>@{{user.account}}</p>
@@ -48,11 +53,9 @@
 import userAPI from '../apis/user'
 import followshipAPI from '../apis/followship'
 import { Toast } from '../utils/helpers'
-import { mapState } from 'vuex';
-import { emptyAvatarFilter } from '../utils/mixins'
+import { mapState } from 'vuex'
 
 export default {
-  mixins: [emptyAvatarFilter],
   data() {
     return {
       users: []
@@ -87,7 +90,7 @@ export default {
         })
 
       }
-      
+
     },
     async deleteFollow(userId) {
 
@@ -133,9 +136,7 @@ export default {
           id: userId
         })
 
-        console.log(response)
         const { data } = response
-        console.log(response)
 
         if (data.status === 'error') {
           throw new Error(data.message)

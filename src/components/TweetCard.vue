@@ -1,152 +1,160 @@
 <template>
   <Spinner v-if="isLoading" />
-  
-  <div v-else class="tweet__card__wrapper">    
+
+  <div
+    v-else
+    class="tweet__card__wrapper"
+  >
 
 
-  <template v-if="isUserLikesPage">
-    <div 
-      v-for="tweet in tweets"
-      :key="tweet.Tweet.id"
-      class="tweet__card"
-    >
-   
-      <router-link
-        class="tweet__card__content"
-        :to="{name: 'reply', params: {id: tweet.Tweet.id}}"
+    <template v-if="isUserLikesPage">
+      <div
+        v-for="tweet in tweets"
+        :key="tweet.Tweet.id"
+        class="tweet__card"
       >
-        <div class="tweet__card__title">
-          <router-link :to="{name: 'user-tweets', params: {id: tweet.Tweet.tweetAuthor.id}}" class="avatar">
+
+        <router-link
+          class="tweet__card__content"
+          :to="{name: 'reply', params: {id: tweet.Tweet.id}}"
+        >
+          <div class="tweet__card__title">
+            <router-link
+              :to="{name: 'user-tweets', params: {id: tweet.Tweet.tweetAuthor.id}}"
+              class="avatar"
+            >
+              <img
+                class="tweet__card__avatar"
+                :src="tweet.Tweet.tweetAuthor.avatar | emptyAvatar"
+                alt="avatar"
+              />
+            </router-link>
+
+            <router-link
+              :to="{name: 'user-tweets', params: {id: tweet.Tweet.tweetAuthor.id}}"
+              class="tweet__card__name"
+            >{{ tweet.Tweet.tweetAuthor.name }}
+            </router-link>
+
+            <p class="tweet__card__account">@{{ tweet.Tweet.tweetAuthor.account }}</p>
+            <p class="tweet__card__time">・{{ tweet.Tweet.createdAt | fromNow }}</p>
+          </div>
+          <div class="tweet__card__description">
+            {{ tweet.Tweet.description }}
+          </div>
+        </router-link>
+
+        <div class="tweet__card__footer">
+
+          <div class="reply-icon">
             <img
-              class="tweet__card__avatar"
-              :src="tweet.Tweet.tweetAuthor.avatar | emptyAvatar"
-              alt="avatar"
+              @click="tweet.showReplyModal=true"
+              src="@/assets/image/reply-icon.png"
+              alt="reply"
             />
-          </router-link>
+          </div>
+          <p>{{ tweet.replyCounts }}</p>
 
-          <router-link 
-          :to="{name: 'user-tweets', params: {id: tweet.Tweet.tweetAuthor.id}}" 
-          class="tweet__card__name"
-          >{{ tweet.Tweet.tweetAuthor.name }}
-          </router-link>
-
-          <p class="tweet__card__account">@{{ tweet.Tweet.tweetAuthor.account }}</p>
-          <p class="tweet__card__time">・{{ tweet.Tweet.createdAt | fromNow }}</p>
-        </div>
-        <div class="tweet__card__description">
-          {{ tweet.Tweet.description }}
-        </div>
-      </router-link>
-
-      <div class="tweet__card__footer">
-      
-        <div class="reply-icon">
-          <img
-            @click="tweet.showReplyModal=true"
-            src="@/assets/image/reply-icon.png"
-            alt="reply"
+          <ReplyModal
+            v-if="tweet.showReplyModal"
+            @close="tweet.showReplyModal=false"
+            :tweet="tweet"
+            :currentUser="currentUser"
+            @successReply="successReplyToast"
           />
+
+          <img
+            v-if="tweet.isLiked"
+            src="@/assets/image/red-like-icon.png"
+            alt="like"
+            @click.stop.prevent="deleteLike(tweet.Tweet.id)"
+          />
+          <img
+            v-else
+            src="@/assets/image/like-icon.png"
+            alt="like"
+            @click.stop.prevent="addLike(tweet.Tweet.id)"
+          />
+          <p>{{ tweet.likeCounts }}</p>
+
         </div>
-        <p>{{ tweet.replyCounts }}</p>
-      
-        <ReplyModal
-          v-if="tweet.showReplyModal"
-          @close="tweet.showReplyModal=false"
-          :tweet="tweet"
-        />
-      
-        <img
-          v-if="tweet.isLiked"
-          src="@/assets/image/red-like-icon.png"
-          alt="like"
-          @click.stop.prevent="deleteLike(tweet.Tweet.id)"
-          :disabled="isProcessing"
-        />
-        <img
-          v-else
-          src="@/assets/image/like-icon.png"
-          alt="like"
-          @click.stop.prevent="addLike(tweet.Tweet.id)"
-          :disabled="isProcessing"
-        />
-        <p>{{ tweet.likeCounts }}</p>
-      
+
       </div>
+    </template>
 
-    </div>
-  </template>
-
-  <template v-else>
-    <div 
-    v-for="tweet in tweets"
-    :key="tweet.id"
-    class="tweet__card"
-    >
-   
-      <router-link
-        class="tweet__card__content"
-        :to="{name: 'reply', params: {id: tweet.id}}"
+    <template v-else>
+      <div
+        v-for="tweet in tweets"
+        :key="tweet.id"
+        class="tweet__card"
       >
-        <div class="tweet__card__title">
-          <router-link :to="{name: 'user-tweets', params: {id: tweet.tweetAuthor.id}}" class="avatar">
+
+        <router-link
+          class="tweet__card__content"
+          :to="{name: 'reply', params: {id: tweet.id}}"
+        >
+          <div class="tweet__card__title">
+            <router-link
+              :to="{name: 'user-tweets', params: {id: tweet.tweetAuthor.id}}"
+              class="avatar"
+            >
+              <img
+                class="tweet__card__avatar"
+                :src="tweet.tweetAuthor.avatar | emptyAvatar"
+                alt="avatar"
+              />
+            </router-link>
+
+            <router-link
+              :to="{name: 'user-tweets', params: {id: tweet.tweetAuthor.id}}"
+              class="tweet__card__name"
+            >{{ tweet.tweetAuthor.name }}
+            </router-link>
+
+            <p class="tweet__card__account">@{{ tweet.tweetAuthor.account }}</p>
+            <p class="tweet__card__time">・{{ tweet.createdAt | fromNow }}</p>
+          </div>
+          <div class="tweet__card__description">
+            {{ tweet.description }}
+          </div>
+        </router-link>
+
+        <div class="tweet__card__footer">
+
+          <div class="reply-icon">
             <img
-              class="tweet__card__avatar"
-              :src="tweet.tweetAuthor.avatar | emptyAvatar"
-              alt="avatar"
+              @click="tweet.showReplyModal=true"
+              src="@/assets/image/reply-icon.png"
+              alt="reply"
             />
-          </router-link>
+          </div>
+          <p>{{ tweet.replyCounts }}</p>
 
-          <router-link 
-          :to="{name: 'user-tweets', params: {id: tweet.tweetAuthor.id}}" 
-          class="tweet__card__name"
-          >{{ tweet.tweetAuthor.name }}
-          </router-link>
-
-          <p class="tweet__card__account">@{{ tweet.tweetAuthor.account }}</p>
-          <p class="tweet__card__time">・{{ tweet.createdAt | fromNow }}</p>
-        </div>
-        <div class="tweet__card__description">
-          {{ tweet.description }}
-        </div>
-      </router-link>
-
-      <div class="tweet__card__footer">
-      
-        <div class="reply-icon">
-          <img
-            @click="tweet.showReplyModal=true"
-            src="@/assets/image/reply-icon.png"
-            alt="reply"
+          <ReplyModal
+            v-if="tweet.showReplyModal"
+            @close="tweet.showReplyModal=false"
+            :tweet="tweet"
+            @successReply="successReplyToast"
           />
-        </div>
-        <p>{{ tweet.replyCounts }}</p>
-      
-        <ReplyModal
-          v-if="tweet.showReplyModal"
-          @close="tweet.showReplyModal=false"
-          :tweet="tweet"
-        />
-      
-        <img
-          v-if="tweet.isLiked"
-          src="@/assets/image/red-like-icon.png"
-          alt="like"
-          @click.stop.prevent="deleteLike(tweet.id)"
-          :disabled="isProcessing"
-        />
-        <img
-          v-else
-          src="@/assets/image/like-icon.png"
-          alt="like"
-          @click.stop.prevent="addLike(tweet.id)"
-          :disabled="isProcessing"
-        />
-        <p>{{ tweet.likeCounts }}</p>
-      
-      </div>
 
-    </div>
-  </template>
+          <img
+            v-if="tweet.isLiked"
+            src="@/assets/image/red-like-icon.png"
+            alt="like"
+            @click.stop.prevent="deleteLike(tweet.id)"
+          />
+          <img
+            v-else
+            src="@/assets/image/like-icon.png"
+            alt="like"
+            @click.stop.prevent="addLike(tweet.id)"
+          />
+          <p>{{ tweet.likeCounts }}</p>
+
+        </div>
+
+      </div>
+    </template>
 
   </div>
 </template>
@@ -156,7 +164,7 @@ import ReplyModal from './ReplyModal.vue';
 import { Toast } from '@/utils/helpers'
 import { fromNowFilter } from "./../utils/mixins";
 import Spinner from './../components/Spinner'
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 import { emptyAvatarFilter } from '../utils/mixins'
 
 import userAPI from "@/apis/user";
@@ -172,39 +180,64 @@ export default {
     return {
       tweets: [],
       isLoading: true,
-      isProcessing: false,
       isUserLikesPage: false
     };
   },
-  created() {      
+  watch: {
+    tweets(newData) {
+      this.tweets = newData
+    }
+  },
+  updated() {
     const { id: userId } = this.$route.params;
 
-    if(this.$route.name === 'user-tweets') {
+    if (this.$route.name === 'user-tweets') {
       this.fetchUserTweets(userId);
     } else if (this.$route.name === 'user-likes') {
       this.isUserLikesPage = true;
       this.fetchUserLikes(userId);
     }
 
-    if(this.$route.name === 'main') {
+    if (this.$route.name === 'main') {
       this.fetchTweets();
-    }        
+    }
+  },
+  created() {
+    const { id: userId } = this.$route.params;
+
+    if (this.$route.name === 'user-tweets') {
+      this.fetchUserTweets(userId);
+    } else if (this.$route.name === 'user-likes') {
+      this.isUserLikesPage = true;
+      this.fetchUserLikes(userId);
+    }
+
+    if (this.$route.name === 'main') {
+      this.fetchTweets();
+    }
   },
   computed: {
-    ...mapState(['currentUser']),
+    ...mapState(['currentUser'])
   },
   methods: {
     // 在首頁瀏覽所有推文
     async fetchTweets() {
       try {
         const response = await tweetAPI.getTweets();
-        let { data }  =response
+        let { data } = response
 
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
         data = data.filter(item => item.tweetAuthor !== null)
+
+        data = data.map(item => {
+          return {
+            ...item,
+            showReplyModal: false
+          }
+        })
 
         // data的格式是陣列，把 data裡一個一個值放進 tweets陣列
         this.tweets = [
@@ -227,18 +260,25 @@ export default {
     async fetchUserTweets(userId) {
       try {
         const response = await userAPI.getUserTweets({ id: userId });
-        const { data } = response
+        let { data } = response
 
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
+        data = data.map(item => {
+          return {
+            ...item,
+            showReplyModal: false
+          }
+        })
+
         this.tweets = [
           ...data
         ]
 
-        this.isLoading = false               
-      } catch(error) {
+        this.isLoading = false
+      } catch (error) {
         this.isLoading = false
         console.error("error", error);
 
@@ -246,24 +286,33 @@ export default {
           icon: "error",
           title: "無法取得推文，請稍後再試",
         })
-      } 
+      }
     },
     // 使用者查看個人檔案並看到該使用者按讚的推文
     async fetchUserLikes(userId) {
       try {
         const response = await userAPI.getUserLikes({ id: userId });
-        const { data } = response
+        let { data } = response
 
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
+
+
+        data = data.map(item => {
+          return {
+            ...item,
+            showReplyModal: false
+          }
+        })
+
         this.tweets = [
           ...data
         ]
 
-        this.isLoading = false               
-      } catch(error) {
+        this.isLoading = false
+      } catch (error) {
         this.isLoading = false
         console.error("error", error);
 
@@ -275,46 +324,28 @@ export default {
     },
     async addLike(tweetId) {
       try {
-        this.isProcessing = true
-        const response = await tweetAPI.addLike({
+        const { data } = await tweetAPI.addLike({
           tweet_id: tweetId,
           userId: this.currentUser.id
         });
 
-        const { data } = response
-
         if (data.status === 'error') {
           throw new Error(data.message)
-        }  
-        
-        if (this.isUserLikesPage) {
-          this.tweets = this.tweets.map(tweet => {
-            if (tweet.Tweet.id === tweetId) {
-              return {
-                ...tweet,
-                isLiked: true,
-                likeCounts: tweet.likeCounts + 1
-              }
-            } else {
-              return tweet
-            }
-          })
-        } else {
-          this.tweets = this.tweets.map(tweet => {
-            if(tweet.id === tweetId) {
-              return {
-                ...tweet,
-                isLiked: true,
-                likeCounts: tweet.likeCounts + 1
-              }            
-            } else {
-              return tweet
-            }
-          })
         }
-        this.isProcessing = false
+
+        this.tweets = this.tweets.map(tweet => {
+          if (tweet.id === tweetId) {
+            return {
+              ...tweet,
+              isLiked: true,
+              likeCounts: tweet.likeCounts + 1
+            }
+          } else {
+            return tweet
+          }
+        })
+
       } catch (error) {
-        this.isProcessing = false
         console.error("error", error);
 
         Toast.fire({
@@ -322,50 +353,33 @@ export default {
           title: "無法對推文按愛心，請稍後再試",
         })
 
-      }     
+      }
     },
     async deleteLike(tweetId) {
+      console.log(tweetId)
       try {
-        this.isProcessing = true
-        const response = await tweetAPI.deleteLike({
+        const { data } = await tweetAPI.deleteLike({
           tweet_id: tweetId,
           userId: this.currentUser.id
         });
-
-        const { data } = response
 
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
-        if (this.isUserLikesPage) {
-          this.tweets = this.tweets.map(tweet => {
-            if (tweet.Tweet.id === tweetId) {
-              return {
-                ...tweet,
-                isLiked: false,
-                likeCounts: tweet.likeCounts - 1
-              }
-            } else {
-              return tweet
+        this.tweets = this.tweets.map(tweet => {
+          if (tweet.id === tweetId) {
+            return {
+              ...tweet,
+              isLiked: false,
+              likeCounts: tweet.likeCounts - 1
             }
-          })
-        } else {
-          this.tweets = this.tweets.map(tweet => {
-            if (tweet.id === tweetId) {
-              return {
-                ...tweet,
-                isLiked: false,
-                likeCounts: tweet.likeCounts - 1
-              }
-            } else {
-              return tweet
-            }
-          })
-        }        
-        this.isProcessing = false
+          } else {
+            return tweet
+          }
+        })
+
       } catch (error) {
-        this.isProcessing = false
         console.error("error", error);
 
         Toast.fire({
@@ -375,6 +389,33 @@ export default {
 
       }
     },
+    successReplyToast(tweetId) {
+
+      Toast.fire({
+        icon: 'success',
+        title: '回覆發送成功'
+      })
+
+      console.log(tweetId)
+      console.log(this.tweets)
+
+      this.tweets = this.tweets.map(tweet => {
+        if (tweet.id === tweetId) {
+          return {
+            ...tweet,
+            replyCounts: tweet.replyCounts + 1
+          }
+        } else if (tweet.TweetId === tweetId) {
+          return {
+            ...tweet,
+            replyCounts: tweet.replyCounts + 1
+          }
+        } else {
+          return tweet
+        }
+      })
+
+    }
   },
 };
 </script>
@@ -383,41 +424,50 @@ export default {
 .tweet__card {
   position: relative;
   display: block;
+
   &:hover {
-      background-color: $scale-gray3;
-    }
+    background-color: $scale-gray3;
+  }
+
   .router-link-active {
-    text-decoration: none; 
+    text-decoration: none;
     color: $scale-gray10;
   }
+
   a {
     text-decoration: none;
     color: $scale-gray10;
   }
+
   .tweet__card__content {
     display: block;
     border-top: 1px solid $border;
     padding: 16px 24px 40px 24px;
+
     .tweet__card__title {
       display: flex;
       align-items: top;
       height: 40px;
+
       .tweet__card__avatar {
         border-radius: 50%;
         width: 50px;
         height: 50px;
+
         &:hover {
           opacity: 0.7
         }
       }
+
       .tweet__card__name {
         margin: 2px 8px 0 10px;
         font-size: 16px;
         font-weight: 700;
-        &:hover {
-          text-decoration: solid underline $modal-black 1.5px;
-        }
+        // &:hover {
+        //   text-decoration: solid underline $modal-black 1.5px;
+        // }
       }
+
       .tweet__card__account,
       .tweet__card__time {
         margin: 4px 0 0 0;
@@ -426,14 +476,16 @@ export default {
         font-weight: 400;
       }
     }
+
     .tweet__card__description {
       color: $scale-gray10;
       font-size: 16px;
       font-weight: 400;
       margin: 0;
       padding: 0px 0 5px 60px;
-    } 
+    }
   }
+
   .tweet__card__footer {
     position: absolute;
     bottom: 16px;
@@ -447,6 +499,7 @@ export default {
     font-size: 14px;
     font-weight: 600;
     font-family: Montserrat;
+
     img {
       position: relative;
       display: block;
@@ -457,12 +510,13 @@ export default {
       //   border: 10px solid rgba(255, 102, 0, 0.2);
       // }
     }
-    p {
-      margin: 0 40px 0 10px;
-      &:hover {
-        color: $brand-orange;
-      }
-    }
+
+    // p {
+    //   margin: 0 40px 0 10px;
+    //   &:hover {
+    //     color: $brand-orange;
+    //   }
+    // }
   }
 }
 </style>

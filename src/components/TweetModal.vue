@@ -4,25 +4,29 @@
 
       <div class="modal-wrapper">
         <div class="modal-container">
-  
+
           <div class="modal-header">
-            <img 
-              src="../assets/image/orange-cross.png" 
+            <img
+              src="../assets/image/orange-cross.png"
               @click="$emit('close')"
-              alt="close-madal">
+              alt="close-madal"
+            >
           </div>
-  
+
           <div class="modal-body d-flex">
-            <img src="../assets/image/avatar-1.png" alt="avatar">
-            <textarea 
-            name="tweetContent" 
-            required
-            placeholder="有什麼新鮮事？"
-            v-model="tweetContent"
-            rows="5"
+            <img
+              :src="currentUser.avatar | emptyAvatar"
+              alt="avatar"
+            >
+            <textarea
+              name="tweetContent"
+              required
+              placeholder="有什麼新鮮事？"
+              v-model="tweetContent"
+              rows="5"
             ></textarea>
           </div>
-  
+
           <div class="modal-footer">
             <span>{{tweetContentCount > 140 ? '字數不可超過 140 字' : ''}}</span>
             <span>{{!tweetContentCount ? '內容不可空白' : ''}}</span>
@@ -37,7 +41,7 @@
 
         </div>
       </div>
-      
+
     </div>
   </transition>
 </template>
@@ -46,19 +50,18 @@
 import tweetAPI from '@/apis/tweet'
 import { mapState } from 'vuex'
 import { Toast } from '../utils/helpers.js'
+import { emptyAvatarFilter } from '../utils/mixins'
 
 export default {
-  data () {
+  mixins: [emptyAvatarFilter],
+  data() {
     return {
       tweetContent: "",
       isProcessing: false
     }
   },
-  computed: {
-    ...mapState(['currentUser'])
-  },
   methods: {
-    async submitTweet () {
+    async submitTweet() {
 
       try {
 
@@ -85,13 +88,16 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-        
+
+        console.log(data)
+
         this.isProcessing = false
         this.$emit('close')
+        this.$emit('successTweet')
 
       } catch (error) {
         this.isProcessing = false
-        console.error(error)        
+        console.error(error)
         Toast.fire({
           icon: 'error',
           title: '目前無法發推文，請稍後再試'
@@ -101,10 +107,11 @@ export default {
     }
   },
   computed: {
-    tweetContentCount () {
+    tweetContentCount() {
       const tweetCountLength = this.tweetContent.length
       return tweetCountLength
-    }
+    },
+    ...mapState(['currentUser'])
   }
 }
 </script>
@@ -135,6 +142,7 @@ export default {
 
   .modal-header {
     padding: 20.5px 16px 20.5px 19.5px;
+
     img {
       width: 15px;
       height: 15px;
@@ -145,10 +153,12 @@ export default {
 
   .modal-body {
     padding: 16px 0 0 24px;
+
     img {
       width: 50px;
       height: 50px;
     }
+
     textarea {
       width: 100%;
       height: 100%;
@@ -160,6 +170,7 @@ export default {
       line-height: 26px;
       resize: none;
       overflow-y: scroll;
+
       &::placeholder {
         color: $secondary-gray;
         font-weight: 400;
@@ -171,6 +182,7 @@ export default {
 
   .modal-footer {
     border-top: none;
+
     button {
       height: 46px;
       border-radius: 50px;
@@ -179,10 +191,12 @@ export default {
       color: $scale-gray1;
       padding: 8px 24px;
       margin: 0 16px 16px 0;
+
       &.disabled {
         opacity: 0.5;
       }
     }
+
     span {
       color: $error-red;
       font-weight: 500;
