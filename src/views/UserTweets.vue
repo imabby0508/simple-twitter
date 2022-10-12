@@ -43,7 +43,6 @@ export default {
       isUpdated: false
     }    
   },
-
   methods: {
     editUserProfile() {
       this.isModalVisible = true,

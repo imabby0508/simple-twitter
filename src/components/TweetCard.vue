@@ -216,6 +216,7 @@ export default {
       this.fetchTweets();
     }
   },
+
   computed: {
     ...mapState(['currentUser'])
   },
