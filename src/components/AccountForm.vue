@@ -88,7 +88,7 @@
       >
     </div>
 
-    <template v-if="isSignUp"> 
+    <template v-if="isSignUp">
       <div>
         <button
           type="button"
@@ -159,12 +159,12 @@ export default {
     }
   },
   // for Setting views only
-  mounted () {
+  mounted() {
     this.renderUser()
   },
   methods: {
     // for Setting views only
-    renderUser () {
+    renderUser() {
       this.account = this.initialUser.account
       this.name = this.initialUser.name
       this.email = this.initialUser.email
@@ -222,7 +222,7 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-        
+
         Toast.fire({
           icon: 'success',
           title: '註冊成功了'
@@ -244,6 +244,43 @@ export default {
     },
     async submitSetting(event) {
       try {
+
+        // 擋掉使用者拿掉 input required
+        if (!this.account || !this.name || !this.email || !this.password || !this.checkPassword) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請確認已填寫所有欄位'
+          })
+          return
+        }
+
+        // 擋掉使用者 account超過 10個字
+        if (this.account.length > 10) {
+          Toast.fire({
+            icon: 'warning',
+            title: '帳號字數超過上限'
+          })
+          return
+        }
+
+        // 擋掉使用者 name超過 50個字
+        if (this.name.length > 50) {
+          Toast.fire({
+            icon: 'warning',
+            title: '名稱字數超過上限'
+          })
+          return
+        }
+
+        // 擋掉使用者密碼設定不一致
+        if (this.password !== this.checkPassword) {
+          Toast.fire({
+            icon: 'warning',
+            title: '密碼確認沒有正確輸入'
+          })
+          return
+        }
+
         const form = event.target //取得 submit的 form
         const formData = new FormData(form) //透過 new FormData產生物件實例，並存在 變數裡
         const response = await userAPI.updateSetting({
@@ -255,19 +292,24 @@ export default {
           throw new Error(data.message)
         }
 
+        Toast.fire({
+          icon: 'success',
+          title: '設定成功了'
+        })
+
         // setting成功更新到 server後，router轉到 main
         this.$router.push('/main')
       } catch (error) {
         console.error(error)
         Toast.fire({
           icon: 'error',
-          title: 'response.data.message'
+          title: error.response.data.message
         })
       }
     }
   },
   computed: {
-    accountThreshold () {
+    accountThreshold() {
       const accountLength = this.account.length
       return accountLength
     },
@@ -318,14 +360,17 @@ export default {
     line-height: 26px;
     color: $scale-gray10;
     border-bottom: 2px solid $form-border;
+
     &:hover,
     &:focus {
       border-bottom-color: $sider-blue;
     }
+
     &:-webkit-autofill {
       -webkit-box-shadow: 0 0 0px 100px $form-bg inset;
     }
   }
+
   .input__info {
     color: $error-red;
     font-weight: 500;

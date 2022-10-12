@@ -7,4 +7,9 @@ export default {
       headers: { Authorization: `Bearer ${getToken()}` },
     });
   },
+  addReply({ TweetId, comment }) {
+    return apiHelper.post(`/api/tweets/${TweetId}/replies`, { comment }, {
+      headers: { Authorization: `Bearer ${getToken()}` },
+    });
+  },
 }

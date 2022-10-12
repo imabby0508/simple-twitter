@@ -14,14 +14,14 @@
       <div class="sidebar--menu">
 
         <router-link
-          to="/admin/main"
+          to="/main"
           class="d-flex align-items-center"
         >
           <img
             src='../assets/image/home-icon_active.png'
             alt="home-page"
             class="icon"
-            v-if="$route.name === 'admin-main'"
+            v-if="$route.name === 'main'"
           >
           <img
             src='../assets/image/home-icon.png'
@@ -29,18 +29,18 @@
             class="icon"
             v-else
           >
-          <span>推文清單</span>
+          <span>首頁</span>
         </router-link>
 
         <router-link
-          to="/admin/users"
+          :to="{name: 'user-tweets', params: {id: currentUser.id}}"
           class="d-flex align-items-center"
         >
           <img
             src="../assets/image/profile-icon_active.png"
             alt="profile-page"
             class="icon"
-            v-if="$route.name === 'admin-users'"
+            v-if="($route.params.id === currentUser.id || $route.name === 'user-tweets')"
           >
           <img
             src="../assets/image/profile-icon.png"
@@ -48,9 +48,42 @@
             class="icon"
             v-else
           >
-          <span>使用者列表</span>
+          <span>個人資料</span>
         </router-link>
 
+        <router-link
+          to="/setting"
+          class="d-flex align-items-center"
+        >
+          <img
+            src="../assets/image/setting-icon_active.png"
+            alt="setting-page"
+            class="icon"
+            v-if="$route.name === 'setting'"
+          >
+          <img
+            src="../assets/image/setting-icon.png"
+            alt="setting-page"
+            class="icon"
+            v-else
+          >
+          <span>設定</span>
+        </router-link>
+
+      </div>
+
+      <div>
+
+        <TweetModal
+          v-if="showTweetModal"
+          @close="showTweetModal = false"
+          @successTweet="successTweetModal"
+        />
+
+        <button
+          type="button"
+          @click="showTweetModal = true"
+        >推文</button>
       </div>
 
     </div>
@@ -65,12 +98,44 @@
           alt="setting-page"
           class="icon"
         >
-        <span>登出</span>
+        <span @click.stop.prevent="logout">登出</span>
       </router-link>
     </div>
 
   </nav>
 </template>
+
+<script>
+import TweetModal from '../components/TweetModal.vue'
+import { mapState } from 'vuex'
+import { Toast } from '../utils/helpers'
+
+export default {
+  components: {
+    TweetModal,
+  },
+  data() {
+    return {
+      showTweetModal: false,
+    }
+  },
+  computed: {
+    ...mapState(['currentUser']),
+  },
+  methods: {
+    logout() {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
+    },
+    successTweetModal() {
+      Toast.fire({
+        icon: 'success',
+        title: '推文發送成功'
+      })
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .sidebar {
@@ -121,6 +186,17 @@
   .icon {
     width: 24px;
     height: 24px;
+  }
+
+  button {
+    width: 100%;
+    height: 46px;
+    border-radius: 50px;
+    background: $brand-orange;
+    font-size: 20px;
+    color: $scale-gray1;
+    padding: 8px 0;
+    margin-top: 24px;
   }
 
   .router-link-exact-active {

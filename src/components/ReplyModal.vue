@@ -15,22 +15,47 @@
 
           <div class="modal-body">
 
-            <div class="tweet--card d-flex">
-              <img src="../assets/image/user-avatar.png" alt="tweet-avatar">
+            <div
+              class="tweet--card d-flex"
+              v-if="$route.name === 'user-likes'"
+            >
+              <img
+                :src="tweet.Tweet.tweetAuthor.avatar | emptyAvatar"
+                alt="tweet-avatar"
+              >
               <div class="tweet--card--connectline"></div>
               <div class="tweet--card--content">
                 <div class="tweet--card--title d-flex align-items-center">
-                  <p class="name">{{tweet.user.name}}</p>
-                  <p class="accounttime">@{{tweet.user.account}}・{{tweet.createdAt}}</p>
+                  <p class="name">{{tweet.Tweet.tweetAuthor.name}}</p>
+                  <p class="accounttime">@{{tweet.Tweet.tweetAuthor.account}}・{{tweet.Tweet.createdAt | fromNow}}</p>
+                </div>
+                <p class="tweet--card--description">{{tweet.Tweet.description}}</p>
+                <p class="tweet--card--target">回覆給 <span>@{{tweet.Tweet.tweetAuthor.account}}</span></p>
+              </div>
+            </div>
+
+            <div
+              class="tweet--card d-flex"
+              v-else
+            >
+              <img
+                :src="tweet.tweetAuthor.avatar | emptyAvatar"
+                alt="tweet-avatar"
+              >
+              <div class="tweet--card--connectline"></div>
+              <div class="tweet--card--content">
+                <div class="tweet--card--title d-flex align-items-center">
+                  <p class="name">{{tweet.tweetAuthor.name}}</p>
+                  <p class="accounttime">@{{tweet.tweetAuthor.account}}・{{tweet.createdAt | fromNow}}</p>
                 </div>
                 <p class="tweet--card--description">{{tweet.description}}</p>
-                <p class="tweet--card--target">回覆給 <span>@{{tweet.user.account}}</span></p>
-                </div>
+                <p class="tweet--card--target">回覆給 <span>@{{tweet.tweetAuthor.account}}</span></p>
               </div>
+            </div>
 
             <div class="reply--card d-flex">
               <img
-                src="../assets/image/avatar-1.png"
+                :src="currentUser.avatar | emptyAvatar"
                 alt="reply-avatar"
               >
               <textarea
@@ -43,13 +68,22 @@
             </div>
           </div>
 
-        <div class="modal-footer">
-          <span>{{replyContentCount > 140 ? '字數不可超過 140 字' : ''}}</span>
-          <span>{{!replyContentCount ? '內容不可空白' : ''}}</span>
-          <button @click.stop.prevent="submitReply">
-            回覆
-          </button>
-        </div>
+          <div class="modal-footer">
+            <span>{{replyContentCount > 140 ? '字數不可超過 140 字' : ''}}</span>
+            <span>{{!replyContentCount ? '內容不可空白' : ''}}</span>
+            <button
+              @click.stop.prevent="submitReply(tweet.TweetId)"
+              v-if="$route.name === 'user-likes'"
+            >
+              回覆
+            </button>
+            <button
+              @click.stop.prevent="submitReply(tweet.id)"
+              v-else
+            >
+              回覆
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -57,17 +91,14 @@
 </template>
 
 <script>
+import replyAPI from '../apis/tweet'
 import { Toast } from '../utils/helpers.js'
-
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    avatar: '../assets/image/avatar-1.png',
-    name: 'Michael',
-  },
-}
+import { mapState } from 'vuex'
+import { emptyAvatarFilter } from '../utils/mixins'
+import { fromNowFilter } from "./../utils/mixins";
 
 export default {
+  mixins: [emptyAvatarFilter, fromNowFilter],
   props: {
     tweet: {
       type: Object,
@@ -76,45 +107,56 @@ export default {
   },
   data() {
     return {
-      currentUser: {},
       replyContent: ""
     }
   },
-  created() {
-    this.fetchCurrentUser()
-  },
   methods: {
-    fetchCurrentUser() {
-      this.currentUser = dummyUser.currentUser
-    },
-    submitReply() {
+    async submitReply(tweetId) {
 
-      if (!this.replyContent) {
-        Toast.fire({
-          icon: 'warning',
-          title: '回覆內容不可空白'
+      try {
+
+        if (!this.replyContent) {
+          Toast.fire({
+            icon: 'warning',
+            title: '推文內容不可空白'
+          })
+          return
+        } else if (this.replyContent.length > 140) {
+          Toast.fire({
+            icon: 'warning',
+            title: '推文內容不可超過 140字'
+          })
+          return
+        }
+
+        const { data } = await replyAPI.addReply({
+          TweetId: tweetId,
+          comment: this.replyContent
         })
-        return
-      } else if (this.replyContent.length > 140) {
-        Toast.fire({
-          icon: 'warning',
-          title: '回覆內容不可超過 140字'
-        })
-        return
-      } else if (this.replyContent.length < 140) {
-        // 當回覆發送成功時，Toast補上
+
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+
         this.$emit('close')
+        this.$emit('successReply', tweetId)
+
+      } catch (error) {
+        console.error(error)
+        Toast.fire({
+          icon: 'warning',
+          title: '目前無法回復該推文，請稍後再試'
+        })
+
       }
-
-
-      
     }
   },
   computed: {
     replyContentCount() {
       const replyCountLength = this.replyContent.length
       return replyCountLength
-    }
+    },
+    ...mapState(['currentUser'])
   }
 }
 </script>
@@ -146,6 +188,7 @@ export default {
 
   .modal-header {
     padding: 20.5px 16px 20.5px 19.5px;
+
     img {
       width: 15px;
       height: 15px;
@@ -156,15 +199,19 @@ export default {
   .modal-body {
     font-family: "Noto Sans TC";
     padding: 15px;
+
     img {
-        width: 50px;
-        height: 50px;
-      }
+      width: 50px;
+      height: 50px;
+    }
+
     .tweet--card {
       position: relative;
+
       img {
         margin-right: 10px;
       }
+
       &--connectline {
         position: absolute;
         top: calc(50px + 16px);
@@ -173,6 +220,7 @@ export default {
         background-color: $scale-gray6;
         width: 2px;
       }
+
       &--title {
         .name {
           color: $modal-black;
@@ -181,12 +229,14 @@ export default {
           line-height: 26px;
           margin-right: 8px;
         }
+
         .accounttime {
           font-weight: 400;
           font-size: 14px;
           line-height: 22px;
         }
       }
+
       &--description {
         margin-top: 8px;
         color: $modal-black;
@@ -194,21 +244,26 @@ export default {
         font-size: 16px;
         line-height: 26px;
       }
+
       &--target {
         margin-top: 11px;
         font-weight: 400;
         font-size: 14px;
         line-height: 22px;
+
         span {
           color: $brand-orange;
         }
       }
     }
+
     .reply--card {
       margin-top: 23px;
+
       img {
         margin-right: 2px;
       }
+
       textarea {
         width: 100%;
         height: 100%;
@@ -220,6 +275,7 @@ export default {
         line-height: 26px;
         resize: none;
         overflow-y: scroll;
+
         &::placeholder {
           color: $secondary-gray;
           font-weight: 400;
@@ -232,6 +288,7 @@ export default {
 
   .modal-footer {
     border-top: none;
+
     button {
       height: 46px;
       border-radius: 50px;
@@ -241,6 +298,7 @@ export default {
       padding: 8px 24px;
       margin: 0 16px 16px 0;
     }
+
     span {
       color: $error-red;
       font-weight: 500;
