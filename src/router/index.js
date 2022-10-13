@@ -72,11 +72,27 @@ const routes = [
     path: "/admin/main",
     name: "admin-main",
     component: () => import("../views/AdminMain.vue"),
+    beforeEnter: (to, from, next) => {
+      const currentUser = store.state.currentUser
+      if (currentUser && store.state.role === 'user') {
+        next('*')
+        return
+      }
+      next()
+    }
   },
   {
     path: "/admin/users",
     name: "admin-users",
     component: () => import("../views/AdminTweetersCard.vue"),
+    beforeEnter: (to, from, next) => {
+      const currentUser = store.state.currentUser
+      if (currentUser && store.state.role === 'user') {
+        next('*')
+        return
+      }
+      next()
+    }
   },
   {
     path: "*",
@@ -119,22 +135,25 @@ router.beforeEach( async(to, from, next) => {
       next('/main')
       return
     }
-  } else if (role === 'admin') {
+  } 
+  
+  // 當有 admin有 currentUser時再打
+  // if (role === 'admin') {
 
-    // if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
-    //   isAuthenticated = await store.dispatch('fetchCurrentUser')
-    // }
+  //   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
+  //     isAuthenticated = await store.dispatch('fetchCurrentUser')
+  //   }
 
-    // if (!isAuthenticated && to.name !== 'admin-sign-in') {
-    //   next('/admin/signin')
-    //   return
-    // }
+  //   if (!isAuthenticated && to.name !== 'admin-sign-in') {
+  //     next('/admin/signin')
+  //     return
+  //   }
 
-    // if (isAuthenticated && to.name === 'admin-sign-in') {
-    //   next('/admin/main')
-    //   return
-    // }
-  }
+  //   if (isAuthenticated && to.name === 'admin-sign-in') {
+  //     next('/admin/main')
+  //     return
+  //   }
+  // }
 
   next()
 })

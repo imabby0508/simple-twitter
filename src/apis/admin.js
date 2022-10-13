@@ -1,5 +1,4 @@
 import { apiHelper } from "@/utils/helpers";
-const getToken = () => localStorage.getItem('token')
 
 export default {
   adminSignIn({ account, password }) {
@@ -9,29 +8,12 @@ export default {
     })
   },
   getTweets() {
-    return apiHelper.get('/api/admin/tweets', {
-      headers: {
-        Authorization: `Bearer ${getToken()}`
-      }
-    })
+    return apiHelper.get('/api/admin/tweets')
   },
   getUsers() {
-    return apiHelper.get('/api/admin/users', {
-      headers: {
-        Authorization: `Bearer ${getToken()}`
-      }
-    })
+    return apiHelper.get('/api/admin/users')
   },
   deleteTweet ({id}) {
-    return apiHelper.delete(`/api/admin/tweets/${id}`, {
-      headers: {
-        Authorization: `Bearer ${getToken()}`
-      }
-    })
+    return apiHelper.delete(`/api/admin/tweets/${id}`)
   }
-  // signUp(data) {
-  //   return apiHelper.post('/api/users', {
-  //     ...data
-  //   })
-  // }
 }

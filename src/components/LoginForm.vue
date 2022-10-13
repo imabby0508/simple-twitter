@@ -131,7 +131,6 @@ export default {
         })
 
         const { data } = response
-        console.log(response)
 
         if (data.status === 'error') {
           throw new Error(data.message)
