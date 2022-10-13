@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import replyAPI from '../apis/tweet'
+import replyAPI from '../apis/reply'
 import { Toast } from '../utils/helpers.js'
 import { mapState } from 'vuex'
 import { emptyAvatarFilter } from '../utils/mixins'
@@ -118,13 +118,13 @@ export default {
         if (!this.replyContent) {
           Toast.fire({
             icon: 'warning',
-            title: '推文內容不可空白'
+            title: '回覆內容不可空白'
           })
           return
         } else if (this.replyContent.length > 140) {
           Toast.fire({
             icon: 'warning',
-            title: '推文內容不可超過 140字'
+            title: '回覆內容不可超過 140字'
           })
           return
         }
@@ -203,6 +203,7 @@ export default {
     img {
       width: 50px;
       height: 50px;
+      border-radius: 50%;
     }
 
     .tweet--card {

@@ -183,25 +183,36 @@ export default {
       isUserLikesPage: false
     };
   },
-  watch: {
-    tweets(newData) {
-      this.tweets = newData
-    }
-  },
-  updated() {
-    const { id: userId } = this.$route.params;
+  updated () {
+    console.log(this.tweets)
 
-    if (this.$route.name === 'user-tweets') {
-      this.fetchUserTweets(userId);
-    } else if (this.$route.name === 'user-likes') {
-      this.isUserLikesPage = true;
-      this.fetchUserLikes(userId);
-    }
-
-    if (this.$route.name === 'main') {
-      this.fetchTweets();
-    }
+    // if (this.tweets.data === 'success') {
+    //   console.log(this.tweets.data.data)
+    // }
+    // this.tweets = this.tweets.push({
+    //   createdAt: ''
+    // })
   },
+  // watch: {
+  //   tweets(newData) {
+  //     // this.tweets = newData
+  //     console.log(newData)
+  //   }
+  // },
+  // updated() {
+  //   const { id: userId } = this.$route.params;
+
+  //   if (this.$route.name === 'user-tweets') {
+  //     this.fetchUserTweets(userId);
+  //   } else if (this.$route.name === 'user-likes') {
+  //     this.isUserLikesPage = true;
+  //     this.fetchUserLikes(userId);
+  //   }
+
+  //   if (this.$route.name === 'main') {
+  //     this.fetchTweets();
+  //   }
+  // },
   created() {
     const { id: userId } = this.$route.params;
 
@@ -357,7 +368,6 @@ export default {
       }
     },
     async deleteLike(tweetId) {
-      console.log(tweetId)
       try {
         const { data } = await tweetAPI.deleteLike({
           tweet_id: tweetId,
@@ -396,9 +406,6 @@ export default {
         icon: 'success',
         title: '回覆發送成功'
       })
-
-      console.log(tweetId)
-      console.log(this.tweets)
 
       this.tweets = this.tweets.map(tweet => {
         if (tweet.id === tweetId) {
