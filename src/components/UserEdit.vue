@@ -248,9 +248,10 @@ export default {
           return;
         } else if (this.user.name.length > 50) {
           Toast.fire({
-            icon: "warning",
-            title: "名稱不可超過50字",
+            icon: "warning",  
+            title: "名稱不可超過50字",                
           });
+    
           return;
         }
 
@@ -272,7 +273,7 @@ export default {
 
         Toast.fire({
           icon: "success",
-          title: "成功儲存",
+          title: "成功儲存",          
         });
 
       } catch (error) {
@@ -450,5 +451,8 @@ export default {
       }
     }
   }
+}
+.Toast {
+  background-color: rgba(63,255,106,0.69);
 }
 </style>

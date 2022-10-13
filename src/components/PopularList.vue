@@ -17,7 +17,7 @@
             class="user--wrapper--image"
           >
             <img
-              :src="user.avatar"
+              :src="user.avatar | emptyAvatar"
               alt="user-avatar"
             >
           </router-link>
@@ -53,9 +53,11 @@
 import userAPI from '../apis/user'
 import followshipAPI from '../apis/followship'
 import { Toast } from '../utils/helpers'
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
+import { emptyAvatarFilter } from '../utils/mixins'
 
 export default {
+  mixins: [emptyAvatarFilter],
   data() {
     return {
       users: []

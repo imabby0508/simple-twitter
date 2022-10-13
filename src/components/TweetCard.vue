@@ -333,18 +333,18 @@ export default {
       }
     },
     async addLike(tweetId) {
-      try {
+      try {        
         const { data } = await tweetAPI.addLike({
           tweet_id: tweetId,
           userId: this.currentUser.id
         });
-
+        
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-
+        
         this.tweets = this.tweets.map(tweet => {
-          if (tweet.id === tweetId) {
+          if (this.isUserLikesPage ? tweet.Tweet.id === tweetId : tweet.id === tweetId) {
             return {
               ...tweet,
               isLiked: true,
@@ -353,7 +353,7 @@ export default {
           } else {
             return tweet
           }
-        })
+        })       
 
       } catch (error) {
         console.error("error", error);
@@ -362,7 +362,6 @@ export default {
           icon: "error",
           title: "無法對推文按愛心，請稍後再試",
         })
-
       }
     },
     async deleteLike(tweetId) {
@@ -375,9 +374,9 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-
+    
         this.tweets = this.tweets.map(tweet => {
-          if (tweet.id === tweetId) {
+          if (this.isUserLikesPage ? tweet.Tweet.id === tweetId : tweet.id === tweetId) {
             return {
               ...tweet,
               isLiked: false,
@@ -386,7 +385,7 @@ export default {
           } else {
             return tweet
           }
-        })
+        })   
 
       } catch (error) {
         console.error("error", error);
@@ -399,7 +398,6 @@ export default {
       }
     },
     successReplyToast(tweetId) {
-
       Toast.fire({
         icon: 'success',
         title: '回覆發送成功'
