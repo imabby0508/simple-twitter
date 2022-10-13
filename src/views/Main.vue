@@ -9,22 +9,23 @@
         <h4 class="tweet__title">首頁</h4>
 
         <div class="tweet__content">
-          <div class="tweet__description">
-            <!-- <router-link :to="{name: 'user-tweets', params: {id: user.id}}"> -->
+
+          <div class="content d-flex">
             <img
-              class="tweet__avatar"
               :src="currentUser.avatar | emptyAvatar"
               alt="avatar"
             >
-            <!-- </router-link> -->
-            <h5>有什麼新鮮事?</h5>
-            <!-- <textarea
-              v-model="tweetContent"
+            <textarea
+              name="tweetContent"
+              required
               placeholder="有什麼新鮮事？"
-              maxlength="140"
-            />       -->
+              v-model="tweetContent"
+              rows="3"
+            ></textarea>
           </div>
+            
           <button @click.stop.prevent="showTweetModal = true">推文</button>
+
         </div>
       </div>
 
@@ -106,33 +107,31 @@ export default {
     border-top: 1px solid $border;
     border-bottom: 10px solid $border;
 
-    .tweet__description {
-      display: flex;
-
-      .tweet__avatar {
-        border-radius: 50%;
+    .content {
+      img {
         width: 50px;
         height: 50px;
+        border-radius: 50%;
       }
 
-      h5 {
-        color: $secondary-gray;
-        padding-left: 8px;
-        line-height: 50px;
-        // textarea {
-        //   border: none;
-        //   resize: none;
-        //   overflow: hidden;
-        //   color: $scale-gray10;
-        //   width: 80%;
-        //   height: 100px;
-        //   padding: 15px 8px;
-        //   line-height: 26px;
-        //   font-size: 18px;
-        //   font-weight: 700;
-        //   &::placeholder {
-        //     color: $secondary-gray;
-        // }
+      textarea {
+        width: 100%;
+        height: 100%;
+        padding: 12px 24px 12px 8px;
+        border: none;
+        color: $scale-gray10;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 26px;
+        resize: none;
+        overflow-y: scroll;
+
+        &::placeholder {
+          color: $secondary-gray;
+          font-weight: 400;
+          font-size: 18px;
+          line-height: 26px;
+        }
       }
     }
 
@@ -150,5 +149,3 @@ export default {
   }
 }
 </style>
-
-
