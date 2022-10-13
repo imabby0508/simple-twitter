@@ -48,8 +48,12 @@ export default new Vuex.Store({
           id, account, avatar, backgroundImage, email, introduction, name, role
         })
 
+        return true
+
       } catch (error) {
         console.error(error.message)
+
+        return false
       }
 
     }
