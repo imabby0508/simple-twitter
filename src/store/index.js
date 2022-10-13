@@ -49,6 +49,7 @@ export default new Vuex.Store({
         const response = await userAPI.getCurrentUser()
         const { id, account, avatar, backgroundImage, email, introduction, name, role } = response.data
 
+        console.log(response)
         commit('setCurrentUser', {
           id, account, avatar, backgroundImage, email, introduction, name, role
         })

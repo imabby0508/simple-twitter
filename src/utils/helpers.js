@@ -20,7 +20,6 @@ axiosInstance.interceptors.request.use(
   },
   err => Promise.reject(err)
 )
-
 export const apiHelper = axiosInstance
 
 export const Toast = Swal.mixin({

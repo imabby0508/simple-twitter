@@ -138,22 +138,22 @@ router.beforeEach( async(to, from, next) => {
   } 
   
   // 當有 admin有 currentUser時再打
-  // if (role === 'admin') {
+  if (role === 'admin') {
 
-  //   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
-  //     isAuthenticated = await store.dispatch('fetchCurrentUser')
-  //   }
+    if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
+      isAuthenticated = await store.dispatch('fetchCurrentUser')
+    }
 
-  //   if (!isAuthenticated && to.name !== 'admin-sign-in') {
-  //     next('/admin/signin')
-  //     return
-  //   }
+    if (!isAuthenticated && to.name !== 'admin-sign-in') {
+      next('/admin/signin')
+      return
+    }
 
-  //   if (isAuthenticated && to.name === 'admin-sign-in') {
-  //     next('/admin/main')
-  //     return
-  //   }
-  // }
+    if (isAuthenticated && to.name === 'admin-sign-in') {
+      next('/admin/main')
+      return
+    }
+  }
 
   next()
 })
