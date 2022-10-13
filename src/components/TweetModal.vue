@@ -89,8 +89,6 @@ export default {
           throw new Error(data.message)
         }
 
-        console.log(data)
-
         this.isProcessing = false
         this.$emit('close')
         this.$emit('successTweet')
@@ -157,6 +155,7 @@ export default {
     img {
       width: 50px;
       height: 50px;
+      border-radius: 50%;
     }
 
     textarea {
