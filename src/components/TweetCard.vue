@@ -184,7 +184,7 @@ export default {
     };
   },
   updated () {
-    console.log(this.tweets)
+    // console.log(this.tweets)
 
     // if (this.tweets.data === 'success') {
     //   console.log(this.tweets.data.data)

@@ -14,10 +14,11 @@ export default new Vuex.Store({
       email: '',
       introduction: '',
       name: '',
-      role: '',
     },
     isAuthenticated: false,
-    token: ''
+    token: '',
+    role: '',
+
   },
   getters: {
   },
@@ -30,11 +31,13 @@ export default new Vuex.Store({
       }
       state.token = localStorage.getItem('token')
       state.isAuthenticated = true
+      state.role = currentUser.role
     },
     revokeAuthentication(state) {
       state.currentUser = {}
       state.token = ''
       state.isAuthenticated = false
+      state.role = ''
       localStorage.removeItem('token')
     }
   },

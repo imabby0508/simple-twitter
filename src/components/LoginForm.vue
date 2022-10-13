@@ -96,7 +96,7 @@ export default {
         })
 
         this.$store.commit('setCurrentUser', data.data.user)
-        this.$router.push('main')
+        this.$router.push('/main')
 
       } catch (error) {
         this.password = ''
@@ -131,6 +131,7 @@ export default {
         })
 
         const { data } = response
+        console.log(response)
 
         if (data.status === 'error') {
           throw new Error(data.message)
@@ -144,7 +145,7 @@ export default {
         })
 
         this.$store.commit('setCurrentUser', data.data.user)
-        this.$router.push('main')
+        this.$router.push('/admin/main')
 
       } catch (error) {
         this.password = ''

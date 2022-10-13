@@ -91,27 +91,51 @@ const router = new VueRouter({
 
 router.beforeEach( async(to, from, next) => {
 
+  const role = store.state.role
+
+  const tokenInLocalStorage = localStorage.getItem('token') // signin時存到 localStorage的 token
   const tokenInStore = store.state.token //每次打 currentUser api，就會存到 store
-  const tokenInLocalStorage = localStorage.getItem('token') // signin時放到 localStorage
-  let isAuthenticated =  store.state.isAuthenticated
+  let isAuthenticated = store.state.isAuthenticated
 
-  // 在路由改變時
-  // 只有當 local storage token存在，且 local storage token === store token，
-  // 才會去打 GET currentUser api，把 currentUser存到 Vuex
-  if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
-    isAuthenticated = await store.dispatch('fetchCurrentUser')
+  if (role === 'user') {
+
+    // 在路由改變時，什麼時候會打 currentUser api，並把值存到 state?
+    // 1. 當 local storage token存在
+    // 2. 且當 local storage token === store token
+    if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
+      isAuthenticated = await store.dispatch('fetchCurrentUser')
+    }
+
+    const pathWithoutAuthentication = ['sign-in', 'sign-up']
+
+    // 當你沒有登入時，你只能去 signin/ signup頁面
+    if (!isAuthenticated && !pathWithoutAuthentication.includes(to.name)) {
+      next('/signin')
+      return
+    }
+
+    // 當你有登入時，你不能去 signin/ signup頁面
+    if (isAuthenticated && pathWithoutAuthentication.includes(to.name)) {
+      next('/main')
+      return
+    }
+  } else if (role === 'admin') {
+
+    // if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
+    //   isAuthenticated = await store.dispatch('fetchCurrentUser')
+    // }
+
+    // if (!isAuthenticated && to.name !== 'admin-sign-in') {
+    //   next('/admin/signin')
+    //   return
+    // }
+
+    // if (isAuthenticated && to.name === 'admin-sign-in') {
+    //   next('/admin/main')
+    //   return
+    // }
   }
 
-  const pathWithoutAuthentication = ['sign-in', 'sign-up']
-  if (!isAuthenticated && !pathWithoutAuthentication.includes(to.name)) {
-    next('/signin')
-    return
-  }
-  if (isAuthenticated && pathWithoutAuthentication.includes(to.name)) {
-    next('/main')
-    return
-  }
-  
   next()
 })
 
