@@ -7,7 +7,6 @@
 
           <div class="modal-header">
             <img
-              class="cursor-pointer"
               src="../assets/image/orange-cross.png"
               @click="$emit('close')"
               alt="close-madal"
@@ -140,10 +139,7 @@ export default {
         }
 
         this.$emit('close')
-        this.$emit('successReply', {
-          TweetId: tweetId,
-          comment: this.replyContent
-        })
+        this.$emit('successReply', tweetId)
 
       } catch (error) {
         console.error(error)

@@ -9,9 +9,7 @@
       
       <ProfilePills />
 
-      <TweetCard
-      :UserIdForRouter="UserIdForRouter"
-      />
+      <TweetCard />
     </div>
 
     <PopularList />
@@ -42,14 +40,8 @@ export default {
   data() {
     return {
       isModalVisible: false,
-      isUpdated: false,
-      UserIdForRouter: ''
+      isUpdated: false
     }    
-  },
-  beforeRouteUpdate(to, from, next) {
-    const { id } = to.params
-    this.UserIdForRouter = id
-    next()
   },
   methods: {
     editUserProfile() {
