@@ -91,21 +91,22 @@ const router = new VueRouter({
 
 router.beforeEach( async(to, from, next) => {
 
-  const token = localStorage.getItem('token')
+  const tokenInStore = store.state.token //每次打 currentUser api，就會存到 store
+  const tokenInLocalStorage = localStorage.getItem('token') // signin時放到 localStorage
+  let isAuthenticated =  store.state.isAuthenticated
 
-  let isAuthenticated =  false
-
-  if (token) {
+  // 在路由改變時
+  // 只有當 local storage token存在，且 local storage token === store token，
+  // 才會去打 GET currentUser api，把 currentUser存到 Vuex
+  if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
     isAuthenticated = await store.dispatch('fetchCurrentUser')
   }
 
   const pathWithoutAuthentication = ['sign-in', 'sign-up']
-
   if (!isAuthenticated && !pathWithoutAuthentication.includes(to.name)) {
     next('/signin')
     return
   }
-
   if (isAuthenticated && pathWithoutAuthentication.includes(to.name)) {
     next('/main')
     return
