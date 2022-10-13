@@ -7,6 +7,7 @@
 
           <div class="modal-header">
             <img
+              class="cursor-pointer"
               src="../assets/image/orange-cross.png"
               @click="$emit('close')"
               alt="close-madal"

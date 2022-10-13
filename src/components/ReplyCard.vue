@@ -1,7 +1,7 @@
 <template>
   <Spinner v-if="isLoading" />
   <div v-else class="reply__card__wrapper">
-    <router-link v-for="reply in replies" :key="reply.TweetId" class="reply__card" :to="{ name: 'reply', params: {id: reply.TweetId}}">
+    <router-link v-for="reply in replies" :key="reply.id" class="reply__card" :to="{ name: 'reply', params: {id: reply.TweetId}}">
       <div class="reply__card__content">
         <div class="reply__card__title">
           <router-link :to="{ name: 'user-tweets', params: {id: reply.replyUser.id}}">
@@ -43,6 +43,26 @@ import Spinner from './../components/Spinner';
 import { emptyAvatarFilter } from '../utils/mixins'
 
 export default {
+  props: {
+    newReply: {
+      type: Object,
+      default: () => {
+        return {
+          createdAt: '',
+          tweetAuthorAccount: '',
+          comment: '',
+          replyUser: {}
+        }
+      }
+    }
+  },
+  watch: {
+    newReply: {
+      handler (newData) {
+        this.replies.unshift(newData)
+      }
+    }
+  },
   mixins: [fromNowFilter, emptyAvatarFilter],
   components: {
     Spinner
@@ -50,7 +70,7 @@ export default {
   data() {
     return {
       replies: [],
-      isLoading: true,     
+      isLoading: true,  
     };
   },
   created() {
@@ -66,16 +86,14 @@ export default {
     async fetchUserReplies(userId) {
       try {
         const { data } = await userAPI.getUserReplies({ userId });
-        console.log('data', data)
 
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
-        this.replies = {
-          ...this.replies,
-          ...data
-        }
+        this.replies = Object.values(data).map(ele => ele)
+
+        
         this.isLoading = false         
       } catch(error) {
         this.isLoading = false         
@@ -89,18 +107,15 @@ export default {
 
     async fetchReplies(tweetId) {
       try {
-        console.log(tweetId)
+
         const response = await replyAPI.getReplies({ tweetId });
         const { data } = response
-        console.log(data)
+
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
-        this.replies = {
-          ...this.replies,
-          ...data
-        }
+        this.replies = Object.values(data).map(ele => ele)
 
         this.isLoading = false
                

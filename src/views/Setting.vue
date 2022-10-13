@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import MainNav from "./../components/MainNav";
+import MainNav from "./../components/MainNav.vue";
 import AccountForm from "@/components/AccountForm.vue";
 import { mapState } from 'vuex'
 

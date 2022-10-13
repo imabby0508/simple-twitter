@@ -283,14 +283,18 @@ export default {
 
         const form = event.target //取得 submit的 form
         const formData = new FormData(form) //透過 new FormData產生物件實例，並存在 變數裡
+
         const response = await userAPI.updateSetting({
           id: this.id,
           formData
         })
+        
         const { data } = response
         if (data.status === 'error') {
           throw new Error(data.message)
         }
+
+        console.log(response)
 
         Toast.fire({
           icon: 'success',

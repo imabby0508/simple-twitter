@@ -183,36 +183,6 @@ export default {
       isUserLikesPage: false
     };
   },
-  updated () {
-    // console.log(this.tweets)
-
-    // if (this.tweets.data === 'success') {
-    //   console.log(this.tweets.data.data)
-    // }
-    // this.tweets = this.tweets.push({
-    //   createdAt: ''
-    // })
-  },
-  // watch: {
-  //   tweets(newData) {
-  //     // this.tweets = newData
-  //     console.log(newData)
-  //   }
-  // },
-  // updated() {
-  //   const { id: userId } = this.$route.params;
-
-  //   if (this.$route.name === 'user-tweets') {
-  //     this.fetchUserTweets(userId);
-  //   } else if (this.$route.name === 'user-likes') {
-  //     this.isUserLikesPage = true;
-  //     this.fetchUserLikes(userId);
-  //   }
-
-  //   if (this.$route.name === 'main') {
-  //     this.fetchTweets();
-  //   }
-  // },
   created() {
     const { id: userId } = this.$route.params;
 
@@ -222,12 +192,10 @@ export default {
       this.isUserLikesPage = true;
       this.fetchUserLikes(userId);
     }
-
     if (this.$route.name === 'main') {
       this.fetchTweets();
     }
   },
-
   computed: {
     ...mapState(['currentUser'])
   },
@@ -397,19 +365,20 @@ export default {
 
       }
     },
-    successReplyToast(tweetId) {
+    successReplyToast(payload) {
+
       Toast.fire({
         icon: 'success',
         title: '回覆發送成功'
       })
 
       this.tweets = this.tweets.map(tweet => {
-        if (tweet.id === tweetId) {
+        if (tweet.id === payload.TweetId) {
           return {
             ...tweet,
             replyCounts: tweet.replyCounts + 1
           }
-        } else if (tweet.TweetId === tweetId) {
+        } else if (tweet.TweetId === payload.TweetId) {
           return {
             ...tweet,
             replyCounts: tweet.replyCounts + 1

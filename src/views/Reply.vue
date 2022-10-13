@@ -37,14 +37,25 @@
           <hr />
 
           <div class="tweet__card__footer" >
-            <img src="@/assets/image/reply-icon.png" alt="reply">
+            <img src="@/assets/image/reply-icon.png" @click="showReplyModal=true" alt="reply">
             <img v-if="tweet.isLiked" src="@/assets/image/red-like-icon.png" alt="like" @click.stop.prevent="deleteLike(tweet.id)"/>
             <img v-else src="@/assets/image/like-icon.png" alt="like" @click.stop.prevent="addLike(tweet.id)"/>         
           </div>
+
+          <ReplyModal
+            v-if="showReplyModal"
+            @close="showReplyModal=false"
+            :tweet="tweet"
+            :currentUser="currentUser"
+            @successReply="successReplyToast"
+          />
+
         </div>
       </div>
 
-      <ReplyCard />
+      <ReplyCard
+      :newReply="newReply"
+      />
     </div>
 
     <PopularList />
@@ -62,6 +73,7 @@ import { emptyAvatarFilter } from './../utils/mixins';
 import { mapState } from 'vuex';
 import { Toast } from './../utils/helpers';
 import Spinner from './../components/Spinner'
+import ReplyModal from '../components/ReplyModal.vue'
 
 export default {
   mixins: [fromNowFilter, timeFormatFilter, emptyAvatarFilter],
@@ -69,7 +81,8 @@ export default {
     MainNav,
     ReplyCard,
     PopularList,
-    Spinner
+    Spinner,
+    ReplyModal,
   },
   data() {
     return {
@@ -88,6 +101,8 @@ export default {
         replyCounts: '',      
       },
       isLoading: true,
+      showReplyModal: false,
+      newReply: {}
     }
   },
   computed: {
@@ -170,6 +185,25 @@ export default {
           title: "無法對推文取消愛心，請稍後再試",
         })
       }
+    },
+    successReplyToast(payload) {
+
+      this.newReply = {
+        createdAt: new Date(),
+        tweetAuthorAccount: this.tweet.tweetAuthor.account,
+        comment: payload.comment,
+        replyUser: {
+          avatar: this.currentUser.avatar,
+          name: this.currentUser.name,
+          account: this.currentUser.account
+        }
+      }
+
+      Toast.fire({
+        icon: 'success',
+        title: '回覆發送成功'
+      })
+
     }
   }
 };

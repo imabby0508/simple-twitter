@@ -34,6 +34,7 @@ export default new Vuex.Store({
       state.role = currentUser.role
     },
     revokeAuthentication(state) {
+      console.log('checkNow')
       state.currentUser = {}
       state.token = ''
       state.isAuthenticated = false
@@ -47,9 +48,10 @@ export default new Vuex.Store({
 
       try {
         const response = await userAPI.getCurrentUser()
-        const { id, account, avatar, backgroundImage, email, introduction, name, role } = response.data
+        console.log('fetchCurrentUser', response)
 
-        console.log(response)
+        const { id, account, avatar, backgroundImage, email, introduction, name, role } = response.data
+        
         commit('setCurrentUser', {
           id, account, avatar, backgroundImage, email, introduction, name, role
         })
@@ -57,7 +59,7 @@ export default new Vuex.Store({
         return true
 
       } catch (error) {
-        console.error(error.message)
+        console.error("fetchCurrentUser", error.message)
         commit('revokeAuthentication')
         return false
       }
