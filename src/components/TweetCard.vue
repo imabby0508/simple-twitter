@@ -310,8 +310,6 @@ export default {
           throw new Error(data.message)
         }
 
-
-
         data = data.map(item => {
           return {
             ...item,

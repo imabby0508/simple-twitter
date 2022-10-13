@@ -1,5 +1,6 @@
 <template>
-  <div class="reply__container">
+  <Spinner v-if="isLoading" />
+  <div v-else class="reply__container">
     <MainNav />
 
     <div class="reply">
@@ -54,12 +55,13 @@
 import MainNav from "./../components/MainNav";
 import ReplyCard from "./../components/ReplyCard";
 import PopularList from "./../components/PopularList";
-import tweetAPI from "@/apis/tweet";
+import tweetAPI from "./../apis/tweet";
 import { fromNowFilter } from "./../utils/mixins";
 import { timeFormatFilter } from "./../utils/mixins";
-import { emptyAvatarFilter } from '../utils/mixins';
+import { emptyAvatarFilter } from './../utils/mixins';
 import { mapState } from 'vuex';
-import { Toast } from '@/utils/helpers'
+import { Toast } from './../utils/helpers';
+import Spinner from './../components/Spinner'
 
 export default {
   mixins: [fromNowFilter, timeFormatFilter, emptyAvatarFilter],
@@ -67,6 +69,7 @@ export default {
     MainNav,
     ReplyCard,
     PopularList,
+    Spinner
   },
   data() {
     return {
@@ -83,7 +86,8 @@ export default {
         isLiked: false,
         likeCounts: '',
         replyCounts: '',      
-      }
+      },
+      isLoading: true,
     }
   },
   computed: {
@@ -102,7 +106,9 @@ export default {
           ...data
         }
 
+        this.isLoading = false
       } catch(error) {
+        this.isLoading = false
         console.log("error", error);
         Toast.fire({
           icon: "error",
