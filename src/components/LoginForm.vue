@@ -96,7 +96,7 @@ export default {
         })
 
         this.$store.commit('setCurrentUser', data.data.user)
-        this.$router.push('main')
+        this.$router.push('/main')
 
       } catch (error) {
         this.password = ''
@@ -144,7 +144,7 @@ export default {
         })
 
         this.$store.commit('setCurrentUser', data.data.user)
-        this.$router.push('main')
+        this.$router.push('/admin/main')
 
       } catch (error) {
         this.password = ''

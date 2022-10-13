@@ -14,9 +14,11 @@ export default new Vuex.Store({
       email: '',
       introduction: '',
       name: '',
-      role: '',
     },
-    isAuthenticated: false
+    isAuthenticated: false,
+    token: '',
+    role: '',
+
   },
   getters: {
   },
@@ -27,12 +29,15 @@ export default new Vuex.Store({
         ...state.currentUser,
         ...currentUser
       }
-
+      state.token = localStorage.getItem('token')
       state.isAuthenticated = true
+      state.role = currentUser.role
     },
     revokeAuthentication(state) {
       state.currentUser = {}
+      state.token = ''
       state.isAuthenticated = false
+      state.role = ''
       localStorage.removeItem('token')
     }
   },
@@ -48,8 +53,12 @@ export default new Vuex.Store({
           id, account, avatar, backgroundImage, email, introduction, name, role
         })
 
+        return true
+
       } catch (error) {
         console.error(error.message)
+        commit('revokeAuthentication')
+        return false
       }
 
     }

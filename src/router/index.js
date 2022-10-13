@@ -72,11 +72,27 @@ const routes = [
     path: "/admin/main",
     name: "admin-main",
     component: () => import("../views/AdminMain.vue"),
+    beforeEnter: (to, from, next) => {
+      const currentUser = store.state.currentUser
+      if (currentUser && store.state.role === 'user') {
+        next('*')
+        return
+      }
+      next()
+    }
   },
   {
     path: "/admin/users",
     name: "admin-users",
     component: () => import("../views/AdminTweetersCard.vue"),
+    beforeEnter: (to, from, next) => {
+      const currentUser = store.state.currentUser
+      if (currentUser && store.state.role === 'user') {
+        next('*')
+        return
+      }
+      next()
+    }
   },
   {
     path: "*",
@@ -89,8 +105,56 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  store.dispatch('fetchCurrentUser')
+router.beforeEach( async(to, from, next) => {
+
+  const role = store.state.role
+
+  const tokenInLocalStorage = localStorage.getItem('token') // signin時存到 localStorage的 token
+  const tokenInStore = store.state.token //每次打 currentUser api，就會存到 store
+  let isAuthenticated = store.state.isAuthenticated
+
+  if (role === 'user') {
+
+    // 在路由改變時，什麼時候會打 currentUser api，並把值存到 state?
+    // 1. 當 local storage token存在
+    // 2. 且當 local storage token === store token
+    if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
+      isAuthenticated = await store.dispatch('fetchCurrentUser')
+    }
+
+    const pathWithoutAuthentication = ['sign-in', 'sign-up']
+
+    // 當你沒有登入時，你只能去 signin/ signup頁面
+    if (!isAuthenticated && !pathWithoutAuthentication.includes(to.name)) {
+      next('/signin')
+      return
+    }
+
+    // 當你有登入時，你不能去 signin/ signup頁面
+    if (isAuthenticated && pathWithoutAuthentication.includes(to.name)) {
+      next('/main')
+      return
+    }
+  } 
+  
+  // 當有 admin有 currentUser時再打
+  // if (role === 'admin') {
+
+  //   if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
+  //     isAuthenticated = await store.dispatch('fetchCurrentUser')
+  //   }
+
+  //   if (!isAuthenticated && to.name !== 'admin-sign-in') {
+  //     next('/admin/signin')
+  //     return
+  //   }
+
+  //   if (isAuthenticated && to.name === 'admin-sign-in') {
+  //     next('/admin/main')
+  //     return
+  //   }
+  // }
+
   next()
 })
 
