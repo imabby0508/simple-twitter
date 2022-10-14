@@ -293,9 +293,11 @@ export default {
           throw new Error(data.message)
         }
 
+        console.log(response)
+
         Toast.fire({
           icon: 'success',
-          title: '設定成功了'
+          title: data.message
         })
 
         // setting成功更新到 server後，router轉到 main
