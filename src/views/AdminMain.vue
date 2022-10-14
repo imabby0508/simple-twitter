@@ -47,7 +47,7 @@
 import AdminNav from '@/components/AdminNav.vue';
 import adminAPI from '../apis/admin'
 import { fromNowFilter } from "./../utils/mixins";
-import { Toast } from '../utils/helpers';
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import { emptyAvatarFilter } from '../utils/mixins'
 
 export default {
@@ -78,8 +78,7 @@ export default {
       } catch (error) {
         console.error(error)
 
-        Toast.fire({
-          icon: 'error',
+        ToastError.fire({
           title: '目前無法取得推文清單，請稍後再試'
         })
       }
@@ -98,8 +97,7 @@ export default {
       } catch (error) {
         console.error(error)
 
-        Toast.fire({
-          icon: 'error',
+        ToastError.fire({
           title: '目前無法刪除該推文，請稍後再試'
         })
       }

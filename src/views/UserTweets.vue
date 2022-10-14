@@ -9,7 +9,7 @@
       
       <ProfilePills />
 
-      <TweetCard />
+      <TweetCard :is-updated="isUpdated"/>
     </div>
 
     <PopularList />

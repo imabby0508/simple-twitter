@@ -33,16 +33,8 @@ import FollowPills from "./../components/FollowPills";
 import FollowCard from "./../components/FollowCard";
 import PopularList from "./../components/PopularList";
 import userAPI from "@/apis/user";
-import { Toast } from '@/utils/helpers';
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import Spinner from './../components/Spinner'
-
-// const dummyUser = {
-//   user: {
-//     id: 1,
-//     tweetCount: 25,
-//     name: 'John Doe',    
-//   }
-// }
 
 export default {
   components: {
@@ -83,8 +75,7 @@ export default {
       } catch(error) {
         this.isLoading = false
         console.log("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取得使用者資料，請稍後再試",
         });
       }      

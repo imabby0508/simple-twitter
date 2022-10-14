@@ -49,7 +49,7 @@ import MainNav from "./../components/MainNav";
 import TweetCard from "./../components/TweetCard";
 import PopularList from "./../components/PopularList";
 import TweetModal from "./../components/TweetModal";
-import { Toast } from "./../utils/helpers"
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import { mapState } from 'vuex'
 import { emptyAvatarFilter } from '../utils/mixins'
 
@@ -74,7 +74,6 @@ export default {
   methods: {
     successTweetModal() {
       Toast.fire({
-        icon: 'success',
         title: '推文發送成功'
       })
     }

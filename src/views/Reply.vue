@@ -75,7 +75,7 @@ import { fromNowFilter } from "./../utils/mixins";
 import { timeFormatFilter } from "./../utils/mixins";
 import { emptyAvatarFilter } from './../utils/mixins';
 import { mapState } from 'vuex';
-import { Toast } from './../utils/helpers';
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import Spinner from './../components/Spinner'
 import ReplyModal from '../components/ReplyModal.vue'
 
@@ -129,8 +129,7 @@ export default {
       } catch(error) {
         this.isLoading = false
         console.log("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取得推文，請稍後再試",
         })
       }
@@ -157,8 +156,7 @@ export default {
 
       } catch(error) {
         console.error("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法對推文按愛心，請稍後再試",
         })
       }
@@ -184,8 +182,7 @@ export default {
 
       } catch(error) {
         console.error("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法對推文取消愛心，請稍後再試",
         })
       }
@@ -206,7 +203,6 @@ export default {
       this.tweet.replyCounts += 1
 
       Toast.fire({
-        icon: 'success',
         title: '回覆發送成功'
       })
       

@@ -49,7 +49,7 @@
 <script>
 import tweetAPI from '@/apis/tweet'
 import { mapState } from 'vuex'
-import { Toast } from '../utils/helpers.js'
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import { emptyAvatarFilter } from '../utils/mixins'
 
 export default {
@@ -66,14 +66,12 @@ export default {
       try {
 
         if (!this.tweetContent) {
-          Toast.fire({
-            icon: 'warning',
+          ToastWarning.fire({
             title: '推文內容不可空白'
           })
           return
         } else if (this.tweetContent.length > 140) {
-          Toast.fire({
-            icon: 'warning',
+          ToastWarning.fire({
             title: '推文內容不可超過 140字'
           })
           return
@@ -96,8 +94,7 @@ export default {
       } catch (error) {
         this.isProcessing = false
         console.error(error)
-        Toast.fire({
-          icon: 'error',
+        ToastError.fire({
           title: '目前無法發推文，請稍後再試'
         })
       }

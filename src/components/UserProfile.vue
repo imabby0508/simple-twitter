@@ -80,7 +80,7 @@
 import { mapState } from "vuex";
 import userAPI from "./../apis/user";
 import followshipAPI from "./../apis/followship";
-import { Toast } from "./../utils/helpers";
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import Spinner from "./../components/Spinner";
 import { emptyAvatarFilter } from '../utils/mixins'
 
@@ -120,12 +120,6 @@ export default {
     const { id: userId } = this.$route.params;
     this.fetchUser(userId);
   },
-  // beforeRouteUpdate(to, from, next) {
-  //   console.log('to', to)
-  //   console.log('from', from)
-  //   next()
-  // },
-
   watch: {
     isUpdated(newValue, oldValue) {
       if (this.user.id === this.currentUser.id) {
@@ -172,8 +166,7 @@ export default {
       } catch (error) {
         this.isLoading = false;
         console.log("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取得使用者資料，請稍後再試",
         });
       }
@@ -204,8 +197,7 @@ export default {
       } catch (error) {
         this.isProcessing = false
         console.error("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法追蹤使用者，請稍後再試",
         });
       }
@@ -232,8 +224,7 @@ export default {
       } catch (error) {
         this.isProcessing = false
         console.error("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取消追蹤使用者，請稍後再試",
         });
       }

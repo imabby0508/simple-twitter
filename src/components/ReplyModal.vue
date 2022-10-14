@@ -93,7 +93,7 @@
 
 <script>
 import replyAPI from '../apis/reply'
-import { Toast } from '../utils/helpers.js'
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import { mapState } from 'vuex'
 import { emptyAvatarFilter } from '../utils/mixins'
 import { fromNowFilter } from "./../utils/mixins";
@@ -117,15 +117,13 @@ export default {
       try {
 
         if (!this.replyContent) {
-          Toast.fire({
-            icon: 'warning',
+          ToastWarning.fire({
             title: '回覆內容不可空白'
           })
           return
         } else if (this.replyContent.length > 140) {
-          Toast.fire({
-            icon: 'warning',
-            title: '回覆內容不可超過 140字'
+          ToastWarning.fire({
+            title: '回覆內容不可超過140字'
           })
           return
         }
@@ -147,8 +145,7 @@ export default {
 
       } catch (error) {
         console.error(error)
-        Toast.fire({
-          icon: 'warning',
+        ToastWarning.fire({
           title: '目前無法回復該推文，請稍後再試'
         })
 

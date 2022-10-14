@@ -122,7 +122,7 @@
 
 <script>
 import userAPI from "@/apis/user";
-import { Toast } from "../utils/helpers";
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import Spinner from "./../components/Spinner";
 import { emptyAvatarFilter } from '../utils/mixins'
 
@@ -189,8 +189,7 @@ export default {
       } catch (error) {
         this.isLoading = false;
         console.log("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取得使用者資料，請稍後再試",
         });
       }
@@ -241,14 +240,12 @@ export default {
 
       try {
         if (!this.user.name) {
-          Toast.fire({
-            icon: "warning",
+          ToastWarning.fire({
             title: "名稱不可空白",
           });
           return;
         } else if (this.user.name.length > 50) {
-          Toast.fire({
-            icon: "warning",  
+          ToastWarning.fire({
             title: "名稱不可超過50字",                
           });
     
@@ -256,8 +253,7 @@ export default {
         }
 
         if (this.user.introduction.length > 160) {
-          Toast.fire({
-            icon: "warning",
+          ToastWarning.fire({
             title: "自我介紹不可超過160字",
           });
           return;
@@ -272,14 +268,12 @@ export default {
         }
 
         Toast.fire({
-          icon: "success",
           title: "成功儲存",          
         });
 
       } catch (error) {
         console.log("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法更新使用者資料，請稍後再試",
         });
       }
@@ -452,7 +446,5 @@ export default {
     }
   }
 }
-.Toast {
-  background-color: rgba(63,255,106,0.69);
-}
+
 </style>
