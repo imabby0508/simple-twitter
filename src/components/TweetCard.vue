@@ -180,6 +180,17 @@ export default {
       type: Boolean,
       default: false
     },
+    newTweet: {
+      type: Object,
+      default: () => {
+        return {
+          tweetAuthor: {},
+          id: '',
+          createdAt: '',
+          description: '',
+        }
+      }
+    }
   },
   data() {
     return {
@@ -188,36 +199,6 @@ export default {
       isUserLikesPage: false
     };
   },
-  // updated () {
-    // console.log(this.tweets)
-
-    // if (this.tweets.data === 'success') {
-    //   console.log(this.tweets.data.data)
-    // }
-    // this.tweets = this.tweets.push({
-    //   createdAt: ''
-    // })
-  // },
-  // watch: {
-  //   tweets(newData) {
-  //     // this.tweets = newData
-  //     console.log(newData)
-  //   }
-  // },
-  // updated() {
-  //   const { id: userId } = this.$route.params;
-
-  //   if (this.$route.name === 'user-tweets') {
-  //     this.fetchUserTweets(userId);
-  //   } else if (this.$route.name === 'user-likes') {
-  //     this.isUserLikesPage = true;
-  //     this.fetchUserLikes(userId);
-  //   }
-
-  //   if (this.$route.name === 'main') {
-  //     this.fetchTweets();
-  //   }
-  // },
   created() {
     const { id: userId } = this.$route.params;
 
@@ -245,6 +226,11 @@ export default {
         this.fetchUserLikes(userId);
       }      
     },
+    newTweet: {
+      handler(newData) {
+        this.tweets.unshift(newData)
+      }
+    },
   },
   methods: {
     // 在首頁瀏覽所有推文
@@ -266,7 +252,6 @@ export default {
           }
         })
 
-        // data的格式是陣列，把 data裡一個一個值放進 tweets陣列
         this.tweets = [
           ...data
         ]

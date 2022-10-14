@@ -2,14 +2,19 @@
 
   <div class="user__container">
 
-    <MainNav />
+    <MainNav 
+    @submitNewTweet="handleSubmitNewTweet"
+    />
 
     <div class="user__info__wrapper">
       <UserProfile @after-click-button="editUserProfile" :is-updated="isUpdated"/>
       
       <ProfilePills />
 
-      <TweetCard :is-updated="isUpdated"/>
+      <TweetCard 
+      :is-updated="isUpdated"
+      :newTweet="newTweet"
+      />
     </div>
 
     <PopularList />
@@ -27,6 +32,7 @@ import ProfilePills from "./../components/ProfilePills";
 import TweetCard from "./../components/TweetCard";
 import PopularList from "./../components/PopularList";
 import UserEdit from "./../components/UserEdit";
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -40,8 +46,12 @@ export default {
   data() {
     return {
       isModalVisible: false,
-      isUpdated: false
+      isUpdated: false,
+      newTweet: {}
     }    
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   methods: {
     editUserProfile() {
@@ -51,6 +61,26 @@ export default {
     closeUserEditModal() {
       this.isModalVisible = false,
       this.isUpdated = true
+    },
+    handleSubmitNewTweet(payload) {
+      this.newTweet = {
+        Tweet: {
+          createdAt: new Date(),
+          description: payload.description,
+          id: payload.id,
+          tweetAuthor: {
+            account: this.currentUser.account,
+            avatar: this.currentUser.avatar,
+            id: this.currentUser.id,
+            name: this.currentUser.name,
+          }
+        },
+        TweetId: payload.id,
+        isLiked: false,
+        likeCounts: 0,
+        replyCounts: 0,
+        showReplyModal: false
+      }
     }
   } 
 }

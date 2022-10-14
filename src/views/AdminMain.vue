@@ -1,8 +1,9 @@
 <template>
-
   <div class="main__container">
     <AdminNav />
-    <div class="main">
+
+    <Spinner v-if="isLoading" />
+    <div class="main" v-else>
       <div class="main__title">
         <h4>推文清單</h4>
       </div>
@@ -49,15 +50,18 @@ import adminAPI from '../apis/admin'
 import { fromNowFilter } from "./../utils/mixins";
 import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import { emptyAvatarFilter } from '../utils/mixins'
+import Spinner from '../components/Spinner.vue'
 
 export default {
   mixins: [fromNowFilter, emptyAvatarFilter],
   components: {
     AdminNav,
+    Spinner,
   },
   data() {
     return {
-      tweetsArray: []
+      tweetsArray: [],
+      isLoading: true
     };
   },
   created() {
@@ -74,10 +78,10 @@ export default {
           throw new Error(data.message)
         }
         this.tweetsArray = data
-        
+        this.isLoading = false
       } catch (error) {
         console.error(error)
-
+        this.isLoading = false
         ToastError.fire({
           title: '目前無法取得推文清單，請稍後再試'
         })

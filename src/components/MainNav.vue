@@ -78,6 +78,7 @@
         <TweetModal
           v-if="showTweetModal"
           @close="showTweetModal = false"
+          @successTweet="successTweetModal"
         />
 
         <button
@@ -134,8 +135,26 @@ export default {
 
       this.$store.commit('revokeAuthentication')
       this.$router.push('/signin')
+    },
+    successTweetModal(payload) {
+
+      this.$emit('submitNewTweet', {
+        tweetAuthor: {
+          id: this.currentUser.id,
+          avatar: this.currentUser.avatar,
+          name: this.currentUser.name,
+          account: this.currentUser.account,
+        },
+        id: payload.tweetId,
+        createdAt: new Date(),
+        description: payload.description,
+      })
+
+      Toast.fire({
+        title: '推文發送成功'
+      })
     }
-  }
+  },
 }
 </script>
 

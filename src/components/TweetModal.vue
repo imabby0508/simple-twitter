@@ -83,13 +83,20 @@ export default {
           description: this.tweetContent
         })
 
+        console.log(data)
+
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
+        console.log(data)
+
         this.isProcessing = false
         this.$emit('close')
-        this.$emit('successTweet')
+        this.$emit('successTweet', {
+          tweetId: data.data.id,
+          description: this.tweetContent
+        })
 
       } catch (error) {
         this.isProcessing = false

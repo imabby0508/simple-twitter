@@ -278,11 +278,13 @@ export default {
           id: this.id,
           formData
         })
+
         const { data } = response
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
+        console.log(data)
         Toast.fire({         
           title: data.message
         })

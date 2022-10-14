@@ -31,7 +31,9 @@ export default {
 
 <style lang="scss" scoped>
 .login__wrapper {
-  padding: 6vh 38vw 60vh 38vw;
+  width: 400px;
+  margin: 0 auto;
+  padding: 6vh 0 60vh 0;
   img {
     margin: 0 auto;
     width: 50px;
