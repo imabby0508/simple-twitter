@@ -397,19 +397,19 @@ export default {
 
       }
     },
-    successReplyToast(tweetId) {
+    successReplyToast(payload) {
       Toast.fire({
         icon: 'success',
         title: '回覆發送成功'
       })
 
       this.tweets = this.tweets.map(tweet => {
-        if (tweet.id === tweetId) {
+        if (tweet.id === payload.TweetId) {
           return {
             ...tweet,
             replyCounts: tweet.replyCounts + 1
           }
-        } else if (tweet.TweetId === tweetId) {
+        } else if (tweet.TweetId === payload.TweetId) {
           return {
             ...tweet,
             replyCounts: tweet.replyCounts + 1

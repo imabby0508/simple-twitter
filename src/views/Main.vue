@@ -8,21 +8,17 @@
       <div class="tweet__post">
         <h4 class="tweet__title">首頁</h4>
 
-        <div class="tweet__content">
+        <div
+          class="tweet__content cursor-pointer"
+          @click.stop.prevent="showTweetModal = true"
+        >
+          <div class="tweet__description">
 
-          <div class="content d-flex">
-            <img
-              :src="currentUser.avatar | emptyAvatar"
-              alt="avatar"
-            >
-            <textarea
-              name="tweetContent"
-              required
-              placeholder="有什麼新鮮事？"
-              v-model="tweetContent"
-              rows="3"
-            ></textarea>
-          </div>
+          <img
+            class="tweet__avatar"
+            :src="currentUser.avatar | emptyAvatar"
+            alt="avatar"
+          >
             
           <button @click.stop.prevent="showTweetModal = true">推文</button>
 
@@ -40,6 +36,7 @@
     </div>
 
     <PopularList />
+    </div>
 
   </div>
 </template>
@@ -100,6 +97,8 @@ export default {
     margin-bottom: 0;
   }
 
+
+}
   .tweet__content {
     position: relative;
     height: 136px;
@@ -107,31 +106,13 @@ export default {
     border-top: 1px solid $border;
     border-bottom: 10px solid $border;
 
-    .content {
-      img {
+    .tweet__description {
+      display: flex;
+  
+      .tweet__avatar {
+        border-radius: 50%;
         width: 50px;
         height: 50px;
-        border-radius: 50%;
-      }
-
-      textarea {
-        width: 100%;
-        height: 100%;
-        padding: 12px 24px 12px 8px;
-        border: none;
-        color: $scale-gray10;
-        font-weight: 400;
-        font-size: 18px;
-        line-height: 26px;
-        resize: none;
-        overflow-y: scroll;
-
-        &::placeholder {
-          color: $secondary-gray;
-          font-weight: 400;
-          font-size: 18px;
-          line-height: 26px;
-        }
       }
     }
 
@@ -147,5 +128,4 @@ export default {
       color: $scale-gray1
     }
   }
-}
 </style>
