@@ -52,7 +52,7 @@
 <script>
 import userAPI from '../apis/user'
 import followshipAPI from '../apis/followship'
-import { Toast } from '../utils/helpers'
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import { mapState } from 'vuex';
 import { emptyAvatarFilter } from '../utils/mixins'
 
@@ -86,8 +86,7 @@ export default {
 
         console.error("error", error);
 
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取得熱門使用者，請稍後再試",
         })
 
@@ -116,8 +115,7 @@ export default {
         })
       } catch (error) {
         console.error("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取消追蹤使用者，請稍後再試",
         })
       }
@@ -127,8 +125,7 @@ export default {
       try {
 
         if (this.currentUser.id === userId) {
-          Toast.fire({
-            icon: "warning",
+          ToastWarning.fire({
             title: "無法追蹤自己，謝謝",
           })
           return
@@ -158,8 +155,7 @@ export default {
       } catch (error) {
 
         console.error("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法追蹤使用者，請稍後再試",
         })
 

@@ -48,6 +48,7 @@
 import AdminNav from '@/components/AdminNav.vue';
 import adminAPI from '../apis/admin'
 import { emptyAvatarFilter } from '../utils/mixins'
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 
 export default {
   mixins: [emptyAvatarFilter],
@@ -78,8 +79,7 @@ export default {
       } catch {
         console.error(error)
 
-        Toast.fire({
-          icon: 'error',
+        ToastError.fire({
           title: '目前無法取得使用者列表，請稍後再試'
         })
       }

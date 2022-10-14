@@ -52,7 +52,7 @@
 <script>
 import authorizationAPI from '@/apis/authorization'
 import adminAPI from '@/apis/admin'
-import { Toast } from '@/utils/helpers'
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 
 export default {
   data () {
@@ -68,8 +68,7 @@ export default {
       try {
 
         if (!this.account || !this.password) {
-          Toast.fire({
-            icon: 'warning',
+          ToastWarning.fire({         
             title: '請填入帳號和密碼'
           })
           return
@@ -91,7 +90,6 @@ export default {
         localStorage.setItem('token', data.data.token)
 
         Toast.fire({
-          icon: 'success',
           title: '成功登入'
         })
 
@@ -101,8 +99,7 @@ export default {
       } catch (error) {
         this.password = ''
 
-        Toast.fire({
-          icon: 'warning',
+        ToastWarning.fire({
           title: error.response.data.message
         })
 
@@ -116,8 +113,7 @@ export default {
       try {
 
         if (!this.account || !this.password) {
-          Toast.fire({
-            icon: 'warning',
+          ToastWarning.fire({            
             title: '請填入帳號和密碼'
           })
           return
@@ -138,8 +134,7 @@ export default {
 
         localStorage.setItem('token', data.data.token)
 
-        Toast.fire({
-          icon: 'success',
+        Toast.fire({         
           title: '成功登入'
         })
 
@@ -149,8 +144,7 @@ export default {
       } catch (error) {
         this.password = ''
 
-        Toast.fire({
-          icon: 'warning',
+        ToastWarning.fire({
           title: '請確認您輸入了正確的帳號密碼'
         })
 

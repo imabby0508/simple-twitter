@@ -41,7 +41,7 @@
 <script>
 import userAPI from "@/apis/user";
 import replyAPI from "@/apis/reply";
-import { Toast } from '@/utils/helpers'
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import { fromNowFilter } from "./../utils/mixins";
 import Spinner from './../components/Spinner';
 import { emptyAvatarFilter } from '../utils/mixins'
@@ -58,14 +58,24 @@ export default {
           replyUser: {}
         }
       }
-    }
+    },
+    isUpdated: {
+      type: Boolean,
+      default: false
+    },
   },
   watch: {
     newReply: {
       handler(newData) {
         this.replies.unshift(newData)
       }
-    }
+    },
+    isUpdated(newValue, oldValue) {
+      if(this.$route.name === 'user-replies') {
+        const { id: userId } = this.$route.params;     
+        this.fetchUserReplies(userId);
+      }
+    },
   },
   mixins: [fromNowFilter, emptyAvatarFilter],
   components: {
@@ -100,8 +110,7 @@ export default {
       } catch(error) {
         this.isLoading = false         
         console.log("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取得回覆，請稍後再試",
         })
       }
@@ -120,8 +129,7 @@ export default {
                
       } catch(error) {
         console.log("error", error);
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取得回覆，請稍後再試",
         })
       }

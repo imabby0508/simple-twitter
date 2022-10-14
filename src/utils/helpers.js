@@ -27,5 +27,22 @@ export const Toast = Swal.mixin({
   position: "top-end",
   showConfirmButton: false,
   timer: 3000,
+  imageUrl: require("./../assets/image/success.png"),
+});
+
+export const ToastError = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  imageUrl: require("./../assets/image/error.png"),
+});
+
+export const ToastWarning = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  imageUrl: require("./../assets/image/warning.png"),
 });
 

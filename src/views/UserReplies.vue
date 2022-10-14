@@ -9,7 +9,7 @@
       
       <ProfilePills />
 
-      <ReplyCard />
+      <ReplyCard :is-updated="isUpdated"/>
     </div>
 
     <PopularList />

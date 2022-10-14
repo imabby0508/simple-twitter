@@ -161,12 +161,11 @@
 
 <script>
 import ReplyModal from './ReplyModal.vue';
-import { Toast } from '@/utils/helpers'
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 import { fromNowFilter } from "./../utils/mixins";
 import Spinner from './../components/Spinner'
 import { mapState } from 'vuex'
 import { emptyAvatarFilter } from '../utils/mixins'
-
 import userAPI from "@/apis/user";
 import tweetAPI from "@/apis/tweet";
 
@@ -176,6 +175,12 @@ export default {
     ReplyModal,
     Spinner
   },
+  props: {
+    isUpdated: {
+      type: Boolean,
+      default: false
+    },
+  },
   data() {
     return {
       tweets: [],
@@ -183,7 +188,7 @@ export default {
       isUserLikesPage: false
     };
   },
-  updated () {
+  // updated () {
     // console.log(this.tweets)
 
     // if (this.tweets.data === 'success') {
@@ -192,7 +197,7 @@ export default {
     // this.tweets = this.tweets.push({
     //   createdAt: ''
     // })
-  },
+  // },
   // watch: {
   //   tweets(newData) {
   //     // this.tweets = newData
@@ -227,9 +232,19 @@ export default {
       this.fetchTweets();
     }
   },
-
   computed: {
     ...mapState(['currentUser'])
+  },
+  watch: {
+    isUpdated(newValue, oldValue) {     
+      const { id: userId } = this.$route.params;
+
+      if (this.$route.name === 'user-tweets') {
+        this.fetchUserTweets(userId);
+      } else if (this.$route.name === 'user-likes') {
+        this.fetchUserLikes(userId);
+      }      
+    },
   },
   methods: {
     // 在首頁瀏覽所有推文
@@ -261,8 +276,7 @@ export default {
         this.isLoading = false
         console.error("error", error);
 
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取得推文，請稍後再試",
         })
 
@@ -294,8 +308,7 @@ export default {
         this.isLoading = false
         console.error("error", error);
 
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取得推文，請稍後再試",
         })
       }
@@ -326,8 +339,7 @@ export default {
         this.isLoading = false
         console.error("error", error);
 
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法取得推文，請稍後再試",
         })
       }
@@ -358,8 +370,7 @@ export default {
       } catch (error) {
         console.error("error", error);
 
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法對推文按愛心，請稍後再試",
         })
       }
@@ -390,8 +401,7 @@ export default {
       } catch (error) {
         console.error("error", error);
 
-        Toast.fire({
-          icon: "error",
+        ToastError.fire({
           title: "無法對推文取消愛心，請稍後再試",
         })
 
@@ -399,7 +409,6 @@ export default {
     },
     successReplyToast(payload) {
       Toast.fire({
-        icon: 'success',
         title: '回覆發送成功'
       })
 

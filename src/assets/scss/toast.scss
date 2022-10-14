@@ -1,5 +1,5 @@
 .swal2-container {
-  width: 330px;
+  width: 394px;
   height: 96px;
 
   .swal2-popup.swal2-toast {
@@ -9,31 +9,22 @@
     .swal2-header {
       flex-direction: row-reverse;
       justify-content: space-between;
-      width: 100%;
+      align-items: center;
+      width: 95%;
+      height: 100%;
 
-      .swal2-success {
-        margin: 0 0.6rem;
-        .swal2-success-line-tip {
-          background-color: #82C43C;
-        }
-        .swal2-success-line-long {
-          background-color: #82C43C;
-        }
-        .swal2-success-ring {
-          width: 2.5rem;
-          height: 2.5rem;
-          border-color: #82C43C;
-          top: -6px;
-          left: -7px;
-          border-width: 2px;
-        }
+      .swal2-image {
+        width: 56px;
+        height: 56px;
       }
-      h2 {
+
+      .swal2-title {
         font-family: 'Roboto';
         font-style: normal;
         font-weight: 700;
         font-size: 20px;
         color: #000000;
+        margin-left: 0;
       }
     }
   }
