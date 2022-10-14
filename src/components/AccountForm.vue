@@ -168,6 +168,7 @@ export default {
       this.account = this.initialUser.account
       this.name = this.initialUser.name
       this.email = this.initialUser.email
+      this.id = this.initialUser.id
     },
     async submitSignUp() {
 

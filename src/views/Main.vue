@@ -8,23 +8,20 @@
       <div class="tweet__post">
         <h4 class="tweet__title">首頁</h4>
 
-        <div class="tweet__content">
+        <div
+          class="tweet__content cursor-pointer"
+          @click.stop.prevent="showTweetModal = true"
+        >
           <div class="tweet__description">
-            <!-- <router-link :to="{name: 'user-tweets', params: {id: user.id}}"> -->
-            <img
-              class="tweet__avatar"
-              :src="currentUser.avatar | emptyAvatar"
-              alt="avatar"
-            >
-            <!-- </router-link> -->
-            <h5>有什麼新鮮事?</h5>
-            <!-- <textarea
-              v-model="tweetContent"
-              placeholder="有什麼新鮮事？"
-              maxlength="140"
-            />       -->
-          </div>
+
+          <img
+            class="tweet__avatar"
+            :src="currentUser.avatar | emptyAvatar"
+            alt="avatar"
+          >
+            
           <button @click.stop.prevent="showTweetModal = true">推文</button>
+
         </div>
       </div>
 
@@ -39,6 +36,7 @@
     </div>
 
     <PopularList />
+    </div>
 
   </div>
 </template>
@@ -99,6 +97,8 @@ export default {
     margin-bottom: 0;
   }
 
+
+}
   .tweet__content {
     position: relative;
     height: 136px;
@@ -108,31 +108,11 @@ export default {
 
     .tweet__description {
       display: flex;
-
+  
       .tweet__avatar {
         border-radius: 50%;
         width: 50px;
         height: 50px;
-      }
-
-      h5 {
-        color: $secondary-gray;
-        padding-left: 8px;
-        line-height: 50px;
-        // textarea {
-        //   border: none;
-        //   resize: none;
-        //   overflow: hidden;
-        //   color: $scale-gray10;
-        //   width: 80%;
-        //   height: 100px;
-        //   padding: 15px 8px;
-        //   line-height: 26px;
-        //   font-size: 18px;
-        //   font-weight: 700;
-        //   &::placeholder {
-        //     color: $secondary-gray;
-        // }
       }
     }
 
@@ -148,7 +128,4 @@ export default {
       color: $scale-gray1
     }
   }
-}
 </style>
-
-

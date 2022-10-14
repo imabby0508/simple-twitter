@@ -153,9 +153,10 @@ export default {
     padding: 16px 0 0 24px;
 
     img {
-      width: 50px;
+      max-width: 50px;
       height: 50px;
       border-radius: 50%;
+      object-fit: cover
     }
 
     textarea {
