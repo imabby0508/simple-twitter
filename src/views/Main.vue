@@ -14,28 +14,31 @@
         >
           <div class="tweet__description">
 
-          <img
-            class="tweet__avatar"
-            :src="currentUser.avatar | emptyAvatar"
-            alt="avatar"
-          >
-            
-          <button @click.stop.prevent="showTweetModal = true">推文</button>
+            <img
+              class="tweet__avatar"
+              :src="currentUser.avatar | emptyAvatar"
+              alt="avatar"
+            >
 
+            <h5>有什麼新鮮事?</h5>
+
+
+            <button @click.stop.prevent="showTweetModal = true">推文</button>
+
+          </div>
         </div>
+
+        <TweetCard />
+
+        <TweetModal
+          v-if="showTweetModal"
+          @close="showTweetModal = false"
+          @successTweet="successTweetModal"
+        />
+
       </div>
 
-      <TweetCard />
-
-      <TweetModal
-        v-if="showTweetModal"
-        @close="showTweetModal = false"
-        @successTweet="successTweetModal"
-      />
-
-    </div>
-
-    <PopularList />
+      <PopularList />
     </div>
 
   </div>
@@ -96,36 +99,41 @@ export default {
     padding: 24px;
     margin-bottom: 0;
   }
-
-
 }
-  .tweet__content {
-    position: relative;
-    height: 136px;
-    padding: 16px 24px;
-    border-top: 1px solid $border;
-    border-bottom: 10px solid $border;
 
-    .tweet__description {
-      display: flex;
-  
-      .tweet__avatar {
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-      }
-    }
+h5 {
+  color: $secondary-gray;
+  padding-left: 8px;
+  line-height: 50px;
+}
 
-    button {
-      position: absolute;
-      right: 40px;
-      bottom: 16px;
-      width: 64px;
-      height: 40px;
-      border-radius: 50px;
-      border: none;
-      background: $brand-orange;
-      color: $scale-gray1
+.tweet__content {
+  position: relative;
+  height: 136px;
+  padding: 16px 24px;
+  border-top: 1px solid $border;
+  border-bottom: 10px solid $border;
+
+  .tweet__description {
+    display: flex;
+
+    .tweet__avatar {
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
     }
   }
+
+  button {
+    position: absolute;
+    right: 40px;
+    bottom: 16px;
+    width: 64px;
+    height: 40px;
+    border-radius: 50px;
+    border: none;
+    background: $brand-orange;
+    color: $scale-gray1
+  }
+}
 </style>
