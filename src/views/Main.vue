@@ -73,6 +73,9 @@ export default {
       newTweet: {}
     }
   },
+  created() {
+    this.$store.dispatch('fetchCurrentUser')
+  },
   methods: {
     successTweetModal(payload) {
 
