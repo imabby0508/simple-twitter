@@ -3,7 +3,6 @@
   <div class="user__container">
 
     <MainNav 
-    @submitNewTweet="handleSubmitNewTweet"
     />
 
     <div class="user__info__wrapper">
@@ -47,9 +46,6 @@ export default {
       isUpdated: false,
       newTweet: {}
     }    
-  },
-  computed: {
-    ...mapState(['currentUser'])
   },
   methods: {
     editUserProfile() {

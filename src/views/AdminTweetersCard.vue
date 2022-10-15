@@ -75,6 +75,9 @@ export default {
 
         const response = await adminAPI.getUsers()
         const { data } = response
+
+        console.log(data)
+        
         if (data.status === 'error') {
           throw new Error(data.message)
         }
