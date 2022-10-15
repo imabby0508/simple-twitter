@@ -103,7 +103,7 @@ export default {
         console.error('error', error)
 
         ToastWarning.fire({
-          title: error.message
+          title: error.response.data.message
         })
 
       }
@@ -148,7 +148,7 @@ export default {
         console.error('error', error)
 
         ToastWarning.fire({
-        title: error.message
+        title: error.response.data.message
         })
       }
     }
