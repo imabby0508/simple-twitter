@@ -134,7 +134,7 @@ router.beforeEach( async(to, from, next) => {
   if (!isAuthenticated && !pathWithoutAuthentication.includes(to.name)) {
 
     ToastWarning.fire({
-      title: '登入帳密才可以使用'
+      title: '帳號不存在！'
     })
 
     next('/signin')

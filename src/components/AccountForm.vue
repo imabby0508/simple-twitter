@@ -284,6 +284,8 @@ export default {
           throw new Error(data.message)
         }
 
+        this.$store.dispatch('fetchCurrentUser')
+
         console.log(data)
         Toast.fire({         
           title: data.message
