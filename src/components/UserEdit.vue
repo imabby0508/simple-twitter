@@ -154,8 +154,13 @@ export default {
       return nameLength;
     },
     introductionThreshold() {
-      const introductionLength = this.user.introduction.length;
-      return introductionLength;
+      if(this.user.introduction) {
+        const introductionLength = this.user.introduction.length;
+        return introductionLength;
+      } else {
+        return 0
+      }
+      
     },
   },
   updated() {
@@ -247,17 +252,19 @@ export default {
         } else if (this.user.name.length > 50) {
           ToastWarning.fire({
             title: "名稱不可超過50字",                
-          });
-    
+          });    
           return;
         }
 
-        if (this.user.introduction.length > 160) {
+        if (!this.user.introduction) {
+          this.user.introduction = ''
+        } else if (this.user.introduction.length > 160) {
           ToastWarning.fire({
             title: "自我介紹不可超過160字",
           });
           return;
         }
+
         const { data } = await userAPI.update({
           userId: this.user.id,
           formData,
