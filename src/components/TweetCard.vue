@@ -188,6 +188,9 @@ export default {
           id: '',
           createdAt: '',
           description: '',
+          likeCounts: '',
+          replyCounts: '',
+          showReplyModal: ''
         }
       }
     }

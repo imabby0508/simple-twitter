@@ -147,6 +147,9 @@ export default {
         id: payload.tweetId,
         createdAt: new Date(),
         description: payload.description,
+        likeCounts: 0,
+        replyCounts: 0,
+        showReplyModal: false
       })
 
       Toast.fire({
