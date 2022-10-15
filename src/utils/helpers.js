@@ -2,6 +2,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const baseURL = "https://safe-earth-79613.herokuapp.com";
+// const baseURL = "https://liver-animals.herokuapp.com"
 
 const axiosInstance = axios.create({
   baseURL

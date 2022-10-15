@@ -2,7 +2,9 @@
 
   <div class="main__container">
 
-    <MainNav />
+    <MainNav
+    @submitNewTweet="handleSubmitNewTweet"
+    />
 
     <div class="tweet">
       <div class="tweet__post">
@@ -19,16 +21,15 @@
               :src="currentUser.avatar | emptyAvatar"
               alt="avatar"
             >
-
             <h5>有什麼新鮮事?</h5>
-
-
             <button @click.stop.prevent="showTweetModal = true">推文</button>
 
           </div>
         </div>
 
-        <TweetCard />
+        <TweetCard
+        :newTweet="newTweet"
+        />
 
         <TweetModal
           v-if="showTweetModal"
@@ -63,19 +64,36 @@ export default {
     MainNav,
     TweetCard,
     PopularList,
-    TweetModal
+    TweetModal,
   },
   data() {
     return {
       user: {},
       showTweetModal: false,
+      newTweet: {}
     }
   },
   methods: {
-    successTweetModal() {
+    successTweetModal(payload) {
+
+      this.newTweet = {
+        tweetAuthor: {
+          id: this.currentUser.id,
+          avatar: this.currentUser.avatar,
+          name: this.currentUser.name,
+          account: this.currentUser.account,
+        },
+        id: payload.tweetId,
+        createdAt: new Date(),
+        description: payload.description,
+      }
+
       Toast.fire({
         title: '推文發送成功'
       })
+    },
+    handleSubmitNewTweet (payload) {
+      this.newTweet = payload
     }
   },
 }

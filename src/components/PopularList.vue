@@ -80,7 +80,7 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-        this.users = response.data
+        this.users = response.data.slice(0, 10)
 
       } catch (error) {
 

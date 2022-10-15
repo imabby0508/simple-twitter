@@ -81,30 +81,30 @@ export default {
           password: this.password
         })
 
-        const { data } = response
+        // const { data } = response
 
-        if (data.status === 'error') {
-          throw new Error(data.message)
+        if (response.data.status === 'error') {
+          throw new Error(response.data.message)
         }
 
-        localStorage.setItem('token', data.data.token)
+        localStorage.setItem('token', response.data.data.token)
 
         Toast.fire({
           title: '成功登入'
         })
 
-        this.$store.commit('setCurrentUser', data.data.user)
+        this.$store.commit('setCurrentUser', response.data.data.user)
         this.$router.push('/main')
 
       } catch (error) {
         this.password = ''
 
+        this.isProcessing = false
+        console.error('error', error)
+
         ToastWarning.fire({
           title: error.response.data.message
         })
-
-        this.isProcessing = false
-        console.log('error', error)
 
       }
     },
@@ -126,31 +126,30 @@ export default {
           password: this.password
         })
 
-        const { data } = response
+        // const { data } = response
 
-        if (data.status === 'error') {
-          throw new Error(data.message)
+        if (response.data.status === 'error') {
+          throw new Error(response.data.message)
         }
 
-        localStorage.setItem('token', data.data.token)
+        localStorage.setItem('token', response.data.data.token)
 
         Toast.fire({         
           title: '成功登入'
         })
 
-        this.$store.commit('setCurrentUser', data.data.user)
+        this.$store.commit('setCurrentUser', response.data.data.user)
         this.$router.push('/admin/main')
 
       } catch (error) {
         this.password = ''
 
-        ToastWarning.fire({
-          title: '請確認您輸入了正確的帳號密碼'
-        })
-
         this.isProcessing = false
-        console.log('error', error)
+        console.error('error', error)
 
+        ToastWarning.fire({
+        title: error.response.data.message
+        })
       }
     }
   },

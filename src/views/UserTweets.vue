@@ -2,14 +2,17 @@
   
   <div class="user__container">
 
-    <MainNav />
+    <MainNav 
+    @submitNewTweet="handleSubmitNewTweet"
+    />
 
     <div class="user__info__wrapper">
       <UserProfile @after-click-button="editUserProfile" :is-updated="isUpdated"/>
-      
       <ProfilePills />
-
-      <TweetCard :is-updated="isUpdated"/>
+      <TweetCard 
+      :is-updated="isUpdated"
+      :newTweet="newTweet"
+      />
     </div>
 
     <PopularList />
@@ -40,7 +43,8 @@ export default {
   data() {
     return {
       isModalVisible: false,
-      isUpdated: false
+      isUpdated: false,
+      newTweet: {}
     }    
   },
   methods: {
@@ -51,6 +55,9 @@ export default {
     closeUserEditModal() {
       this.isModalVisible = false,
       this.isUpdated = true
+    },
+    handleSubmitNewTweet(payload) {
+      this.newTweet = payload
     }
   } 
 }

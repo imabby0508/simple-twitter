@@ -2,7 +2,9 @@
 
   <div class="main__container">
     <AdminNav />
-    <div class="main">
+
+    <Spinner v-if="isLoading" />
+    <div class="main" v-else>
       <div class="main__title">
         <h4>使用者列表</h4>
       </div>
@@ -49,15 +51,18 @@ import AdminNav from '@/components/AdminNav.vue';
 import adminAPI from '../apis/admin'
 import { emptyAvatarFilter } from '../utils/mixins'
 import { Toast, ToastError, ToastWarning } from '../utils/helpers'
+import Spinner from '../components/Spinner.vue'
 
 export default {
   mixins: [emptyAvatarFilter],
   components: {
     AdminNav,
+    Spinner,
   },
   data() {
     return {
-      users: []
+      users: [],
+      isLoading: true
     };
   },
   created() {
@@ -70,15 +75,19 @@ export default {
 
         const response = await adminAPI.getUsers()
         const { data } = response
+
+        console.log(data)
+        
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
         this.users = data
+        this.isLoading = false
 
       } catch {
         console.error(error)
-
+        this.isLoading = false
         ToastError.fire({
           title: '目前無法取得使用者列表，請稍後再試'
         })
