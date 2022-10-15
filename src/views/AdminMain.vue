@@ -83,7 +83,7 @@ export default {
         console.error(error)
         this.isLoading = false
         ToastError.fire({
-          title: '目前無法取得推文清單，請稍後再試'
+          title: '無法取得推文清單，請稍後再試'
         })
       }
     },
@@ -102,7 +102,7 @@ export default {
         console.error(error)
 
         ToastError.fire({
-          title: '目前無法刪除該推文，請稍後再試'
+          title: '無法刪除該推文，請稍後再試'
         })
       }
     }
