@@ -89,7 +89,7 @@ export default {
         console.error(error)
         this.isLoading = false
         ToastError.fire({
-          title: '目前無法取得使用者列表，請稍後再試'
+          title: '無法取得使用者列表，請稍後再試'
         })
       }
 

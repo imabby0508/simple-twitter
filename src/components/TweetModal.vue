@@ -72,7 +72,7 @@ export default {
           return
         } else if (this.tweetContent.length > 140) {
           ToastWarning.fire({
-            title: '推文內容不可超過 140字'
+            title: '推文內容不可超過140字'
           })
           return
         }

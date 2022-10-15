@@ -146,7 +146,7 @@ export default {
       } catch (error) {
         console.error(error)
         ToastWarning.fire({
-          title: '目前無法回復該推文，請稍後再試'
+          title: '目前無法回覆該推文，請稍後再試'
         })
 
       }

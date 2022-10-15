@@ -4,7 +4,7 @@ import NotFound from "../views/NotFound.vue";
 import UserLogin from "../views/UserLogin.vue";
 import Main from "../views/Main.vue";
 import store from "@/store";
-import { Toast } from '../utils/helpers'
+import { Toast, ToastError, ToastWarning } from "../utils/helpers";
 
 Vue.use(VueRouter);
 
@@ -121,7 +121,6 @@ const router = new VueRouter({
 
 router.beforeEach( async(to, from, next) => {
 
-
   const tokenInLocalStorage = localStorage.getItem('token') // signin時存到 localStorage的 token
   const tokenInStore = store.state.token //每次打 currentUser api，就會存到 store
   let isAuthenticated = store.state.isAuthenticated
@@ -134,8 +133,7 @@ router.beforeEach( async(to, from, next) => {
 
   if (!isAuthenticated && !pathWithoutAuthentication.includes(to.name)) {
 
-    Toast.fire({
-      icon: 'warning',
+    ToastWarning.fire({
       title: '登入帳密才可以使用'
     })
 

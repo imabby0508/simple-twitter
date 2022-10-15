@@ -111,7 +111,7 @@
 <script>
 import TweetModal from '../components/TweetModal.vue'
 import { mapState } from 'vuex'
-import { Toast } from '../utils/helpers'
+import { Toast, ToastError, ToastWarning } from '../utils/helpers'
 
 export default {
   components: {
@@ -129,7 +129,6 @@ export default {
     logout () {
 
       Toast.fire({
-        icon: 'success',
         title: '帳號已成功登出'
       })
 
