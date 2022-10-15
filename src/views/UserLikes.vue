@@ -13,7 +13,6 @@
 
       <TweetCard 
       :is-updated="isUpdated"
-      :newTweet="newTweet"
       />
     </div>
 
@@ -32,7 +31,6 @@ import ProfilePills from "./../components/ProfilePills";
 import TweetCard from "./../components/TweetCard";
 import PopularList from "./../components/PopularList";
 import UserEdit from "./../components/UserEdit";
-import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -62,26 +60,6 @@ export default {
       this.isModalVisible = false,
       this.isUpdated = true
     },
-    handleSubmitNewTweet(payload) {
-      this.newTweet = {
-        Tweet: {
-          createdAt: new Date(),
-          description: payload.description,
-          id: payload.id,
-          tweetAuthor: {
-            account: this.currentUser.account,
-            avatar: this.currentUser.avatar,
-            id: this.currentUser.id,
-            name: this.currentUser.name,
-          }
-        },
-        TweetId: payload.id,
-        isLiked: false,
-        likeCounts: 0,
-        replyCounts: 0,
-        showReplyModal: false
-      }
-    }
   } 
 }
 
