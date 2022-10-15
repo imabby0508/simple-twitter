@@ -227,7 +227,9 @@ export default {
         this.fetchUserTweets(userId);
       } else if (this.$route.name === 'user-likes') {
         this.fetchUserLikes(userId);
-      }      
+      } else if (this.$route.name === 'main') {
+        this.fetchTweets()
+      } 
     },
     newTweet: {
       handler(newData) {
