@@ -10,6 +10,7 @@
               src="../assets/image/orange-cross.png"
               @click="$emit('close')"
               alt="close-madal"
+              class="cursor-pointer"
             >
           </div>
 
@@ -88,8 +89,6 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-
-        console.log(data)
 
         this.isProcessing = false
         this.$emit('close')

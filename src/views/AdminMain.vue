@@ -12,7 +12,7 @@
 
         <div class="tweet__card__wrapper">
           <div
-            v-for="tweet in tweetsArray"
+            v-for="tweet in tweetsCurrentPage"
             :key="tweet.id"
             class="tweet__card"
           >
@@ -38,6 +38,13 @@
           </div>
         </div>
 
+        <nav aria-label="Page navigation" class="my-4">
+          <ul class="pagination justify-content-center" id="paginator">
+            <li class="page-item" v-for="page in paginator" :key="page" :class="{active: page === currentPage ? true : false}">
+              <a class="page-link" href="#" @click.stop.prevent="handlePageChange(page)">{{page}}</a>
+            </li>
+          </ul>
+        </nav>
 
       </div>
     </div>
@@ -60,8 +67,12 @@ export default {
   },
   data() {
     return {
-      tweetsArray: [],
-      isLoading: true
+      isLoading: true,
+      tweetsTotal: [],
+      tweetsCurrentPage: [],
+      paginator: [],
+      currentPage: 1,
+      tweetsPerPage: 10
     };
   },
   created() {
@@ -69,15 +80,16 @@ export default {
   },
   methods: {
     async fetchTweets() {
-
       try {
-
         const response = await adminAPI.getTweets()
         const { data } = response
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-        this.tweetsArray = data
+        this.tweetsTotal = data
+        this.getTweetByPage(1)
+        this.renderPaginator(this.tweetsTotal.length)
+
         this.isLoading = false
       } catch (error) {
         console.error(error)
@@ -96,7 +108,8 @@ export default {
           throw new Error(data.message)
         }
 
-        this.tweetsArray = this.tweetsArray.filter(tweet => (tweet.id !== tweetId))
+        this.tweetsTotal = this.tweetsTotal.filter(tweet => (tweet.id !== tweetId))
+        this.getTweetByPage(this.currentPage)
 
       } catch (error) {
         console.error(error)
@@ -105,6 +118,20 @@ export default {
           title: '無法刪除該推文，請稍後再試'
         })
       }
+    },
+    getTweetByPage(page) {
+      const startIndex = (page - 1) * this.tweetsPerPage
+      this.tweetsCurrentPage = this.tweetsTotal.slice(startIndex, startIndex + this.tweetsPerPage)
+    },
+    renderPaginator(amount) {
+      const numOfPages = Math.ceil(amount / this.tweetsPerPage)
+      for (let i = 1; i <= numOfPages; i++) {
+        this.paginator.push(i)
+      }
+    },
+    handlePageChange (page) {
+      this.currentPage = page
+      this.getTweetByPage(page)
     }
   },
 }
@@ -194,6 +221,15 @@ export default {
       margin: 0;
       padding: 0px 0 5px 60px;
     }
+  }
+  .page-item.active .page-link {
+    background-color: $brand-orange;
+    border-color: $border;
+    color: $scale-gray2
+  }
+
+  .page-link {
+    color: $scale-gray8
   }
 }
 </style>

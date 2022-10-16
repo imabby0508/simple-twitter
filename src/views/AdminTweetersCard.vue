@@ -12,7 +12,7 @@
 
 
         <div class="tweet__card__wrapper">
-          <div class="card d-flex flex-column" v-for="user in users" :key="user.id">
+          <div class="card d-flex flex-column" v-for="user in usersCurrentPage" :key="user.id">
             <img class="card--cover" :src="user.backgroundImage" alt="user-cover">
             <img class="card--avatar" :src="user.avatar | emptyAvatar" alt="user-avatar">
 
@@ -40,6 +40,28 @@
           </div>
         </div>
 
+        <nav
+          aria-label="Page navigation"
+          class="my-4"
+        >
+          <ul
+            class="pagination justify-content-center"
+            id="paginator"
+          >
+            <li
+              class="page-item"
+              v-for="page in paginator"
+              :key="page"
+              :class="{active: page === currentPage ? true : false}"
+            >
+              <a
+                class="page-link"
+                href="#"
+                @click.stop.prevent="handlePageChange(page)"
+              >{{page}}</a>
+            </li>
+          </ul>
+        </nav>
 
       </div>
     </div>
@@ -61,8 +83,12 @@ export default {
   },
   data() {
     return {
-      users: [],
-      isLoading: true
+      usersTotal: [],
+      isLoading: true,
+      usersCurrentPage: [],
+      paginator: [],
+      currentPage: 1,
+      usersPerPage: 8
     };
   },
   created() {
@@ -72,19 +98,18 @@ export default {
     async fetchUsers() {
 
       try {
-
         const response = await adminAPI.getUsers()
         const { data } = response
-
-        console.log(data)
         
         if (data.status === 'error') {
           throw new Error(data.message)
         }
 
-        this.users = data
-        this.isLoading = false
+        this.usersTotal = data
+        this.getUsersByPage(1)
+        this.renderPaginator(this.usersTotal.length)
 
+        this.isLoading = false
       } catch {
         console.error(error)
         this.isLoading = false
@@ -94,6 +119,20 @@ export default {
       }
 
     },
+    getUsersByPage(page) {
+      const startIndex = (page - 1) * this.usersPerPage
+      this.usersCurrentPage = this.usersTotal.slice(startIndex, startIndex + this.usersPerPage)
+    },
+    renderPaginator(amount) {
+      const numOfPages = Math.ceil(amount / this.usersPerPage)
+      for (let i = 1; i <= numOfPages; i++) {
+        this.paginator.push(i)
+      }
+    },
+    handlePageChange(page) {
+      this.currentPage = page
+      this.getUsersByPage(page)
+    }
   },
 }
 </script>
@@ -209,7 +248,14 @@ export default {
       margin-right: 8px;
     }
   }
+  .page-item.active .page-link {
+    background-color: $brand-orange;
+    border-color: $border;
+    color: $scale-gray2
+  }
 
-
+  .page-link {
+    color: $scale-gray8
+  }
 }
 </style>

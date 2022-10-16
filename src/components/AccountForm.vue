@@ -221,7 +221,7 @@ export default {
         }
 
         Toast.fire({         
-          title: '註冊成功了'
+          title: '註冊成功，請先登入帳號'
         })
 
         // 註冊成功新增到 server後，router轉到 signin
@@ -286,7 +286,6 @@ export default {
 
         this.$store.dispatch('fetchCurrentUser')
 
-        console.log(data)
         Toast.fire({         
           title: data.message
         })
