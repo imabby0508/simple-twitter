@@ -26,10 +26,6 @@ export default {
     return apiHelper.get(`/api/users/${ id }/likes`);
   },
   update({ userId, formData }) {
-    console.log('inside API:', userId);
-    for (let [name, value] of formData.entries()) {
-      console.log(name + ": " + value);
-    }
     return apiHelper.put(`/api/users/${userId}`, formData);
   },
   updateSetting({ id, formData }) {
