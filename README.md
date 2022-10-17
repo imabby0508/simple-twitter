@@ -72,3 +72,7 @@ npm run build
     - 刪除
   - 使用者
     - 瀏覽
+
+### 備註
+
+- 若使用 node v14環境，可能會遇到 node-sass相容問題，解法可以參考這篇文章 [文章](https://ericwu.asia/2021/07/28/%E9%97%9C%E6%96%BC%E3%80%8Enode-sass-version-6-0-0-is-incompatible-with4-0-0%E3%80%8F%E8%A7%A3%E6%B3%95/)
